@@ -1,3 +1,65 @@
 .combo-body{
     background: linear-gradient(0deg, rgba(0,0,0,1) 0%, rgba(39,83,44,1) 100%);
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    color:#ffffff;
+}
+.combo-container{
+    width: 80%;
+    padding: 30px;
+
+}
+.card-container{
+    display: flex;
+    border-bottom: 2px solid #ffffff; 
+    padding: 10px;
+}
+.image-div{
+    width: 300px;
+    height: 300px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.image-combo {
+    width: 80%;
+    height: 80%;
+    border-radius: 20px;
+}
+
+.info-combo {
+    display: flex;
+    padding: 20px 40px;
+    align-content: center;
+    align-items: flex-start;
+    justify-content: center;
+    flex-direction: column;
+    padding: 20px;
+    text-align: center;
+}
+
+.title-combo {
+    color:antiquewhite;
+    font-size: 2.5em;
+}
+
+.text-combo {
+    font-size: 1.2em;
+}
+
+/* Responsivo */
+@media (min-width: 768px) {
+    .card-container {
+        flex-direction: row;
+    }
+
+    .image-div, .info-combo {
+        width: 50%;
+    }
+
+    .info-combo {
+        text-align: left;
+        padding: 20px 40px;
+    }
 }
