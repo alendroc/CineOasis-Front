@@ -32,6 +32,7 @@
           </g>
         </g>
       </svg>
+      
     
       <div
         class="offcanvas offcanvas-end"
@@ -50,19 +51,18 @@
           ></button>
         </div>
         <div class="offcanvas-body">
-          <ul class="navbar-nav justify-content-center flex-grow-1 pe-3">
-            <li class="nav-item">
-              <a class="nav-link mx-lg-2" href="#">Cartelera</a>
-            </li>
-            <li class="nav-item mx-lg-2">
-              <a class="nav-link" [routerLink]="['combos']">Combos</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link mx-lg-2 active" arias-current="page" [routerLink]="['']">Home</a
-              >
-            </li>
-          </ul>
-        </div>
+            <ul class="navbar-nav justify-content-center flex-grow-1 pe-3">
+              <li class="nav-item mx-lg-2">
+                <a class="nav-link" [routerLink]="['/']" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a>
+              </li>
+              <li class="nav-item mx-lg-2">
+                <a class="nav-link" [routerLink]="['/combos']" routerLinkActive="active">Combos</a>
+              </li>
+              <li class="nav-item mx-lg-2">
+                <a class="nav-link" [routerLink]="['/cartelera']" routerLinkActive="active">Cartelera</a>
+              </li>
+            </ul>
+          </div>
       </div>
       <a href="#" class="login"> Inicio de sesion</a>
       <button
