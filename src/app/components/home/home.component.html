@@ -55,11 +55,10 @@
               <a class="nav-link mx-lg-2" href="#">Cartelera</a>
             </li>
             <li class="nav-item mx-lg-2">
-              <a class="nav-link" href="#">Combos</a>
+              <a class="nav-link" [routerLink]="['combos']">Combos</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link mx-lg-2 active" aria-current="page" href="#"
-                >Home</a
+              <a class="nav-link mx-lg-2 active" arias-current="page" [routerLink]="['']">Home</a
               >
             </li>
           </ul>
@@ -78,4 +77,7 @@
     </button>
     </div>
   </nav>
+  <div style="height: 100%; margin-top: 61px;">
+    <router-outlet></router-outlet>
+  </div>
 </div>

@@ -1,11 +1,41 @@
-/*.home-body{
-    background-image: ;
-}*/
+.home-body{
+    background: linear-gradient(0deg, rgba(233,173,43,1) 0%, rgba(136,183,108,1) 61%, rgba(39,83,44,1) 100%);
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.navbar{
+    background-color: aliceblue;
+    font-family: "Roboto Condensed", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400px;
+    font-style: normal;
+}
+
 .login{
     background-color: #009970;
     color: white;
     font-size: 15px;
-    padding: 4px 10px;
+    padding: 8px 15px;
     border-radius: 30px;
     text-decoration: none;
+    transition: 0.3s background-color;
+}
+.login:hover{
+    background-color: #07af82;
+}
+.navbar-toggler{
+    border: none;
+    font-size: 1.5rem;
+}
+.navbar-toggler:focus{
+    box-shadow: none;
+    outline: none;
+}
+.nav-link {
+   font-weight: 500;
 }
