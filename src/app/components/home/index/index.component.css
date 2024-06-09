@@ -54,9 +54,10 @@
 }
 .cartelera{
     border-top: solid 2px black;
-    padding: 25px;
+    padding: 45px;
     background-color: rgba(239, 239, 240, 0.153);
     backdrop-filter: blur(5px);
+    height: 100%;
 }
 .titule-about-body{
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -67,54 +68,70 @@
     border-bottom: solid 2px white;
     margin-bottom: 50px;
 }
-.card-cartelera{
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr; /* Una columna */
-    grid-gap: 3%;
 
+.card-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    z-index: 2; /* Asegura que esté por encima de la imagen */
+    position: relative; /* Agregamos posición relativa para los elementos hijos absolutos */
 }
 
-.card {
-    height: 40vh;
-    box-shadow: 0 10px 10px rgba(0, 0, 0, 0.212);
-    background: #fff;
-    display: flex;
-    border-radius: 20px;
-    justify-content: center;
+
+
+.card-cartelera {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* Cuatro columnas por defecto */
+    width: 100%; /* Asegura que cubra el 100% del contenedor */
+    gap: 3%;
+    align-items: flex-start;
+}
+
+.card1 {
+   
+    height: 30vh;
     position: relative;
+    box-shadow: 0 10px 10px rgba(0, 0, 0, 0.212);
+    font-size: clamp(0.2rem, 2vw, 1rem);
+    background: #fff; 
+    border-radius: 10px;
     transition: all .4s;
     background: green;
-   }
+}
    
-   .card::before {
+.card1::before {
+    
     content: 'Comprar ticket';
     letter-spacing: 0.2em;
     position: absolute;
     bottom: 8px;
     left: 20px;
     color: rgb(255, 255, 255);
-    font-size: 0.8em;
-    font-weight: 700;
-    
-   }
    
-   .card div {
+    font-weight: 700;
+}
+   
+.card1 div {
     width: 100%;
     height: 100%;
-    border-radius: 20px;
+   border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.212);
     cursor: pointer;
     z-index: 10;
     transition: all .4s;
     background-color: #fff;
-   }
+}
    
-   .card:hover div {
+.card1:hover div {
     transform: translateY(-30px);
-   }
+}
 
-   @media (max-width: 771px)  {
-    .card-cartelera{
-        grid-template-columns: 1fr 1fr 1fr;
+@media (max-width:771px){
+    .card1{
+        height:  25vh;
     }
-   }
+    .card-cartelera{
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+/* Media queries para responsividad */
