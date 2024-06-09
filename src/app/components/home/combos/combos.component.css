@@ -24,15 +24,15 @@
     padding: 10px;
 }
 .image-div{
-    width: 300px;
-    height: 300px;
+    width: 250px;
+    height: 25vh;
     display: flex;
     justify-content: left;
     align-items: center;
 }
 .image-combo {
-    width: 80%;
-    height: 80%;
+    width: 90%;
+    height: 90%;
     border-radius: 20px;
 }
 .info-combo {
@@ -53,7 +53,11 @@
     font-size: 1.2em;
 }
 /* Responsivo */
-@media (min-width: 768px) {
+@media (max-width: 768px) {
+    .combo-container{
+        width: 100%;
+        padding: 10px;
+    }
     .card-container {
         flex-direction: row;
     }
