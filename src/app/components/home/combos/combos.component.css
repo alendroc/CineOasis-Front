@@ -4,30 +4,59 @@
     justify-content: center;
     width: 100%;
     color:#ffffff;
+    height: 100vh; 
+    overflow: hidden;
 }
 .combo-container{
     width: 80%;
     padding: 30px;
-
+    max-height: 100%;
+    overflow: hidden; 
+    text-align: center;
 }
+h3{
+    margin: 30px;
+}
+.div-scroll {
+    max-height: 70vh; /* Adjust based on your design */
+    overflow-y: scroll;
+}
+/* Estilo de la barra de desplazamiento para navegadores WebKit (Chrome, Safari) */
+.div-scroll::-webkit-scrollbar {
+    width: 15px; /* Ancho de la barra de desplazamiento */
+}
+
+.div-scroll::-webkit-scrollbar-track {
+    background: rgb(133, 159, 135); /* Color del fondo de la barra de desplazamiento */
+    border-radius: 20px;
+}
+.div-scroll::-webkit-scrollbar-thumb {
+    background-color:rgba(39,83,44,1); /* Color del "pulgar" de la barra de desplazamiento */
+    border-radius: 10px;
+    border: 3px solid #ffffff; /* Espacio alrededor del "pulgar" */
+}
+
+.div-scroll::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(39,83,44,1); /* Color del "pulgar" al pasar el mouse */
+}
+
 .card-container{
     display: flex;
     border-bottom: 2px solid #ffffff; 
     padding: 10px;
 }
 .image-div{
-    width: 300px;
-    height: 300px;
+    width: 250px;
+    height: 25vh;
     display: flex;
-    justify-content: center;
+    justify-content: left;
     align-items: center;
 }
 .image-combo {
-    width: 80%;
-    height: 80%;
+    width: 90%;
+    height: 90%;
     border-radius: 20px;
 }
-
 .info-combo {
     display: flex;
     padding: 20px 40px;
@@ -38,18 +67,19 @@
     padding: 20px;
     text-align: center;
 }
-
 .title-combo {
     color:antiquewhite;
     font-size: 2.5em;
 }
-
 .text-combo {
     font-size: 1.2em;
 }
-
 /* Responsivo */
-@media (min-width: 768px) {
+@media (max-width: 768px) {
+    .combo-container{
+        width: 100%;
+        padding: 10px;
+    }
     .card-container {
         flex-direction: row;
     }
