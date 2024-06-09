@@ -2,7 +2,6 @@
     background: linear-gradient(0deg, rgba(233,173,43,1) 0%, rgba(136,183,108,1) 61%, rgba(39,83,44,1) 100%);
     top: 0;
     left: 0;
-    height: 100%;
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -19,16 +18,17 @@
     font-optical-sizing: auto;
     font-weight: 400px;
     font-style: normal;
-    background-color: rgba(203, 203, 203, 0.186);
+    background-color:#224e27;
+  
    
 }
 
 .login{
     background-color: #009970;
     color: white;
-    font-size: 15px;
+    font-size: 12px;
     padding: 8px 15px;
-    border-radius: 30px;
+    border-radius: 10px;
     text-decoration: none;
     transition: 0.3s background-color;
 }
@@ -55,7 +55,7 @@
     .nav-link::before {
     content: "";
     position: absolute;
-    bottom: -5px; /* Ajusta esta propiedad según la distancia que quieras de la línea al texto */
+    bottom: 2px; /* Ajusta esta propiedad según la distancia que quieras de la línea al texto */
     left: 50%;
     transform: translateX(-50%);
     width: 0;
