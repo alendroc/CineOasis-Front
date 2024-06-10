@@ -10,6 +10,8 @@ import { User } from "../models/User";
 
 export class UserService{
     private urlAPI:string;
+    private userSubject = new BehaviorSubject<any>(null);
+    public user$ = this.userSubject.asObservable();
     constructor(
         private _http:HttpClient
     ){

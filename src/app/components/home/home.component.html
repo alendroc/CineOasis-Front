@@ -127,11 +127,12 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <form>
+        <form #signupForm="ngForm" (ngSubmit)="registerUser(signupForm)">
           <div class="horizontal">
             <div style="width: 45%;">
             <label for="name"  class="form-text modal-title">Nombre</label>
-            <input type="text" id="name"  name="name" pattern="^[A-Z][a-zA-Z]*$" required  class="input" >
+            <input type="text" id="name" #name="ngModel" name="name" pattern="^[a-zA-Z]*$" 
+            required  class="input" [(ngModel)]="user.nombre"/>
               
             </div>
             <div style="width: 45;">
