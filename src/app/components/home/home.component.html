@@ -52,7 +52,7 @@
         </div>
         <div class="offcanvas-body">
             <ul class="navbar-nav justify-content-center flex-grow-1 pe-3">
-              <li class="nav-item mx-lg-2">
+              <li class="nav-item mx-lg-2" (click)="eleccion('default')">
                 <a class="nav-link" [routerLink]="['/']" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a>
               </li>
               <li class="nav-item mx-lg-2">
@@ -61,6 +61,17 @@
               <li class="nav-item mx-lg-2">
                 <a class="nav-link" [routerLink]="['/cartelera']" routerLinkActive="active">Cartelera</a>
               </li>
+              <!--Parte del admin-->
+              <li class="nav-item mx-lg-2 dropdown" routerLinkActive="active">
+                  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+                    aria-expanded="false">Administrar</a>
+                  <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <li class="li-drop" (click)="eleccion('usuario')"><a class="nav-link"><i class="fa-solid fa-user" style="margin-right: 10px;"></i> Usuarios</a></li>
+                    <li class="li-drop" (click)="eleccion('pelicula')"><a class="nav-link"><i class="fa-solid fa-play" style="margin-right: 10px;"></i> Peliculas</a></li>
+                    <li class="li-drop" (click)="eleccion('comida')"><a class="nav-link"><i class="fa-solid fa-utensils" style="margin-right: 10px;"></i> Comidas</a></li>
+                    <li class="li-drop" (click)="eleccion('asientos')"><a class="nav-link"><i class="fa-solid fa-chair" style="margin-right: 10px;"></i> Asientos</a></li>
+                  </ul>
+                </li>
             </ul>
           </div>
       </div>
@@ -79,67 +90,93 @@
   </nav>
 
  <!--modal-dialog-centered-->
-  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" style="display: flex;
-      justify-content: center;">
-      <div class="modal-content" >
-        <div class="modal-header">
-          <h1 class="modal-title fs-5" id="exampleModalLabel">Inicio de sesion</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <form>
-            <div style="margin-bottom: 20px;">
-            <p class="form-text modal-title">Tu correo electronico</p>
-            <input type="email" name="email" class="input" placeholder="ejemplo@gmail.com">
-            </div>
-            <div>
-              <p  class="form-text modal-title" >Su contraseña</p>
-              <input type="password"  name="password" class="input">
-              </div>
-              <input type="button" class="btn-sesion" value="Iniciar sesion en tu cuenta">
-              <div class="registrar">
-                <p>¿No estas registrado?</p>
-                <a href="#" style="text-decoration: none;" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#registarModal">Crear cuenta</a>
-              </div>
-          </form>
-        </div>
+ <div class="modal" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" style="display: flex; justify-content: center;">
+    <div class="modal-content primerModal">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Inicio de sesión</h1>
+        <a class="btn-close" data-bs-dismiss="modal" aria-label="Close"></a>
+      </div>
+      <div class="modal-body">
+        <form >
+          <div style="margin-bottom: 20px;">
+            <p class="form-text modal-title">Tu correo electrónico</p>
+            <input type="email" required name="email" class="input" placeholder="ejemplo@gmail.com">
+          </div>
+          <div>
+            <p class="form-text modal-title">Su contraseña</p>
+            <input type="password" required name="password" class="input">
+          </div>
+          <input type="button" class="btn-sesion" value="Iniciar sesión en tu cuenta">
+          <div class="registrar">
+            <p>¿No estás registrado?</p>
+            <a href="#" style="text-decoration: none;" data-bs-dismiss="modal" data-bs-target="#registarModal" data-bs-toggle="modal">Crear cuenta</a>
+          </div>
+        </form>
       </div>
     </div>
   </div>
-  <!--modal-dialog-centered-->
-  <div class="modal fade" id="registarModal" tabindex="-1" aria-labelledby="rescisrarModalLabel" aria-hidden="true">
-    <div class="modal-dialog" style="display: flex;
-      justify-content: center;">
-      <div class="modal-content" >
-        <div class="modal-header">
-          <h1 class="modal-title fs-5" id="rescisrarModalLabel">Crear cuenta</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <form>
-            <div style="margin-bottom: 20px;">
-            <p class="form-text modal-title">Tu correo electronico</p>
-            <input type="email" name="email" class="input" placeholder="ejemplo@gmail.com">
-            </div>
-            <div>
-              <p  class="form-text modal-title" >Su contraseña</p>
-              <input type="password"  name="password" class="input">
-              </div>
-              <input type="button" class="btn-sesion" value="Iniciar sesion en tu cuenta">
-              <div class="registrar">
-                <p>¿No estas registrado?</p>
-                <a href="#" style="text-decoration: none;">Crear cuenta</a>
-              </div>
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
+</div>
 
-  <div style="height: 100%; margin-top: 61px;">
+<!-- Modal 2: Crear cuenta -->
+<div class="modal fade" id="registarModal" tabindex="-1" aria-labelledby="rescisrarModalLabel" aria-hidden="true">
+  <div class="modal-dialog" style="display: flex; justify-content: center;">
+    <div class="modal-content segundoModal">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="rescisrarModalLabel">Crear cuenta</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="horizontal">
+            <div style="width: 45%;">
+            <label for="name"  class="form-text modal-title">Nombre</label>
+            <input type="text" id="name"  name="name" pattern="^[A-Z][a-zA-Z]*$" required  class="input" >
+              
+            </div>
+            <div style="width: 45;">
+            <p class="form-text modal-title">Apellido</p>
+            <input type="text" required  class="input">
+            
+            </div>
+          </div>
+          <div style=" margin-bottom: 20px; ">
+            <p class="form-text modal-title">Correo</p>
+            <input type="email" name="email" required class="input" placeholder="ejemplo@gmail.com">
+          </div>
+          <div style=" margin-bottom: 20px; ">
+            <p class="form-text modal-title">Contraseña</p>
+            <input type="password" name="email" required class="input" placeholder="contraseña">
+          </div>
+          <div style=" margin-bottom: 20px; ">
+            <p class="form-text modal-title">Fecha de nacimiento</p>
+            <input type="date" required name="email" class="input" placeholder="contraseña">
+          </div >
+          <input type="button" class="btn-sesion"  value="Iniciar sesión en tu cuenta">
+          <div class="registrar">
+        
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+@switch (cuerpo) {
+  @case ("usuario") {
+    <div style="height: 100%; margin-top: 61px;">
+      <div class="contenedor-tablas">
+        a
+      </div>
+    </div>
+  }
+  @default {
+    <div style="height: 100%; margin-top: 61px;">
     <router-outlet></router-outlet>
   </div>
+  }
+}
+  
 
 
 </div>
