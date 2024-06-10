@@ -11,21 +11,22 @@
     box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.7); 
     background-position: center;
     background-size: cover;
- 
 }
-/*
-.c-image{
-   
+.image-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
     height: 100%;
-    width: 20px;
-    object-fit: cover;
-    filter: brightness(0.6);
-    
-}*/
+    background-color: rgba(0, 0, 0, 0.5); /* Ajusta la opacidad y el color según sea necesario */
+    z-index: 1; /* Asegúrate de que el pseudo-elemento esté sobre la imagen */
+  }
 .carousel-caption {
     display: flex !important;
     flex-direction: column;
     align-items: center; /* Centra el contenedor de texto horizontalmente */
+    z-index: 1;
 }
 
 .texto-izquierda {
@@ -49,8 +50,7 @@
 .reducction{
     margin-top: 4%;
     width: 70rem;
- 
-   
+    height: 100%;
 }
 .cartelera{
     border-top: solid 2px black;
@@ -58,6 +58,7 @@
     background-color: rgba(239, 239, 240, 0.153);
     backdrop-filter: blur(5px);
     height: 100%;
+    margin-bottom: 4rem;
 }
 .titule-about-body{
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -126,12 +127,51 @@
     transform: translateY(-30px);
 }
 
+.comida{
+    height: 100%;
+    margin-bottom: 4rem;
+     padding: 0 30px;
+}
+.comida1{
+    display: flex;
+    margin-bottom: 30px;
+   
+}
+.comida-foto{
+    border-radius: 20px;
+    width: 30%;
+    height: 20vh;
+    background-color: bisque;
+    margin-right: 20px;
+}
+.comida-info{
+    width: 70%;
+    font-size: clamp(0.2rem, 2vw, 1rem);
+}
+
 @media (max-width:771px){
     .card1{
-        height:  25vh;
+        height:  22vh;
     }
     .card-cartelera{
         grid-template-columns: repeat(3, 1fr);
     }
+}
+@media (max-width:690px){
+    .comida1{
+        
+    }
+    .comida-info{
+        width: 100%;
+    }
+    .comida-foto{
+        width: 100%;
+    }
+
+}
+.footer{
+    width: 100%;
+    height: 15vh;
+    background-image: linear-gradient(45deg, rgb(22, 22, 22),rgb(121, 121, 121)),linear-gradient(45deg, rgb(86, 33, 11) 0%, rgb(86, 33, 11) 19%,rgb(105, 58, 15) 19%, rgb(105, 58, 15) 64%,rgb(125, 83, 19) 64%, rgb(125, 83, 19) 68%,rgb(144, 109, 22) 68%, rgb(144, 109, 22) 81%,rgb(164, 134, 26) 81%, rgb(164, 134, 26) 87%,rgb(183, 159, 30) 87%, rgb(183, 159, 30) 100%),linear-gradient(135deg, rgb(86, 33, 11) 0%, rgb(86, 33, 11) 19%,rgb(105, 58, 15) 19%, rgb(105, 58, 15) 64%,rgb(125, 83, 19) 64%, rgb(125, 83, 19) 68%,rgb(144, 109, 22) 68%, rgb(144, 109, 22) 81%,rgb(164, 134, 26) 81%, rgb(164, 134, 26) 87%,rgb(183, 159, 30) 87%, rgb(183, 159, 30) 100%); background-blend-mode:overlay,overlay,normal;
 }
 /* Media queries para responsividad */
