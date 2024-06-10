@@ -3,6 +3,7 @@
     top: 0;
     left: 0;
     width: 100%;
+    height: 100%;
     display: flex;
     flex-direction: column;
 }
@@ -128,15 +129,25 @@
     backdrop-filter: blur(5px);
     background: #316b354f;
 }
-
-.navbar-brand:focus{
-  border: none;
+.li-drop{
+  cursor: pointer;
 }
 
 .contenedor-tablas{
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 100%;
-  height: 93vh;
+  height:100%;
 }
+
+.reducir-tabla{
+    width: 80%;
+    height: 80%;
+    background-color: #fff;
+}
+
+
 @media (min-width: 991px) {
     .nav-link::before {
     content: "";
@@ -167,3 +178,6 @@
  }
 
 }
+
+/*Css de la tabla*/
+
