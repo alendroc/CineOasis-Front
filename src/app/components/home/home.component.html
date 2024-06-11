@@ -62,7 +62,8 @@
                 <a class="nav-link" [routerLink]="['/cartelera']" routerLinkActive="active">Cartelera</a>
               </li>
               <!--Parte del admin-->
-              <li class="nav-item mx-lg-2 dropdown" routerLinkActive="active">
+              @if(identity&&identity.permisoAdmin==1){
+                 <li class="nav-item mx-lg-2 dropdown" routerLinkActive="active">
                   <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
                     aria-expanded="false">Administrar</a>
                   <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -72,10 +73,17 @@
                     <li class="li-drop" ><a class="nav-link"><i class="fa-solid fa-chair" style="margin-right: 10px;"></i> Asientos</a></li>
                   </ul>
                 </li>
+              }
+             
             </ul>
           </div>
       </div>
-      <button type="button" class="login" data-bs-toggle="modal" data-bs-target="#exampleModal"> Inicio de sesion</button>
+      @if(identity){
+        <!-- menu personalizado del usuario -->
+      }@else {
+          <button type="button" class="login" data-bs-toggle="modal" data-bs-target="#exampleModal"> Inicio de sesion</button>
+      }
+    
       <button
       class="navbar-toggler"
       type="button"
@@ -98,19 +106,21 @@
         <a class="btn-close" data-bs-dismiss="modal" aria-label="Close"></a>
       </div>
       <div class="modal-body">
-        <form >
+        <form #loginForm="ngForm" (ngSubmit)="login(loginForm)">
           <div style="margin-bottom: 20px;">
-            <p class="form-text modal-title">Tu correo electrónico</p>
-            <input type="email" required name="email" class="input" placeholder="ejemplo@gmail.com">
+            <label for="emailLogin"  class="form-text modal-title">Tu correo electrónico</label>
+            <input type="email" id="emailLogin" #emailLogin="ngModel" name="emailLogin" 
+            required class="input" [(ngModel)]="user.email"/>
           </div>
           <div>
-            <p class="form-text modal-title">Su contraseña</p>
-            <input type="password" required name="password" class="input">
+            <label for="passwordLogin" class="form-text modal-title">Su contraseña</label>
+            <input type="password" id="passwordLogin" #passwordRegpasswordLoginister="ngModel" name="passwordLogin" 
+            required class="input" [(ngModel)]="user.password"/>
           </div>
-          <input type="button" class="btn-sesion" value="Iniciar sesión en tu cuenta">
+          <input type="submit" class="btn-sesion" value="Iniciar sesión en tu cuenta">
           <div class="registrar">
             <p>¿No estás registrado?</p>
-            <a href="#" style="text-decoration: none;" data-bs-dismiss="modal" data-bs-target="#registarModal" data-bs-toggle="modal">Crear cuenta</a>
+            <a href="#" style="text-decoration: none;" data-bs-dismiss="modal" data-bs-target="#registrarModal" data-bs-toggle="modal">Crear cuenta</a>
           </div>
         </form>
       </div>
@@ -119,40 +129,76 @@
 </div>
 
 <!-- Modal 2: Crear cuenta -->
-<div class="modal fade" id="registarModal" tabindex="-1" aria-labelledby="rescisrarModalLabel" aria-hidden="true">
+<div class="modal fade" id="registrarModal" tabindex="-1" aria-labelledby="registrarModalLabel" aria-hidden="true">
   <div class="modal-dialog" style="display: flex; justify-content: center;">
     <div class="modal-content segundoModal">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="rescisrarModalLabel">Crear cuenta</h1>
+        <h1 class="modal-title fs-5" id="registrarModalLabel">Crear cuenta</h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <form>
+        <span>
+      @switch (status) {
+          <!-- @case (0) {
+              <div class="alert alert-success"><p>Registro exitoso! </p></div>
+              
+          } -->
+          @case (1) {
+              <div class="alert alert-warning"><p>No se pudo agregar el usuario!</p></div>
+          }
+          @case (2) {
+              <div *ngFor="let error of errores" class="alert alert-danger">
+                  <p>{{ error }}</p>
+              </div>
+              <!-- <div class="alert alert-danger"><p>Error de servidor!</p></div> -->
+          }
+      }
+      </span>
+        <form #signupForm="ngForm" (ngSubmit)="registerUser(signupForm)">
           <div class="horizontal">
-            <div style="width: 45%;">
-            <label for="name"  class="form-text modal-title">Nombre</label>
-            <input type="text" id="name"  name="name" pattern="^[A-Z][a-zA-Z]*$" required  class="input" >
+            <div class="name-input" style="width: 45%; margin-bottom: 10px;">
+            <label for="nameRegister"  class="form-text modal-title">Nombre</label>
+            <input type="text" id="nameRegister" #nameRegister="ngModel" name="nameRegister" pattern="^[a-zA-Z]*$" 
+            required  class="input" [(ngModel)]="user.name"/>
+
+            @if(!nameRegister.valid && nameRegister.touched){
+              <small class="invalid-feedback d-block">Formato invalido</small> 
+          }
               
             </div>
-            <div style="width: 45;">
-            <p class="form-text modal-title">Apellido</p>
-            <input type="text" required  class="input">
+            <div class="name-input" style="width: 45%;">
+            <label for="lastnameRegister"  class="form-text modal-title">Apellido</label>
+            <input type="text" id="lastnameRegister" #lastnameRegister="ngModel" name="lastnameRegister" pattern="^[a-zA-Z]*$" 
+            required  class="input" [(ngModel)]="user.apellido" placeholder="Digita tu primer apellido"/>
             
+            @if(!lastnameRegister.valid && lastnameRegister.touched){
+              <small class="invalid-feedback d-block">Formato invalido</small> 
+          }
+
             </div>
           </div>
           <div style=" margin-bottom: 20px; ">
-            <p class="form-text modal-title">Correo</p>
-            <input type="email" name="email" required class="input" placeholder="ejemplo@gmail.com">
+            <label for="emailRegister"  class="form-text modal-title">Correo</label>
+            <input type="email" id="emailRegister" #emailRegister="ngModel" name="emailRegister" pattern="\b[\w\.-]+@[\w\.-]+\.\w{2,4}\b" 
+            required placeholder="ejemplo@gmail.com" class="input" [(ngModel)]="user.email"/>
+
+            @if(!emailRegister.valid && emailRegister.touched){
+              <small class="invalid-feedback d-block">Formato invalido</small> 
+          }
+
           </div>
           <div style=" margin-bottom: 20px; ">
-            <p class="form-text modal-title">Contraseña</p>
-            <input type="password" name="email" required class="input" placeholder="contraseña">
+            <label for="passwordRegister"  class="form-text modal-title">Contraseña</label>
+            <input type="password" id="passwordRegister" #passwordRegister="ngModel" name="passwordRegister" 
+            required class="input" [(ngModel)]="user.password" placeholder="contraseña"/>
           </div>
           <div style=" margin-bottom: 20px; ">
-            <p class="form-text modal-title">Fecha de nacimiento</p>
-            <input type="date" required name="email" class="input" placeholder="contraseña">
+            <label for="date"  class="form-text modal-title">Fecha de Nacimiento</label>
+            <input type="date" id="date" #date="ngModel" name="date"
+            required class="input" [(ngModel)]="user.fechaNacimiento"/>
           </div >
-          <input type="button" class="btn-sesion"  value="Iniciar sesión en tu cuenta">
+          <input type="submit" class="btn-sesion" [disabled]="signupForm.invalid" value="Registrar nueva cuenta">
+          
           <div class="registrar">
         
           </div>
