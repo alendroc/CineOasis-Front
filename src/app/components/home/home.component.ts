@@ -165,4 +165,3 @@ msgAlert= (title:any, text:any, icon:any) =>{
     this.cuerpo = choice
   } 
 }
-

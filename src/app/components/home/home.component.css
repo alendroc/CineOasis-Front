@@ -1,6 +1,7 @@
 .home-body{
     background: linear-gradient(0deg, rgba(233,173,43,1) 0%, rgba(136,183,108,1) 61%, rgba(39,83,44,1) 100%);
     top: 0;
+    height: 100%;
     left: 0;
     width: 100%;
     display: flex;
@@ -54,6 +55,7 @@
 }
 
 
+
 .modal-header{
     border-bottom: none;
 }
@@ -90,6 +92,8 @@
     font-weight: bold;
     
   }
+
+  
  .primerModal{
     width: 60%;
  }
@@ -143,6 +147,21 @@
     height: 80%;
     background-color: #fff;
 }
+table {
+  width: 100%;
+}
+
+.mat-mdc-form-field {
+  font-size: 14px;
+  width: 100%;
+}
+
+td, th {
+  width: 25%;
+}
+.alert{
+  z-index: 1;
+}
 
 
 @media (min-width: 991px) {
@@ -160,6 +179,7 @@
 }
 
 
+
 .nav-link:hover::before, .nav-link.active::before {
     width: 100%;
     visibility: visible; /* Se hace visible cuando se activa o se pasa el mouse por encima */
@@ -173,7 +193,9 @@
  .horizontal{
   flex-direction: column;
  }
-
+.name-input{
+  width: 100% !important;
+}
 }
 
 /*Css de la tabla*/

@@ -52,7 +52,7 @@
         </div>
         <div class="offcanvas-body">
             <ul class="navbar-nav justify-content-center flex-grow-1 pe-3">
-              <li class="nav-item mx-lg-2" (click)="eleccion('default')">
+              <li class="nav-item mx-lg-2" >
                 <a class="nav-link" [routerLink]="['/']" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a>
               </li>
               <li class="nav-item mx-lg-2">
@@ -67,10 +67,10 @@
                   <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
                     aria-expanded="false">Administrar</a>
                   <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <li class="li-drop" (click)="eleccion('usuario')"><a class="nav-link"><i class="fa-solid fa-user" style="margin-right: 10px;"></i> Usuarios</a></li>
-                    <li class="li-drop" (click)="eleccion('pelicula')"><a class="nav-link"><i class="fa-solid fa-play" style="margin-right: 10px;"></i> Peliculas</a></li>
-                    <li class="li-drop" (click)="eleccion('comida')"><a class="nav-link"><i class="fa-solid fa-utensils" style="margin-right: 10px;"></i> Comidas</a></li>
-                    <li class="li-drop" (click)="eleccion('asientos')"><a class="nav-link"><i class="fa-solid fa-chair" style="margin-right: 10px;"></i> Asientos</a></li>
+                    <li class="li-drop" [routerLink]="['/usuarioAdministracion']" ><a class="nav-link"><i class="fa-solid fa-user" style="margin-right: 10px;"></i> Usuarios</a></li>
+                    <li class="li-drop" ><a class="nav-link"><i class="fa-solid fa-play" style="margin-right: 10px;"></i> Peliculas</a></li>
+                    <li class="li-drop" ><a class="nav-link"><i class="fa-solid fa-utensils" style="margin-right: 10px;"></i> Comidas</a></li>
+                    <li class="li-drop" ><a class="nav-link"><i class="fa-solid fa-chair" style="margin-right: 10px;"></i> Asientos</a></li>
                   </ul>
                 </li>
               }
@@ -131,8 +131,13 @@
 <!-- Modal 2: Crear cuenta -->
 <div class="modal fade" id="registrarModal" tabindex="-1" aria-labelledby="registrarModalLabel" aria-hidden="true">
   <div class="modal-dialog" style="display: flex; justify-content: center;">
-
-    <span>
+    <div class="modal-content segundoModal">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="registrarModalLabel">Crear cuenta</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <span>
       @switch (status) {
           <!-- @case (0) {
               <div class="alert alert-success"><p>Registro exitoso! </p></div>
@@ -149,17 +154,9 @@
           }
       }
       </span>
-
-
-    <div class="modal-content segundoModal">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="registrarModalLabel">Crear cuenta</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
         <form #signupForm="ngForm" (ngSubmit)="registerUser(signupForm)">
           <div class="horizontal">
-            <div style="width: 45%;">
+            <div class="name-input" style="width: 45%; margin-bottom: 10px;">
             <label for="nameRegister"  class="form-text modal-title">Nombre</label>
             <input type="text" id="nameRegister" #nameRegister="ngModel" name="nameRegister" pattern="^[a-zA-Z]*$" 
             required  class="input" [(ngModel)]="user.name"/>
@@ -169,7 +166,7 @@
           }
               
             </div>
-            <div style="width: 45;">
+            <div class="name-input" style="width: 45%;">
             <label for="lastnameRegister"  class="form-text modal-title">Apellido</label>
             <input type="text" id="lastnameRegister" #lastnameRegister="ngModel" name="lastnameRegister" pattern="^[a-zA-Z]*$" 
             required  class="input" [(ngModel)]="user.apellido" placeholder="Digita tu primer apellido"/>
@@ -211,106 +208,9 @@
   </div>
 </div>
 
-@switch (cuerpo) {
-  @case ("usuario") {
-    <div style="height: 100%; margin-top: 61px;">
-      <div class="contenedor-tablas">
-        <div class="reducir-tabla">
-          <table id="tuTabla" class="display" style="width:100%">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Position</th>
-                    <th>Office</th>
-                    <th>Age</th>
-                    <th>Start date</th>
-                    <th>Salary</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Tiger Nixon</td>
-                    <td>System Architect</td>
-                    <td>Edinburgh</td>
-                    <td>61</td>
-                    <td>2011-04-25</td>
-                    <td>$320,800</td>
-                </tr>
-                <tr>
-                    <td>Garrett Winters</td>
-                    <td>Accountant</td>
-                    <td>Tokyo</td>
-                    <td>63</td>
-                    <td>2011-07-25</td>
-                    <td>$170,750</td>
-                </tr>
-                <tr>
-                    <td>Ashton Cox</td>
-                    <td>Junior Technical Author</td>
-                    <td>San Francisco</td>
-                    <td>66</td>
-                    <td>2009-01-12</td>
-                    <td>$86,000</td>
-                </tr>
-                <tr>
-                    <td>Cedric Kelly</td>
-                    <td>Senior Javascript Developer</td>
-                    <td>Edinburgh</td>
-                    <td>22</td>
-                    <td>2012-03-29</td>
-                    <td>$433,060</td>
-                </tr>
-                <tr>
-                    <td>Airi Satou</td>
-                    <td>Accountant</td>
-                    <td>Tokyo</td>
-                    <td>33</td>
-                    <td>2008-11-28</td>
-                    <td>$162,700</td>
-                </tr>
-                <tr>
-                    <td>Brielle Williamson</td>
-                    <td>Integration Specialist</td>
-                    <td>New York</td>
-                    <td>61</td>
-                    <td>2012-12-02</td>
-                    <td>$372,000</td>
-                </tr>
-                <tr>
-                    <td>Herrod Chandler</td>
-                    <td>Sales Assistant</td>
-                    <td>San Francisco</td>
-                    <td>59</td>
-                    <td>2012-08-06</td>
-                    <td>$137,500</td>
-                </tr>
-                <tr>
-                    <td>Rhona Davidson</td>
-                    <td>Integration Specialist</td>
-                    <td>Tokyo</td>
-                    <td>55</td>
-                    <td>2010-10-14</td>
-                    <td>$327,900</td>
-                </tr>
-                <tr>
-                    <td>Colleen Hurst</td>
-                    <td>Javascript Developer</td>
-                    <td>San Francisco</td>
-                    <td>39</td>
-                    <td>2009-09-15</td>
-                    <td>$205,500</td>
-                </tr>
-            
-            </tbody>
-        </table>
-        </div>
-      </div>
-    </div>
-  }
-  @default {
-     <div style="height: 100%; margin-top: 61px;">
+   <div style="height: 100%; margin-top: 61px;">
       <router-outlet></router-outlet>
     </div>
-  }
-}
+  
+
 </div>
