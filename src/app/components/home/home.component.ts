@@ -1,25 +1,24 @@
-import { Component } from '@angular/core';
-import { RouterModule } from '@angular/router';
-import { MatDialogModule} from '@angular/material/dialog';
-import {MatButtonModule} from '@angular/material/button';
+import { RouterLink, RouterLinkActive, RouterModule, RouterOutlet } from '@angular/router';
+import {AfterViewInit, Component, ViewChild} from '@angular/core';
+import {MatPaginator, MatPaginatorModule} from '@angular/material/paginator';
+import {MatSort, MatSortModule} from '@angular/material/sort';
+import {MatTableDataSource, MatTableModule} from '@angular/material/table';
+import {MatInputModule} from '@angular/material/input';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import { Subscription } from 'rxjs';
 
-import { ReactiveFormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
 
+
+/** Constants used to fill up our data base. */
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule,RouterModule, MatButtonModule, MatDialogModule, ReactiveFormsModule],
+  imports: [RouterLink,RouterLinkActive,RouterOutlet,MatFormFieldModule, MatInputModule, MatTableModule ,MatPaginatorModule],
   templateUrl:'./home.component.html',
   styleUrl:'./home.component.css'
 })
-export class HomeComponent {
-  cuerpo: string = '';
+  export class HomeComponent { 
   
-
-  eleccion(choice:string){
-    this.cuerpo = choice
-  } 
+  
 }
-

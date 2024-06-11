@@ -146,7 +146,18 @@
     height: 80%;
     background-color: #fff;
 }
+table {
+  width: 100%;
+}
 
+.mat-mdc-form-field {
+  font-size: 14px;
+  width: 100%;
+}
+
+td, th {
+  width: 25%;
+}
 
 @media (min-width: 991px) {
     .nav-link::before {
