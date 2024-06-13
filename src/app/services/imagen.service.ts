@@ -19,7 +19,7 @@ export class ImagenService{
 
     //----------------------REST PARA RUTAS GENERALES---------------------------------------------
 
-    uploadImage(image: File, path:string): Observable<any> {
+    uploadImageStore(image: File, path:string): Observable<any> {
         const formData: FormData = new FormData(); 
         formData.append('file', image, image.name);
         const bearerToken = sessionStorage.getItem('token');

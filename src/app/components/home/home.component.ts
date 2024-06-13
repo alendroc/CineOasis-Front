@@ -8,7 +8,12 @@ import { User } from '../../models/User';
 import { HttpErrorResponse } from '@angular/common/http';
 import { timer } from 'rxjs';
 import { UserService } from '../../services/user.service';
+
+import { initFlowbite } from 'flowbite';
+
 import Swal from 'sweetalert2';
+import { ImagenService } from '../../services/imagen.service';
+import { server } from '../../services/global';
 
 
 @Component({
@@ -20,24 +25,39 @@ import Swal from 'sweetalert2';
   providers:[UserService]
 })
 export class HomeComponent {
+
+  
   public status:number;
   public cuerpo:string;
   public user:User;
+  public identityAux2: any;
+  public identityAux: any;
   public errores:string[]=[];
   public identity:any;
   private checkIdentity;
+  public selectedFile: File | null = null;
+  urlAPI: string;
   
     constructor(
       private _userService:UserService,
+      private _imagenService:ImagenService,
       private _router: Router,
     ){
+      this.urlAPI = server.url+'imagen/show/';
       this.status=-1;
       this.cuerpo='';
       this.user=new User(1,"","","","","",false,null);
+
       this.checkIdentity=setInterval(()=>{
         this.identity=_userService.getIdentityFromStorage()
-      },500)
+      },700)
+
+      
     }
+  ngOnInit(): void {
+    initFlowbite();
+    this.identityAux = this._userService.getIdentityFromStorage();
+  }
 
 //--------------------DIALOG LOGIN------------------------------------------------
 login(form:any){
@@ -82,6 +102,43 @@ login(form:any){
       //console.log(error);
     }
   })
+}
+//--------------------------------Editar perfil-------------------------------------------------------------
+
+onImageFileChange(event: any): void {
+  this.selectedFile = event.target.files[0];
+}
+
+updateObra(filename:any) {
+  if(!this.identityAux.imagen){
+    this._imagenService.uploadImageStore(this.selectedFile!,"user").subscribe({
+      next: (response: any) => {
+        console.log(response);
+      },
+      error: (err: Error) => {
+        console.log(err.message);
+      }
+    });
+  }
+  if (this.selectedFile) {
+    this._imagenService.updateImage(this.selectedFile,"user",filename).subscribe({
+      next: (response: any) => {
+        console.log(response);
+      },
+      error: (err: Error) => {
+        console.log(err.message);
+      }
+    });
+  }
+  this._userService.update(this.identityAux).subscribe({
+    next: (response: any) => {
+      console.log(response);
+      location.reload();
+    },
+    error: (err: Error) => {
+      console.log(err);
+    }
+  });
 }
 
 //------------------------------CERRAR SESION---------------------------------------------------------------
