@@ -1,73 +1,214 @@
 <div class="tablaUsuario-body">
-    <div class="usuario-container">
-            <div class="contenedor-tablas">
-              <div class="reducir-tabla">
-
-
-                <div class="header-table">
-                <mat-form-field>
-                    <mat-label>Filter</mat-label>
-                    <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Mia" #input>
-                  </mat-form-field>
-                 <div class="btn-table">
-                    <button><span class="button_top ">Agregar</span></button>
-                    <button [disabled]="!isExactlyOneSelected()"><span class="button_top actualizar">Actualizar</span></button>
-                    <button [disabled]="!isAtLeastOneSelected()"><span class="button_top eliminar">Eliminar</span></button>
-                </div>
-                  </div>
-                <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 tabla-redondeada" matSort>
-
-                    <!-- Checkbox Column -->
-                    <ng-container matColumnDef="select">
-                      <th mat-header-cell *matHeaderCellDef>
-                        <mat-checkbox (change)="$event ? toggleAllRows() : null"
-                                      [checked]="selection.hasValue() && isAllSelected()"
-                                      [indeterminate]="selection.hasValue() && !isAllSelected()"
-                                      [aria-label]="checkboxLabel()">
-                        </mat-checkbox>
-                      </th>
-                      <td mat-cell *matCellDef="let row">
-                        <mat-checkbox (click)="$event.stopPropagation()"
-                                      (change)="$event ? selection.toggle(row) : null"
-                                      [checked]="selection.isSelected(row)"
-                                      [aria-label]="checkboxLabel(row)">
-                        </mat-checkbox>
-                      </td>
-                    </ng-container>
-                  
-                    <!-- Position Column -->
-                    <ng-container matColumnDef="position">
-                      <th mat-header-cell *matHeaderCellDef mat-sort-header> No. </th>
-                      <td mat-cell *matCellDef="let element"> {{element.position}} </td>
-                    </ng-container>
-                  
-                    <!-- Name Column -->
-                    <ng-container matColumnDef="name">
-                      <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
-                      <td mat-cell *matCellDef="let element"> {{element.name}} </td>
-                    </ng-container>
-                  
-                    <!-- Weight Column -->
-                    <ng-container matColumnDef="weight">
-                      <th mat-header-cell *matHeaderCellDef> Weight </th>
-                      <td mat-cell *matCellDef="let element"> {{element.weight}} </td>
-                    </ng-container>
-                  
-                    <!-- Symbol Column -->
-                    <ng-container matColumnDef="symbol">
-                      <th mat-header-cell *matHeaderCellDef> Symbol </th>
-                      <td mat-cell *matCellDef="let element"> {{element.symbol}} </td>
-                    </ng-container>
-                  
-                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"
-                        (click)="selection.toggle(row)">
-                    </tr>
-                  </table>
-                <mat-paginator [pageSizeOptions]="[5, 10]" aria-label="Select page of users"></mat-paginator>
+  <div class="usuario-container">
+    <div class="contenedor-tablas">
+      <div class="reducir-tabla">
+            <div class="header-table">
+              <mat-form-field>
+                  <mat-label>Filtrar Usuarios</mat-label>
+                  <input matInput (keyup)="applyFilter($event)" placeholder="Buscar" #input>
+              </mat-form-field>
+              <div class="btn-table">
+                  <button data-bs-toggle="modal" data-bs-target="#crearUsuarioModal"><span class="button_top">Agregar</span></button>
+                  <button data-bs-toggle="modal" data-bs-target="#updateUsuarioModal" [disabled]="!isExactlyOneSelected()"><span class="button_top actualizar" (onClick)="editUser(copyUser[0])">Actualizar</span></button>
+                  <button data-bs-toggle="modal" data-bs-target="#deleteUsuarioModal" [disabled]="!isAtLeastOneSelected()"><span class="button_top eliminar">Eliminar</span></button>
               </div>
             </div>
-            </div>
-          
+            <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 tabla-redondeada" matSort>
+              <!-- Checkbox Column -->
+              <ng-container matColumnDef="select">
+                <th mat-header-cell *matHeaderCellDef>
+                  <mat-checkbox (change)="$event ? toggleAllRows() : null"
+                                [checked]="selection.hasValue() && isAllSelected()"
+                                [indeterminate]="selection.hasValue() && !isAllSelected()"
+                                [aria-label]="checkboxLabel()">
+                  </mat-checkbox>
+                </th>
+                <td mat-cell *matCellDef="let row">
+                  <mat-checkbox (click)="$event.stopPropagation()"
+                                (change)="$event ? selection.toggle(row) : null"
+                                [checked]="selection.isSelected(row)"
+                                [aria-label]="checkboxLabel(row)">
+                  </mat-checkbox>
+                </td>
+              </ng-container>
+                
+              <!-- Id Column -->
+              <ng-container matColumnDef="id">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> ID </th>
+                <td mat-cell *matCellDef="let row"> {{row.id}} </td>
+              </ng-container>
 
+              <!-- Name Column -->
+              <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
+                <td mat-cell *matCellDef="let row"> {{row.name}} </td>
+              </ng-container>
+
+              <!-- Apellido Column -->
+              <ng-container matColumnDef="apellido">
+                <th mat-header-cell *matHeaderCellDef> Apellido </th>
+                <td mat-cell *matCellDef="let row"> {{row.apellido}} </td>
+              </ng-container>
+
+              <!-- Email Column -->
+              <ng-container matColumnDef="email">
+                <th mat-header-cell *matHeaderCellDef> Email </th>
+                <td mat-cell *matCellDef="let row"> {{row.email}} </td>
+              </ng-container>
+
+              <!-- Fecha Nacimiento Column -->
+              <ng-container matColumnDef="fechaNacimiento">
+                <th mat-header-cell *matHeaderCellDef> Fecha Nacimiento </th>
+                <td mat-cell *matCellDef="let row"> {{row.fechaNacimiento}} </td>
+              </ng-container>
+
+              <!-- Permiso Admin Column -->
+              <ng-container matColumnDef="permisoAdmin">
+                <th mat-header-cell *matHeaderCellDef> Permiso Admin </th>
+                <td mat-cell *matCellDef="let row"> {{row.permisoAdmin}} </td>
+              </ng-container>
+
+              <!-- Imagen Column -->
+              <ng-container matColumnDef="imagen">
+                <th mat-header-cell *matHeaderCellDef> Imagen </th>
+                <td mat-cell *matCellDef="let row"> {{row.imagen}} </td>
+              </ng-container>
+
+                
+
+                  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                  <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+                      (click)="selection.toggle(row)">
+                  </tr>
+            </table>
+            <mat-paginator [pageSizeOptions]="[5, 10]" aria-label="Select page of _users"></mat-paginator>
+
+
+            <!--------------------------------DIALOG PARA CREAR USUARIO ---------------------------------->
+
+            <div class="modal fade" id="crearUsuarioModal" tabindex="-1" aria-labelledby="crearUsuarioLabel" aria-hidden="true">
+              <div class="modal-dialog" style="display: flex; justify-content: center;">
+                <div class="modal-content segundoModal">
+                  <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="crearUsuarioLabel">Agregar Usuario</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                    <form #createForm="ngForm" (ngSubmit)="storeUser(createForm)">
+                      <div class="horizontal">
+                        <div class="name-input" style="width: 45%; margin-bottom: 10px;">
+                        <label for="nameForUser"  class="form-text modal-title">Nombre</label>
+                        <input type="text" id="nameForUser" #nameForUser="ngModel" name="nameForUser" pattern="^[a-zA-Z]*$" 
+                        required  class="input" [(ngModel)]="_user.name"/>
+            
+                        @if(!nameForUser.valid && nameForUser.touched){
+                          <small class="invalid-feedback d-block">Formato invalido</small> 
+                      }
+                          
+                        </div>
+                        <div class="name-input" style="width: 45%;">
+                        <label for="lastnameForUser"  class="form-text modal-title">Apellido</label>
+                        <input type="text" id="lastnameForUser" #lastnameForUser="ngModel" name="lastnameForUser" pattern="^[a-zA-Z]*$" 
+                        required  class="input" [(ngModel)]="_user.apellido" placeholder="Digita tu primer apellido"/>
+                        
+                        @if(!lastnameForUser.valid && lastnameForUser.touched){
+                          <small class="invalid-feedback d-block">Formato invalido</small> 
+                      }
+            
+                        </div>
+                      </div>
+                      <div style=" margin-bottom: 20px; ">
+                        <label for="emailForUser"  class="form-text modal-title">Correo</label>
+                        <input type="email" id="emailForUser" #emailForUser="ngModel" name="emailForUser" pattern="\b[\w\.-]+@[\w\.-]+\.\w{2,4}\b" 
+                        required placeholder="ejemplo@gmail.com" class="input" [(ngModel)]="_user.email"/>
+            
+                        @if(!emailForUser.valid && emailForUser.touched){
+                          <small class="invalid-feedback d-block">Formato invalido</small> 
+                      }
+            
+                      </div>
+                      <div style=" margin-bottom: 20px; ">
+                        <label for="passwordForUser"  class="form-text modal-title">Contraseña</label>
+                        <input type="password" id="passwordForUser" #passwordForUser="ngModel" name="passwordForUser" 
+                        required class="input" [(ngModel)]="_user.password" placeholder="contraseña"/>
+                      </div>
+                      <div style=" margin-bottom: 20px; ">
+                        <label for="date"  class="form-text modal-title">Fecha de Nacimiento</label>
+                        <input type="date" id="date" #date="ngModel" name="date"
+                        required class="input" [(ngModel)]="_user.fechaNacimiento"/>
+                      </div >
+                      <input type="submit" class="btn-create" [disabled]="createForm.invalid" value="Crear Usuario">
+                      
+                      <div class="registrar">
+                    
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!--------------------------------FINAL PARA CREAR USUARIO ---------------------------------->
+
+            <!--------------------------------DIALOG PARA ELIMINAR USUARIO ---------------------------------->
+            <div class="modal fade" id="deleteUsuarioModal" tabindex="-1" aria-labelledby="deleteUsuarioModalLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="deleteUsuarioModalLabel">Eliminar Usuario</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                    ¿Está seguro que desea eliminar el usuario?
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" style="" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal" (click)="deleteSelectedUsers()">Eliminar</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!--------------------------------FINAL PARA ELIMINAR USUARIO ---------------------------------->
+
+            <!--------------------------------DIALOG PARA ACTUALIZAR USUARIO ---------------------------------->
+
+            <div class="modal fade" id="updateUsuarioModal" tabindex="-1" aria-labelledby="updateUsuarioModalLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="updateUsuarioModalLabel">Actualizar Usuario</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                    <form #updateForm="ngForm" (ngSubmit)="updateUser2()">
+                      <div class="mb-3">
+                        <label for="nameForUser" class="form-label">Nombre</label>
+                        <input type="text" id="nameForUser" name="name" class="form-control" [(ngModel)]="selectedUser.name" required>
+                      </div>
+                      <div class="mb-3">
+                        <label for="apellidoForUser" class="form-label">Apellido</label>
+                        <input type="text" id="apellidoForUser" name="apellido" class="form-control" [(ngModel)]="selectedUser.apellido" required>
+                      </div>
+                      <div class="mb-3">
+                        <label for="emailForUser" class="form-label">Correo</label>
+                        <input type="email" id="emailForUser" name="email" class="form-control" [(ngModel)]="selectedUser.email" required>
+                      </div>
+                      <div class="mb-3">
+                        <label for="fechaNacimientoForUser" class="form-label">Fecha de Nacimiento</label>
+                        <input type="date" id="fechaNacimientoForUser" name="fechaNacimiento" class="form-control" [(ngModel)]="selectedUser.fechaNacimiento" required>
+                      </div>
+                      <div class="mb-3">
+                        <label for="permisoAdminForUser" class="form-label">Permiso Admin</label>
+                        <input type="checkbox" id="permisoAdminForUser" name="permisoAdmin" [(ngModel)]="selectedUser.permisoAdmin">
+                      </div>
+                      <button type="submit" class="btn btn-primary" [disabled]="updateForm.invalid">Actualizar Usuario</button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!--------------------------------FINAL PARA ACTUALIZAR USUARIO ---------------------------------->
+      </div>
     </div>
+  </div>
+</div>

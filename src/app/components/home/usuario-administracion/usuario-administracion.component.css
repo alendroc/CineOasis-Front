@@ -134,3 +134,62 @@ button[disabled]:active .button_top {
 }
 
 
+/*Inicio del CSS para el DIALOG de Crear Usuaior*/
+
+
+.modal-header{
+  border-bottom: none;
+}
+.input {
+  --input-focus: #2d8cf0;
+  --font-color: #323232;
+  --font-color-sub: #666;
+  --bg-color: #fff;
+  --main-color: #323232;
+  width: 100%;
+  height: 40px;
+  border-radius: 5px;
+  border: 2px solid var(--main-color);
+  background-color: var(--bg-color);
+  box-shadow: 4px 4px var(--main-color);
+  font-size: 15px;
+
+  color: var(--font-color);
+  padding: 5px 10px;
+  outline: none;
+}
+
+.input::placeholder {
+  color: var(--font-color-sub);
+  opacity: 0.8;
+}
+
+.input:focus {
+  border: 2px solid var(--input-focus);
+}
+.form-text{
+ font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  color: black;
+  font-weight: bold;
+  
+}
+.primerModal{
+  width: 60%;
+}
+.segundoModal{
+width: 100%;
+}
+.btn-create{
+  margin-top: 20px;
+  margin-bottom: 10px;
+  width: 100%;
+  padding: 6px;
+  background-color: #224e27;
+  color: white;
+  text-align: center;
+  border-radius: 8px;
+  transition: 0.3s;
+} 
+.btn-create:hover{
+  background-color: #009970;
+}
