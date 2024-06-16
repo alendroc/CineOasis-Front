@@ -8,7 +8,7 @@ export class Pelicula{
         public subtitulo:string,
         public genero:string,
         public fechaEstreno:string,
-        public calificaciónEdad:string,
+        public calificacionEdad:string,
         public animacion:string,
         public director:string,
         public elenco:string

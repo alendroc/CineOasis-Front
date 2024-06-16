@@ -26,7 +26,6 @@ export class IndexComponent {
 
   ngOnInit(): void {
     this.indexTodasLasPeliculas();
-    
   }
 
 

@@ -6,36 +6,60 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import { SelectionModel } from '@angular/cdk/collections';
-import { User } from '../../../models/User';
-import { UserService } from '../../../services/user.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
-import { MatSlideToggleModule,_MatSlideToggleRequiredValidatorModule,} from '@angular/material/slide-toggle';
+import { MatSlideToggleModule} from '@angular/material/slide-toggle';
 import { ImagenService } from '../../../services/imagen.service';
+import { Pelicula } from '../../../models/Pelicula';
+import { PeliculaService } from '../../../services/pelicula.service';
+import { MatSelectModule } from '@angular/material/select';
+import { MatOptionModule } from '@angular/material/core';
 
 @Component({
-  selector: 'app-usuario-administracion',
+  selector: 'app-pelicula-administracion',
   standalone: true,
-  imports: [FormsModule,RouterLink,RouterLinkActive,RouterOutlet,MatFormFieldModule, MatCheckboxModule,
-    MatInputModule, MatTableModule ,MatPaginatorModule, _MatSlideToggleRequiredValidatorModule,MatButtonModule,
-    ReactiveFormsModule, MatSlideToggleModule],
-  templateUrl: './usuario-administracion.component.html',
-  styleUrl: './usuario-administracion.component.css'
+  imports: [ FormsModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatCheckboxModule,
+    MatSelectModule,
+    MatInputModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatButtonModule,
+    MatSlideToggleModule,
+    MatOptionModule,],
+  templateUrl: './pelicula-administracion.component.html',
+  styleUrl: './pelicula-administracion.component.css'
 })
-export class UsuarioAdministracionComponent {
-  displayedColumns: string[] = ['select', 'id', 'name', 'apellido', 'email', 'fechaNacimiento', 'permisoAdmin'];
-  dataSource = new MatTableDataSource<User>([]);
-  selection = new SelectionModel<User>(true, []);
+export class PeliculaAdministracionComponent {
+  displayedColumns: string[] = ['select', 'id', 'nombre', 'descripcion', 'duracion', 'idioma', 'subtitulo',
+    'genero','fechaEstreno','calificacionEdad','animacion','director','elenco'];
+  dataSource = new MatTableDataSource<Pelicula>([]);
+  selection = new SelectionModel<Pelicula>(true, []);
+
+  idiomas: string[] = ['Español','Ingles','Frances','Portugues','Japones'];
+  subtitulos: string[] = ['Español','Ingles','Frances','Portugues','Japones','No Posee'];
+  animaciones: string[] = [ '2D','3D','Stop-Motion'];
+
+  clasificaciones = [
+    { key: 'G', value: 'Para todos los públicos' },
+    { key: 'PG', value: 'Con supervisión de los padres' },
+    { key: 'PG-13', value: 'Con supervisión de los padres para menores de 13 años' },
+    { key: 'R', value: 'Restringido y con supervisión de los padres para menores de 17 años' },
+    { key: 'NC-17', value: 'Para mayores de 17 años' }
+  ];
+
   
-  public _user: User;
-  users: User[] = [];
-  public selectedUser: User = new User(1, "", "", "", "", "", false, "");
+  public _pelicula: Pelicula;
+  peliculas: Pelicula[] = [];
+  public selectedPelicula: Pelicula = new Pelicula(1,'','','','','','','','','','','');
 
   constructor(
-    private _userService: UserService,
+    private _peliculaService: PeliculaService,
     private _imagenService:ImagenService,
   ) {
-    this._user= new User(1,"","","","","",false,"")
+    this._pelicula= new Pelicula(1,'','','','','','','','','','','');
   }
 
   /****************ESTAS SON FUNCIONES PROPIAS DE LA TABLA PARA EL CHECKBOX Y SELECIONAR****************/
@@ -54,7 +78,7 @@ export class UsuarioAdministracionComponent {
     this.selection.select(...this.dataSource.data);
   }
 
-  checkboxLabel(row?: User): string {
+  checkboxLabel(row?: Pelicula): string {
     if (!row) {
       return `${this.isAllSelected() ? 'deselect' : 'select'} all`;
     }
@@ -83,72 +107,55 @@ export class UsuarioAdministracionComponent {
     return this.selection.selected.length === 1;
   }
 
-  isUserRow(row: any): boolean {
-    const identity = sessionStorage.getItem('identity');
-    if (identity) {
-      const parsedIdentity = JSON.parse(identity);
-      return row.id === parsedIdentity['iss'];
-    }
-    return false;
-  }
-
-  isRegisteredUserSelected(): boolean {
-    if (!this.selection.isEmpty()) {
-      const selectedUser = this.selection.selected[0];
-      return this.isUserRow(selectedUser);
-    }
-    return false;
-  }
   /*****************************CREACIÓN DE LAS FUNCIONES PRINCIPALES DEL CRUD*****************************/
   
   ngOnInit():void {
-    this.getUsers();
+    this.getPeliculas();
   }
 
   /*****************************  GET  *****************************/
-  getUsers() {
-    this._userService.index().subscribe({
+  getPeliculas() {
+    this._peliculaService.index().subscribe({
       next: (response: any) => {
         this.dataSource.data = response['data'];
         console.log();
       },
       error: (err: Error) => {
-        console.error('Error al cargar los usuarios', err);
+        console.error('Error al cargar las peliculas', err);
       }
     });
   }
 
   /*****************************  CREATE  *****************************/
-  storeUser(form: any): void {
+  storePelicula(form: any): void {
     if (form.valid) {
-      this._userService.create(this._user).subscribe({
+      this._peliculaService.create(this._pelicula).subscribe({
       next:(response)=>{
         console.log(response);
         if(response.status==201){
           form.reset();            
             } else {
-              console.error('No se pudo ingrear el usuario');
+              console.error('No se pudo ingrear la pelicula');
             }
           },
           error: (err: any) => {
             console.error(err);
           }
         });
-        this.getUsers();
+        this.getPeliculas();
     }
   }
 
   /*****************************  DELETE  *****************************/
-  deleteSelectedUsers() {
-    this.selection.selected.forEach(user => {
-      this._userService.delete(user.id).subscribe({
+  deleteSelectedPeliculas() {
+    this.selection.selected.forEach(pelicula => {
+      this._peliculaService.delete(pelicula.id).subscribe({
         next: () => {
-          // (image!=null)? this.deleteUserImage(image!):console.log('No hay imagenes');
-          this.dataSource.data = this.dataSource.data.filter(u => u.id !== user.id);
+          this.dataSource.data = this.dataSource.data.filter(u => u.id !== pelicula.id);
           this.selection.clear();
         },
         error: (err: any) => {
-          console.error('Error al eliminar el usuario', err);
+          console.error('Error al eliminar la pelicula', err);
         }
       });
     });
@@ -156,18 +163,18 @@ export class UsuarioAdministracionComponent {
 
 
   /*****************************  UPDATE  *****************************/
-    updateUser(form: any): void {
+    updatePelicula(form: any): void {
       if (form.valid) {
-        this._userService.update(this.selectedUser).subscribe({
-          next: (updatedUser) => {
-            const index = this.dataSource.data.findIndex(user => user.id === updatedUser.id);
+        this._peliculaService.update(this.selectedPelicula).subscribe({
+          next: (updatedPelicula) => {
+            const index = this.dataSource.data.findIndex(pelicula => pelicula.id === updatedPelicula.id);
             if (index !== -1) {
-              this.dataSource.data[index] = updatedUser;
+              this.dataSource.data[index] = updatedPelicula;
               this.dataSource.data = [...this.dataSource.data]; // Para disparar la actualización de Angular
               
             }
             form.reset();
-            this.getUsers();
+            this.getPeliculas();
             this.selection.clear(); 
           },
           error: (err) => {
@@ -179,7 +186,7 @@ export class UsuarioAdministracionComponent {
     
     prepareUpdateForm() {
       if (this.isExactlyOneSelected()) {
-        this.selectedUser = { ...this.selection.selected[0] };
+        this.selectedPelicula = { ...this.selection.selected[0] };
       }
     }
 

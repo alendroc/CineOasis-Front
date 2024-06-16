@@ -2,78 +2,24 @@
     <div class="combo-container">
       <h3>Alimentos</h3>
       <div class="div-scroll">
+
+        @for (item of comidas; track $index) {
+
         <div class="card-container">
           <div class="image-div">
             <img class="image-combo" src="../../../../assets/img/Nachos.jpeg" alt="">
           </div>
           <div class="info-combo">
-              <h5 class="title-combo">Nachos</h5>
+              <h5 class="title-combo">{{comida.nombre}}</h5>
               <div style="display: flex; gap: 10px;">
                 <span class="text-combo">Precio:</span>
-                <span class="text-combo"><strong> ₡3300</strong></span>
+                <span class="text-combo"><strong> {{comida.precio}}</strong></span>
               </div>
           </div>
         </div>
-        <div class="card-container">
-          <div class="image-div">
-            <img class="image-combo" src="../../../../assets/img/Burritos.jpeg" alt="">
-          </div>
-          <div class="info-combo">
-              <h5 class="title-combo">Burrito</h5>
-              <div style="display: flex; gap: 10px;">
-                <span class="text-combo">Precio:</span>
-                <span class="text-combo"><strong> ₡3300</strong></span>
-              </div>
-          </div>
-        </div>
-        <div class="card-container">
-          <div class="image-div">
-            <img class="image-combo" src="../../../../assets/img/HotDog.jpeg" alt="">
-          </div>
-          <div class="info-combo">
-              <h5 class="title-combo">Perro Caliente</h5>
-              <div style="display: flex; gap: 10px;">
-                <span class="text-combo">Precio:</span>
-                <span class="text-combo"><strong> ₡3300</strong></span>
-              </div>
-          </div>
-        </div>
-        <div class="card-container">
-          <div class="image-div">
-            <img class="image-combo" src="../../../../assets/img/Palomitas.jpeg" alt="">
-          </div>
-          <div class="info-combo">
-              <h5 class="title-combo">Palomitas Grandes</h5>
-              <div style="display: flex; gap: 10px;">
-                <span class="text-combo">Precio:</span>
-                <span class="text-combo"><strong> ₡3300</strong></span>
-              </div>
-          </div>
-        </div>
-        <div class="card-container">
-          <div class="image-div">
-            <img class="image-combo" src="../../../../assets/img/Pizza.jpeg" alt="">
-          </div>
-          <div class="info-combo">
-              <h5 class="title-combo">Pizza Personal</h5>
-              <div style="display: flex; gap: 10px;">
-                <span class="text-combo">Precio:</span>
-                <span class="text-combo"><strong> ₡3300</strong></span>
-              </div>
-          </div>
-        </div>
-        <div class="card-container">
-          <div class="image-div">
-            <img class="image-combo" src="../../../../assets/img/Tacos.jpeg" alt="">
-          </div>
-          <div class="info-combo">
-              <h5 class="title-combo">Tacos</h5>
-              <div style="display: flex; gap: 10px;">
-                <span class="text-combo">Precio:</span>
-                <span class="text-combo"><strong> ₡3300</strong></span>
-              </div>
-          </div>
-      </div>
+
+        }
+
     </div>
   </div>
 </div>
