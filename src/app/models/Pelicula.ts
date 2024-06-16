@@ -1,4 +1,5 @@
 export class Pelicula{
+    imagenes: any;
     constructor(
         public id:number,
         public nombre:string,

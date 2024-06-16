@@ -51,7 +51,9 @@
           <div class="cartelera">
             <p class="titule-about-body">C A R T E L E R A</p>
             <div  class="card-cartelera" >
-              <div *ngFor="let imagen of imagenesPeli" class="card1"><img class="imagenP" src="{{urlAPI}}{{imagen.imagen}}"></div>
+              <div *ngFor="let imagen of imagenesPeli" class="card1">
+                <img class="imagenP" [routerLink]="['/peliculas', imagen.idPelicula]"  src="{{urlAPI}}{{imagen.imagen}}">
+              </div>
             </div>
           </div>
           <div class="comida">
