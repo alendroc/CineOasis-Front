@@ -11,6 +11,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSlideToggleModule, _MatSlideToggleRequiredValidatorModule } from '@angular/material/slide-toggle';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatButtonModule } from '@angular/material/button';
+import { Imagen } from '../../../models/Imagen';
+import { ImagenService } from '../../../services/imagen.service';
 
 @Component({
   selector: 'app-comida-administracion',
@@ -25,15 +27,17 @@ export class ComidaAdministracionComponent {
   dataSource = new MatTableDataSource<Comida>([]);
   selection = new SelectionModel<Comida>(true, []);
   comida: Comida = new Comida(0, '', 0, '');
-  public _comida: Comida;
+  errorMessage: string | null = null;
+  selectedFile: File | null = null;
   public selectedComida = new Comida(1,"",1,"")
-
-  constructor(private _comidaService: ComidaService) {
+  public _comida: Comida;
+  public _imagen:Imagen;
+  constructor(
+    private _comidaService: ComidaService,
+    private _imagenService: ImagenService
+  ) {
     this._comida = new Comida(1,"",0,"")
-  }
-
-  ngOnInit(): void {
-    // Fetch comidas from the backend
+    this._imagen = new Imagen(1,1,"","")
   }
 
   applyFilter(event: Event): void {
@@ -70,22 +74,107 @@ export class ComidaAdministracionComponent {
     return this.selection.selected.length > 0;
   }
 
-  storeComida(form:any): void {
-    
+  /*****************************CREACIÓN DE LAS FUNCIONES PRINCIPALES DEL CRUD*****************************/
+  
+  ngOnInit():void {
+    this.getComidas();
   }
 
+  /*****************************  GET  *****************************/
+
+  getComidas() {
+    this._comidaService.index().subscribe({
+      next: async (response: any) => {
+        const comidas = response['data'] as Comida[];
+        for (let comida of comidas) {
+          try {
+            const imageBlob = await this._imagenService.getImage('comidas', comida.imagen).toPromise();
+            comida.imagen = URL.createObjectURL(imageBlob);
+          } catch (error) {
+            console.error('Error al cargar la imagen de la comida', error);
+          }
+        }
+        this.dataSource.data = comidas;
+      },
+      error: (err: Error) => {
+        console.error('Error al cargar las comidas', err);
+      }
+    });
+  }
+
+  /*****************************  STORE  *****************************/
+  
+
+  onFileChange(event: any): void {
+    const file = event.target.files[0];
+    if (file) {
+      this.selectedFile = file;
+    }
+  }
+
+  storeComida(form: any): void {
+    if (form.valid && this.selectedFile) {
+      //Primero cargar la imagen
+      this._imagenService.uploadImageStore(this.selectedFile, 'comidas').subscribe({
+        next: (response) => {
+          //Obtener el nombre de la imagen cargada en el Backend
+          this.comida.imagen = response.filename; 
+          this._comidaService.create(this.comida).subscribe({
+            next: () => {
+              this.getComidas();
+              form.resetForm();
+              this.selectedFile = null;
+            },
+            error: (err) => {
+              console.error('Error al crear la comida', err);
+              this.errorMessage = err.error.message || 'Error al crear la comida';
+            }
+          });
+        },
+        error: (err) => {
+          console.error('Error al subir la imagen', err);
+          this.errorMessage = err.error.message || 'Error al subir la imagen';
+        }
+      });
+    } else {
+      this.errorMessage = 'Formulario inválido o imagen no seleccionada';
+    }
+  }
+
+  /*****************************  DELETE  *****************************/
   deleteSelectedComidas(): void {
-    
+    const selectedIds = this.selection.selected.map(comida => comida.id);
+    selectedIds.forEach(id => {
+      this._comidaService.delete(id).subscribe({
+        next: () => {
+          this.getComidas();
+          this.selection.clear(); 
+        },
+        error: (err: Error) => {
+          console.error('Error al eliminar la comida', err);
+        }
+      });
+    });
   }
 
+  /*****************************  UPDATE  *****************************/
   prepareUpdateForm(): void {
-    
+    if (this.isExactlyOneSelected()) {
+      this.selectedComida = this.selection.selected[0];
+    }
   }
 
-  updateComida(form:any): void {
-   
+  updateComida(form: any): void {
+    this._comidaService.update(this.selectedComida).subscribe({
+      next: (response) => {
+        this.getComidas();
+        form.reset();
+        this.selection.clear(); 
+      },
+      error: (err: Error) => {
+        console.error('Error al actualizar la comida', err);
+      }
+    });
   }
-
- 
 
 }
