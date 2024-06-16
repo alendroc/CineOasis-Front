@@ -26,7 +26,7 @@ export class PeliculaService{
         return this._http.get(this.urlAPI+'funpeliculacion', options);
     }
 
-    show(id:number):Observable<any>{
+    show(id:any):Observable<any>{
         let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
         let options = {
             headers
