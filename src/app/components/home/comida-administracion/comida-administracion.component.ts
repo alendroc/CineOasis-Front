@@ -26,10 +26,12 @@ export class ComidaAdministracionComponent {
   displayedColumns: string[] = ['select', 'id', 'nombre', 'precio', 'imagen'];
   dataSource = new MatTableDataSource<Comida>([]);
   selection = new SelectionModel<Comida>(true, []);
-  comida: Comida = new Comida(0, '', 0, '');
   errorMessage: string | null = null;
   selectedFile: File | null = null;
+  updateFile: File | null = null;
+  comida: Comida = new Comida(0, '', 0, '');
   public selectedComida = new Comida(1,"",1,"")
+
   public _comida: Comida;
   public _imagen:Imagen;
   constructor(
@@ -140,7 +142,7 @@ export class ComidaAdministracionComponent {
       this.errorMessage = 'Formulario inválido o imagen no seleccionada';
     }
   }
-
+  
   /*****************************  DELETE  *****************************/
   deleteSelectedComidas(): void {
     const selectedIds = this.selection.selected.map(comida => comida.id);
@@ -158,6 +160,13 @@ export class ComidaAdministracionComponent {
   }
 
   /*****************************  UPDATE  *****************************/
+  onUpdateFileChange(event: any): void {
+    const file = event.target.files[0];
+    if (file) {
+      this.updateFile = file;
+    }
+  }
+
   prepareUpdateForm(): void {
     if (this.isExactlyOneSelected()) {
       this.selectedComida = this.selection.selected[0];
@@ -165,16 +174,43 @@ export class ComidaAdministracionComponent {
   }
 
   updateComida(form: any): void {
-    this._comidaService.update(this.selectedComida).subscribe({
-      next: (response) => {
-        this.getComidas();
-        form.reset();
-        this.selection.clear(); 
-      },
-      error: (err: Error) => {
-        console.error('Error al actualizar la comida', err);
+    if (form.valid) {
+      if (this.updateFile) {
+        this._imagenService.uploadImageStore(this.updateFile, 'comidas').subscribe({
+          next: (response) => {
+            this.selectedComida.imagen = response.filename;
+            this._comidaService.update(this.selectedComida).subscribe({
+              next: () => {
+                this.getComidas();
+                form.resetForm();
+                this.selection.clear();
+                this.updateFile = null;
+              },
+              error: (err) => {
+                console.error('Error al actualizar la comida', err);
+              }
+            });
+          },
+          error: (err) => {
+            console.error('Error al subir la imagen', err);
+          }
+        });
+      } else {
+        this._comidaService.update(this.selectedComida).subscribe({
+          next: () => {
+            this.getComidas();
+            form.resetForm();
+            this.selection.clear();
+          },
+          error: (err) => {
+            console.error('Error al actualizar la comida', err);
+          }
+        });
       }
-    });
+    } else {
+      this.errorMessage = 'Formulario inválido';
+    }
   }
 
+  
 }
