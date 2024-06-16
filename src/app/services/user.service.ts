@@ -60,22 +60,6 @@ export class UserService{
         return this._http.get(this.urlAPI+'user', options);
     }
 
-    index2(): Observable<User[]> {
-        let headers;
-        let bearertoken = sessionStorage.getItem('token');
-        if (bearertoken){
-            headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded').set('bearertoken', bearertoken);
-        } else {
-            headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
-        }
-        let options = {
-            headers
-        };
-        return this._http.get<any>(this.urlAPI + 'user', options).pipe(
-            map(response => response.data)
-        );
-    }
-
     show(id:number):Observable<any>{
         let headers;
         let bearertoken = sessionStorage.getItem('token');
@@ -129,24 +113,6 @@ export class UserService{
             headers
         };
         return this._http.put(this.urlAPI+`user/${user.id}`, params, options);
-    }
-
-    update2(user: User): Observable<any> {
-        const userJson = JSON.stringify(user);
-        const params = `data=${userJson}`;
-        const headersConfig: { [header: string]: string | string[] } = {
-            'Content-Type': 'application/x-www-form-urlencoded'
-        };
-    
-        const bearertoken = sessionStorage.getItem('token');
-        if (bearertoken) {
-            headersConfig['Authorization'] = `Bearer ${bearertoken}`;
-        }
-    
-        const headers = new HttpHeaders(headersConfig);
-        const url = `${this.urlAPI}user/${user.id}`;
-    
-        return this._http.put(url, params, { headers });
     }
     
 
