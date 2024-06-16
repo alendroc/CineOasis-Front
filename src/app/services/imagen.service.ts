@@ -30,7 +30,7 @@ export class ImagenService{
         return this._http.post(this.urlAPI+'imagen/store/'+path, formData, { headers });
     }
     
-    updateImage(image: File, path:string, filename: string){
+    updateImage(image: File, path:string, filename: string):Observable<any>{
         const formData: FormData = new FormData(); 
         formData.append('file', image, image.name);
         const bearerToken = sessionStorage.getItem('token');
@@ -38,7 +38,7 @@ export class ImagenService{
         if (bearerToken) {
         headers = headers.set('bearertoken', `${bearerToken}`);
         }
-        return this._http.post(this.urlAPI+`imagen/updateImage/${path}/${filename}`, formData, { headers });
+        return this._http.post(this.urlAPI+'imagen/update/'+path+'/'+filename, formData, { headers });
     }
     
     destroyImage(path:string, filename: string){
@@ -56,7 +56,7 @@ export class ImagenService{
         if (bearerToken) {
         headers = headers.set('bearertoken', `${bearerToken}`);
         }
-        return this._http.get(`${this.urlAPI}imagen/show/${path}/${filename}`, { headers });
+        return this._http.get(`${this.urlAPI}imagen/show/${path}/${filename}`, { headers, responseType: 'blob' });
     }
 
 

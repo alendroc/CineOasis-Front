@@ -30,12 +30,12 @@ export class HomeComponent {
   public status:number;
   public cuerpo:string;
   public user:User;
-  public identityAux2: any;
   public identityAux: any;
-  public errores:string[]=[];
   public identity:any;
+  public errores:string[]=[];
   private checkIdentity;
   public selectedFile: File | null = null;
+  public imageURL:string='';
   urlAPI: string;
   
     constructor(
@@ -50,13 +50,42 @@ export class HomeComponent {
 
       this.checkIdentity=setInterval(()=>{
         this.identity=_userService.getIdentityFromStorage()
-      },700)
+      },1700)
+     
 
       
     }
   ngOnInit(): void {
     initFlowbite();
-    this.identityAux = this._userService.getIdentityFromStorage();
+    this.loadIndentityAux();
+    try{ this.getUserImage(this.identityAux.imagen);}catch(e){this.imageURL="../../../assets/img/R.jpg";console.log(e)}
+ 
+  }
+
+  //Obtener imagen de usuario
+  getUserImage(filename:string)
+  {
+    this._imagenService.getImage('usuarios',filename).subscribe({
+      next: (response: any) => {
+        this.imageURL= URL.createObjectURL(response);
+      },
+      error: (err: Error) => {
+        //console.log(err);
+      }
+    });
+
+  }
+
+  //FUNCION QUE CARGA AUXILIAR DE INDENTITY PARA ACTUALIZAR EL USUARIO
+  loadIndentityAux(){this.identityAux=this._userService.getIdentityFromStorage();}
+
+  //-------------FUNCION QUE LIMPIA FORM----------------
+  resetForm(form:any){form.reset();}
+
+//---------FUNCION UTILIZADA PARA CERRAR EL DIALOG DE ACTUALIZAR USUARIO-------------
+  closeUpdateUserDialog(form:any){
+    this.loadIndentityAux();
+    this.resetForm(form);
   }
 
 //--------------------DIALOG LOGIN------------------------------------------------
@@ -64,14 +93,12 @@ login(form:any){
   this.status=-1;
   this._userService.login(this.user).subscribe({
     next:(response)=>{
-      console.log(response);
       if(response.status != 401){
         sessionStorage.setItem("token", response);
         this._userService.getIdentityFromAPI().subscribe({
           next:(resp:any)=>{
-            console.log(resp);
             sessionStorage.setItem('identity', JSON.stringify(resp));
-            form.reset();
+            this.resetForm(form);
             location.reload();
           },
           error:(error:Error)=>{
@@ -81,7 +108,7 @@ login(form:any){
       } else {
         this.status = 0;
         this.msgAlert('Datos incorrectos','', 'error');
-        form.reset(); 
+        this.resetForm(form);
       }
     },
     error:(error:HttpErrorResponse)=>{
@@ -99,7 +126,6 @@ login(form:any){
         this.msgAlert('Error desde el servidor, contacte con un administrador', '', 'error');
       }
       this.changeStatus(2);
-      //console.log(error);
     }
   })
 }
@@ -107,39 +133,74 @@ login(form:any){
 
 onImageFileChange(event: any): void {
   this.selectedFile = event.target.files[0];
+
 }
 
-updateObra(filename:any) {
-  if(!this.identityAux.imagen){
-    this._imagenService.uploadImageStore(this.selectedFile!,"user").subscribe({
+updateImageUser(form:any) {
+
+
+this.user=new User(this.identityAux.iss,this.identityAux.name,this.identityAux.apellido,this.identityAux.email,'',
+  this.identityAux.fechaNacimiento,this.identityAux.permisoAdmin,this.identityAux.imagen);
+
+
+if(this.selectedFile==null)
+  {
+    this.updateInfoUser(this.user);
+   
+  }else{
+
+  if(this.user.imagen===''){
+    this._imagenService.uploadImageStore(this.selectedFile!,"usuarios").subscribe({
       next: (response: any) => {
-        console.log(response);
+        this.user.imagen=response['filename'];
+        this.updateInfoUser(this.user);
+        this.getUserImage(this.identityAux.imagen);
+        this.resetForm(form);
       },
       error: (err: Error) => {
-        console.log(err.message);
+        console.log(err);
+      }
+    });
+  }else{
+    this._imagenService.updateImage(this.selectedFile!,"usuarios", this.user.imagen!).subscribe({
+      next: (response: any) => {
+
+        this.updateInfoUser(this.user);
+        this.getUserImage(this.identityAux.imagen)
+        this.resetForm(form);
+      },
+      error: (err: Error) => {
+        console.log(err);
+        
       }
     });
   }
-  if (this.selectedFile) {
-    this._imagenService.updateImage(this.selectedFile,"user",filename).subscribe({
-      next: (response: any) => {
-        console.log(response);
-      },
-      error: (err: Error) => {
-        console.log(err.message);
-      }
-    });
-  }
-  this._userService.update(this.identityAux).subscribe({
+}
+}
+
+updateInfoUser(user:User){
+  this._userService.update(user).subscribe({
     next: (response: any) => {
-      console.log(response);
-      location.reload();
+      sessionStorage.setItem('token',response.token);
+
+      this._userService.getIdentityFromAPI().subscribe({
+        next:(resp:any)=>{
+          sessionStorage.setItem('identity', JSON.stringify(resp));
+          this.identityAux=this._userService.getIdentityFromStorage();
+         
+        },
+        error:(error:Error)=>{
+          console.log(error);
+        }
+      });
+      this.msgAlert('Usuario Actualizado','','success');
     },
     error: (err: Error) => {
       console.log(err);
     }
   });
 }
+
 
 //------------------------------CERRAR SESION---------------------------------------------------------------
 logOut(){
@@ -154,7 +215,7 @@ this._router.navigate([''])
         next:(response)=>{
           console.log(response);
           if(response.status==201){
-            form.reset();
+            this.resetForm(form);
             this.msgAlert('Usuario creado con éxito','','success');
             this.changeStatus(0);
           }else{
@@ -176,7 +237,6 @@ this._router.navigate([''])
             this.msgAlert('Error desde el servidor, contacte con un administrador', '', 'error');
           }
           this.changeStatus(2);
-          //console.log(error);
         }
       })
     }

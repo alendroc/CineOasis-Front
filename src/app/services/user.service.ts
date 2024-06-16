@@ -114,6 +114,10 @@ export class UserService{
         };
         return this._http.put(this.urlAPI+`user/${user.id}`, params, options);
     }
+<<<<<<< HEAD
+=======
+    
+>>>>>>> 0c0662f822493c1f6d4a21b3f8cb6942f7bdb9dc
 
  //----------------------Login---------------------------------------------
 
