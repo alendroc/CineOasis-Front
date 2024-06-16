@@ -6,14 +6,17 @@ import { IndexComponent } from './components/home/index/index.component';
 import { PeliculaComponent } from './components/pelicula/pelicula.component';
 import { UsuarioAdministracionComponent } from './components/home/usuario-administracion/usuario-administracion.component';
 import { PeliculaAdministracionComponent } from './components/home/pelicula-administracion/pelicula-administracion.component';
+import { ComidaAdministracionComponent } from './components/home/comida-administracion/comida-administracion.component';
+
 
 export const routes: Routes = [
     {path:'',component: HomeComponent, children:[
         {path:'',component:IndexComponent},
         {path:'combos',component:CombosComponent},
-        {path:'peliculas', component:PeliculaComponent},
+        {path:'peliculas/:id', component:PeliculaComponent},
         {path:'usuarioAdministracion', component:UsuarioAdministracionComponent},
-        {path:'peliculaAdministracion', component:PeliculaAdministracionComponent}]
+        {path:'peliculaAdministracion', component:PeliculaAdministracionComponent},
+        {path:'comidaAdministracion',component:ComidaAdministracionComponent}]
        
     }
 ];

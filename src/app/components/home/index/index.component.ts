@@ -3,11 +3,12 @@ import { Imagen } from '../../../models/Imagen';
 import { CommonModule } from '@angular/common';
 import { ImagenService } from '../../../services/imagen.service';
 import { server } from '../../../services/global';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-index',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './index.component.html',
   styleUrl: './index.component.css',
   providers:[ImagenService]
@@ -27,8 +28,6 @@ export class IndexComponent {
   ngOnInit(): void {
     this.indexTodasLasPeliculas();
   }
-
-
   indexTodasLasPeliculas(){
      this._imagenService.indexImagesForPelicula().subscribe({
       next: (response:any) =>{
@@ -37,5 +36,6 @@ export class IndexComponent {
     },
       error: (err: Error) => {}
     });
+
   }
 }

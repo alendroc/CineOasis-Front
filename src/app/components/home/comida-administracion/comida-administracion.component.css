@@ -1,13 +1,13 @@
-.tablaPelicula-body {
+.tablaComida-body {
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100%;
     width: 100%;
-    background: linear-gradient(0deg, rgba(0,0,0,1) 0%, rgba(39,83,44,1) 100%);
+    background: linear-gradient(0deg, rgb(83, 47, 3) 0%, rgb(189, 141, 97) 100%);
 }
 
-.pelicula-container {
+.comida-container {
     display: flex;
     flex-direction: column;
     width: 100%;
@@ -115,7 +115,7 @@ button[disabled]:active .button_top {
 }
 
 .tabla-redondeada th {
-    background-color: #658f69db;
+    background-color: #a6612cdb;
 }
 
 /* Ajusta los anchos de las columnas según tus necesidades */
@@ -127,21 +127,14 @@ button[disabled]:active .button_top {
   width: 150px; /* Ajusta el ancho de la columna Name */
 }
 
-.mat-column-apellido {
+.mat-column-precio {
   width: 150px; /* Ajusta el ancho de la columna Apellido */
 }
 
-.mat-column-email {
+.mat-column-imagen {
   width: 200px; /* Ajusta el ancho de la columna Email */
 }
 
-.mat-column-fechaNacimiento {
-  width: 150px; /* Ajusta el ancho de la columna Fecha de Nacimiento */
-}
-
-.mat-column-permisoAdmin {
-  width: 100px; /* Ajusta el ancho de la columna Permiso Admin */
-}
 
 /* Ajusta el ancho de la columna de selección */
 .mat-column-select {
