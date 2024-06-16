@@ -80,15 +80,14 @@ export class UsuarioAdministracionComponent {
   /*****************************CREACIÓN DE LAS FUNCIONES PRINCIPALES DEL CRUD*****************************/
   
   ngOnInit():void {
-    //this.getUsers();
-    this.loadUsers();
+    this.getUsers();
   }
 
   /*****************************  GET  *****************************/
   getUsers() {
     this._userService.index().subscribe({
       next: (response: any) => {
-        this.users = response['data'];
+        this.dataSource.data = response['data'];
         console.log();
       },
       error: (err: Error) => {
@@ -97,12 +96,6 @@ export class UsuarioAdministracionComponent {
     });
   }
 
-  loadUsers() {
-    this._userService.index2().subscribe(users => {
-      this.dataSource.data = users;
-    });
-  }
-  
   /*****************************  CREATE  *****************************/
   storeUser(form: any): void {
     if (form.valid) {
@@ -119,11 +112,11 @@ export class UsuarioAdministracionComponent {
             console.error(err);
           }
         });
-        location.reload();
+        this.getUsers();
     }
   }
 
-  /*****************************  CREATE  *****************************/
+  /*****************************  DELETE  *****************************/
   deleteSelectedUsers() {
     this.selection.selected.forEach(user => {
       this._userService.delete(user.id).subscribe({
@@ -138,46 +131,7 @@ export class UsuarioAdministracionComponent {
     });
   }
 
-  /** 
-  deleteSelectedUsers() {
-    this.selectedUsers.forEach(_user => {
-      this._userService.deleted(_user.id).subscribe({
-        next: () => {
-          this.users = this.users.filter(o => o.id !== _user.id);
-          this.totalRecords--;
-          console.log()
-        },
-        error: (err: Error) => {
-          console.error('Error al eliminar el usuario', err);
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Error',
-            detail: `Failed to delete user: ${_user.nombre}`,
-            life: 3000
-          });
-        }
-      });
-    });
-  */
-
-    editUser(_artista: User) {
-      this.selectedUser = { ..._artista };
-      this.updateDialog = true;
-    }
-
-    updateUser2() {
-      this._userService.update(this.selectedUser).subscribe({
-        next: (response: any) => {
-          console.log('Usuario actualizado', response);
-          location.reload();
-        },
-        error: (err: any) => {
-          console.error('Error al actualizar el usuario', err);
-        }
-      });
-      
-    }
-
+  /*****************************  UPDATE  *****************************/
     updateUser(form: any): void {
       if (form.valid) {
         this._userService.update(this.selectedUser).subscribe({

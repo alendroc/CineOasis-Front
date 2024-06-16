@@ -9,7 +9,7 @@
               </mat-form-field>
               <div class="btn-table">
                   <button data-bs-toggle="modal" data-bs-target="#crearUsuarioModal"><span class="button_top">Agregar</span></button>
-                  <button data-bs-toggle="modal" data-bs-target="#updateUsuarioModal" [disabled]="!isExactlyOneSelected()"><span class="button_top actualizar" (onClick)="editUser(copyUser[0])">Actualizar</span></button>
+                  <button data-bs-toggle="modal" data-bs-target="#updateUsuarioModal" [disabled]="!isExactlyOneSelected()"><span class="button_top actualizar">Actualizar</span></button>
                   <button data-bs-toggle="modal" data-bs-target="#deleteUsuarioModal" [disabled]="!isAtLeastOneSelected()"><span class="button_top eliminar">Eliminar</span></button>
               </div>
             </div>
@@ -74,8 +74,6 @@
                 <td mat-cell *matCellDef="let row"> {{row.imagen}} </td>
               </ng-container>
 
-                
-
                   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                   <tr mat-row *matRowDef="let row; columns: displayedColumns;"
                       (click)="selection.toggle(row)">
@@ -137,7 +135,7 @@
                         <input type="date" id="date" #date="ngModel" name="date"
                         required class="input" [(ngModel)]="_user.fechaNacimiento"/>
                       </div >
-                      <input type="submit" class="btn-create" [disabled]="createForm.invalid" value="Crear Usuario">
+                      <input type="submit" class="btn-create" data-bs-dismiss="modal" [disabled]="createForm.invalid" value="Crear Usuario">
                       
                       <div class="registrar">
                     
@@ -179,7 +177,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                   </div>
                   <div class="modal-body">
-                    <form #updateForm="ngForm" (ngSubmit)="updateUser2()">
+                    <form #updateForm="ngForm" (ngSubmit)="updateUser(updateForm)">
                       <div class="mb-3">
                         <label for="nameForUser" class="form-label">Nombre</label>
                         <input type="text" id="nameForUser" name="name" class="form-control" [(ngModel)]="selectedUser.name" required>
@@ -200,7 +198,7 @@
                         <label for="permisoAdminForUser" class="form-label">Permiso Admin</label>
                         <input type="checkbox" id="permisoAdminForUser" name="permisoAdmin" [(ngModel)]="selectedUser.permisoAdmin">
                       </div>
-                      <button type="submit" class="btn btn-primary" [disabled]="updateForm.invalid">Actualizar Usuario</button>
+                      <button type="submit" class="btn btn-primary" data-bs-dismiss="modal"[disabled]="updateForm.invalid">Actualizar Usuario</button>
                     </form>
                   </div>
                 </div>
