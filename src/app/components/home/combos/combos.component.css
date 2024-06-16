@@ -18,11 +18,10 @@ h3{
     margin: 10px;
     font-family: "League Gothic", sans-serif;
     font-optical-sizing: auto;
-    font-weight: 600;
     font-style: oblique;
     font-variation-settings:
     "wdth" 200;
-    font-size: 2.1em;
+    font-size: 3em;
 }
 .div-scroll {
     max-height: 70vh;

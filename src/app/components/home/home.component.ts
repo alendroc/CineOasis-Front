@@ -30,7 +30,6 @@ export class HomeComponent {
   public status:number;
   public cuerpo:string;
   public user:User;
-  public identityAux2: any;
   public identityAux: any;
   public errores:string[]=[];
   public identity:any;
@@ -109,9 +108,9 @@ onImageFileChange(event: any): void {
   this.selectedFile = event.target.files[0];
 }
 
-updateObra(filename:any) {
+updateUser(filename:any) {
   if(!this.identityAux.imagen){
-    this._imagenService.uploadImageStore(this.selectedFile!,"user").subscribe({
+    this._imagenService.uploadImageStore(this.selectedFile!,"usuarios").subscribe({
       next: (response: any) => {
         console.log(response);
       },
@@ -121,7 +120,7 @@ updateObra(filename:any) {
     });
   }
   if (this.selectedFile) {
-    this._imagenService.updateImage(this.selectedFile,"user",filename).subscribe({
+    this._imagenService.updateImage(this.selectedFile,"usuarios",filename).subscribe({
       next: (response: any) => {
         console.log(response);
       },
