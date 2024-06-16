@@ -9,21 +9,21 @@
               </mat-form-field>
               <div class="btn-table">
                   <button data-bs-toggle="modal" data-bs-target="#crearUsuarioModal"><span class="button_top">Agregar</span></button>
-                  <button data-bs-toggle="modal" data-bs-target="#updateUsuarioModal" [disabled]="!isExactlyOneSelected()"><span class="button_top actualizar">Actualizar</span></button>
+                  <button data-bs-toggle="modal" data-bs-target="#updateUsuarioModal" [disabled]="!isExactlyOneSelected()"><span class="button_top actualizar" (click)="prepareUpdateForm()">Actualizar</span></button>
                   <button data-bs-toggle="modal" data-bs-target="#deleteUsuarioModal" [disabled]="!isAtLeastOneSelected()"><span class="button_top eliminar">Eliminar</span></button>
               </div>
             </div>
             <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 tabla-redondeada" matSort>
               <!-- Checkbox Column -->
               <ng-container matColumnDef="select">
-                <th mat-header-cell *matHeaderCellDef>
+                <th mat-header-cell *matHeaderCellDef class="mat-column-select">
                   <mat-checkbox (change)="$event ? toggleAllRows() : null"
                                 [checked]="selection.hasValue() && isAllSelected()"
                                 [indeterminate]="selection.hasValue() && !isAllSelected()"
                                 [aria-label]="checkboxLabel()">
                   </mat-checkbox>
                 </th>
-                <td mat-cell *matCellDef="let row">
+                <td mat-cell *matCellDef="let row" class="mat-column-select">
                   <mat-checkbox (click)="$event.stopPropagation()"
                                 (change)="$event ? selection.toggle(row) : null"
                                 [checked]="selection.isSelected(row)"
@@ -34,51 +34,46 @@
                 
               <!-- Id Column -->
               <ng-container matColumnDef="id">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header> ID </th>
-                <td mat-cell *matCellDef="let row"> {{row.id}} </td>
+                <th mat-header-cell *matHeaderCellDef mat-sort-header class="mat-column-id"> ID </th>
+                <td mat-cell *matCellDef="let row" class="mat-column-id"> {{row.id}} </td>
               </ng-container>
-
+            
               <!-- Name Column -->
               <ng-container matColumnDef="name">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
-                <td mat-cell *matCellDef="let row"> {{row.name}} </td>
+                <th mat-header-cell *matHeaderCellDef mat-sort-header class="mat-column-name"> Name </th>
+                <td mat-cell *matCellDef="let row" class="mat-column-name"> {{row.name}} </td>
               </ng-container>
-
+            
               <!-- Apellido Column -->
               <ng-container matColumnDef="apellido">
-                <th mat-header-cell *matHeaderCellDef> Apellido </th>
-                <td mat-cell *matCellDef="let row"> {{row.apellido}} </td>
+                <th mat-header-cell *matHeaderCellDef class="mat-column-apellido"> Apellido </th>
+                <td mat-cell *matCellDef="let row" class="mat-column-apellido"> {{row.apellido}} </td>
               </ng-container>
-
+            
               <!-- Email Column -->
               <ng-container matColumnDef="email">
-                <th mat-header-cell *matHeaderCellDef> Email </th>
-                <td mat-cell *matCellDef="let row"> {{row.email}} </td>
+                <th mat-header-cell *matHeaderCellDef class="mat-column-email"> Email </th>
+                <td mat-cell *matCellDef="let row" class="mat-column-email"> {{row.email}} </td>
               </ng-container>
-
+            
               <!-- Fecha Nacimiento Column -->
               <ng-container matColumnDef="fechaNacimiento">
-                <th mat-header-cell *matHeaderCellDef> Fecha Nacimiento </th>
-                <td mat-cell *matCellDef="let row"> {{row.fechaNacimiento}} </td>
+                <th mat-header-cell *matHeaderCellDef class="mat-column-fechaNacimiento"> Fecha Nacimiento </th>
+                <td mat-cell *matCellDef="let row" class="mat-column-fechaNacimiento"> {{row.fechaNacimiento}} </td>
               </ng-container>
-
+            
               <!-- Permiso Admin Column -->
               <ng-container matColumnDef="permisoAdmin">
-                <th mat-header-cell *matHeaderCellDef> Permiso Admin </th>
-                <td mat-cell *matCellDef="let row"> {{row.permisoAdmin}} </td>
+                <th mat-header-cell *matHeaderCellDef class="mat-column-permisoAdmin"> Permiso Admin </th>
+                <td mat-cell *matCellDef="let row" class="mat-column-permisoAdmin"> {{row.permisoAdmin}} </td>
               </ng-container>
-
-              <!-- Imagen Column -->
-              <ng-container matColumnDef="imagen">
-                <th mat-header-cell *matHeaderCellDef> Imagen </th>
-                <td mat-cell *matCellDef="let row"> {{row.imagen}} </td>
-              </ng-container>
-
-                  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                  <tr mat-row *matRowDef="let row; columns: displayedColumns;"
-                      (click)="selection.toggle(row)">
-                  </tr>
+            
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+                  (click)="selection.toggle(row)">
+              </tr>
             </table>
+            
             <mat-paginator [pageSizeOptions]="[5, 10]" aria-label="Select page of _users"></mat-paginator>
 
 
@@ -159,8 +154,8 @@
                     ¿Está seguro que desea eliminar el usuario?
                   </div>
                   <div class="modal-footer">
-                    <button type="button" style="" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal" (click)="deleteSelectedUsers()">Eliminar</button>
+                    <button type="button"  class="btn-cancel" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn-delete" data-bs-dismiss="modal" (click)="deleteSelectedUsers()">Eliminar</button>
                   </div>
                 </div>
               </div>
@@ -179,26 +174,26 @@
                   <div class="modal-body">
                     <form #updateForm="ngForm" (ngSubmit)="updateUser(updateForm)">
                       <div class="mb-3">
-                        <label for="nameForUser" class="form-label">Nombre</label>
-                        <input type="text" id="nameForUser" name="name" class="form-control" [(ngModel)]="selectedUser.name" required>
+                        <label for="nameForUser" class="form-text modal-title">Nombre</label>
+                        <input class="input" type="text" id="nameForUser" name="name"  [(ngModel)]="selectedUser.name" required>
                       </div>
                       <div class="mb-3">
-                        <label for="apellidoForUser" class="form-label">Apellido</label>
-                        <input type="text" id="apellidoForUser" name="apellido" class="form-control" [(ngModel)]="selectedUser.apellido" required>
+                        <label for="apellidoForUser" class="form-text modal-title">Apellido</label>
+                        <input class="input" type="text" id="apellidoForUser" name="apellido"  [(ngModel)]="selectedUser.apellido" required>
                       </div>
                       <div class="mb-3">
-                        <label for="emailForUser" class="form-label">Correo</label>
-                        <input type="email" id="emailForUser" name="email" class="form-control" [(ngModel)]="selectedUser.email" required>
+                        <label for="emailForUser" class="form-text modal-title">Correo</label>
+                        <input class="input" type="email" id="emailForUser" name="email" [placeholder]="selectedUser.email" disabled>
                       </div>
                       <div class="mb-3">
-                        <label for="fechaNacimientoForUser" class="form-label">Fecha de Nacimiento</label>
-                        <input type="date" id="fechaNacimientoForUser" name="fechaNacimiento" class="form-control" [(ngModel)]="selectedUser.fechaNacimiento" required>
+                        <label for="fechaNacimientoForUser" class="form-text modal-title">Fecha de Nacimiento</label>
+                        <input class="input" type="date" id="fechaNacimientoForUser" name="fechaNacimiento"  [(ngModel)]="selectedUser.fechaNacimiento" required>
                       </div>
                       <div class="mb-3">
-                        <label for="permisoAdminForUser" class="form-label">Permiso Admin</label>
-                        <input type="checkbox" id="permisoAdminForUser" name="permisoAdmin" [(ngModel)]="selectedUser.permisoAdmin">
+                        <label for="permisoAdminForUser" class="form-text modal-title">Permiso Admin</label>
+                        <mat-slide-toggle id="permisoAdminForUser" name="permisoAdmin" [(ngModel)]="selectedUser.permisoAdmin"></mat-slide-toggle>
                       </div>
-                      <button type="submit" class="btn btn-primary" data-bs-dismiss="modal"[disabled]="updateForm.invalid">Actualizar Usuario</button>
+                      <button type="submit" class="btn-create"   data-bs-dismiss="modal"[disabled]="updateForm.invalid">Actualizar Usuario</button>
                     </form>
                   </div>
                 </div>

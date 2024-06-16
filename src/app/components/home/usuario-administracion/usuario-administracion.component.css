@@ -118,20 +118,41 @@ button[disabled]:active .button_top {
     background-color: #658f69db;
 }
 
-.tabla-redondeada th:first-child,
-.tabla-redondeada td:first-child {
-    width: 10%; /* Ancho de la primera columna */
+/* Ajusta los anchos de las columnas según tus necesidades */
+.mat-column-id {
+  width: 50px; /* Ajusta el ancho de la columna ID */
 }
 
-.tabla-redondeada th:nth-child(2),
-.tabla-redondeada td:nth-child(2) {
-    width: 20%; /* Ancho de la segunda columna */
+.mat-column-name {
+  width: 150px; /* Ajusta el ancho de la columna Name */
 }
 
-.tabla-redondeada th:last-child,
-.tabla-redondeada td:last-child {
-    width: 30%; /* Ancho de la tercera columna */
+.mat-column-apellido {
+  width: 150px; /* Ajusta el ancho de la columna Apellido */
 }
+
+.mat-column-email {
+  width: 200px; /* Ajusta el ancho de la columna Email */
+}
+
+.mat-column-fechaNacimiento {
+  width: 150px; /* Ajusta el ancho de la columna Fecha de Nacimiento */
+}
+
+.mat-column-permisoAdmin {
+  width: 100px; /* Ajusta el ancho de la columna Permiso Admin */
+}
+
+/* Ajusta el ancho de la columna de selección */
+.mat-column-select {
+  width: 50px;
+}
+
+/* Ajusta el ancho del header de la columna de selección */
+.mat-header-cell {
+  text-align: center;
+}
+
 
 
 /*Inicio del CSS para el DIALOG de Crear Usuaior*/
@@ -193,3 +214,26 @@ width: 100%;
 .btn-create:hover{
   background-color: #009970;
 }
+
+.btn-cancel{
+  margin-top: 20px;
+  margin-bottom: 10px;
+  width: auto;
+  padding: 6px;
+  background-color: #719475;
+  color: white;
+  text-align: center;
+  border-radius: 8px;
+  transition: 0.3s;
+} 
+.btn-delete{
+  margin-top: 20px;
+  margin-bottom: 10px;
+  width: auto;
+  padding: 6px;
+  background-color: #bd3200;
+  color: white;
+  text-align: center;
+  border-radius: 8px;
+  transition: 0.3s;
+} 

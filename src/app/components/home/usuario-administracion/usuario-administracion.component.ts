@@ -8,25 +8,25 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
 import { SelectionModel } from '@angular/cdk/collections';
 import { User } from '../../../models/User';
 import { UserService } from '../../../services/user.service';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatSlideToggleModule,_MatSlideToggleRequiredValidatorModule,} from '@angular/material/slide-toggle';
 
 @Component({
   selector: 'app-usuario-administracion',
   standalone: true,
-  imports: [FormsModule,RouterLink,RouterLinkActive,RouterOutlet,MatFormFieldModule, MatCheckboxModule,MatInputModule, MatTableModule ,MatPaginatorModule],
+  imports: [FormsModule,RouterLink,RouterLinkActive,RouterOutlet,MatFormFieldModule, MatCheckboxModule,MatInputModule, MatTableModule ,MatPaginatorModule, _MatSlideToggleRequiredValidatorModule,MatButtonModule,ReactiveFormsModule, MatSlideToggleModule],
   templateUrl: './usuario-administracion.component.html',
   styleUrl: './usuario-administracion.component.css'
 })
 export class UsuarioAdministracionComponent {
-  displayedColumns: string[] = ['select', 'id', 'name', 'apellido', 'email', 'fechaNacimiento', 'permisoAdmin', 'imagen'];
+  displayedColumns: string[] = ['select', 'id', 'name', 'apellido', 'email', 'fechaNacimiento', 'permisoAdmin'];
   dataSource = new MatTableDataSource<User>([]);
   selection = new SelectionModel<User>(true, []);
   
   public _user: User;
   users: User[] = [];
   public selectedUser: User = new User(1, "", "", "", "", "", false, "");
-  updateDialog: boolean = false;
-  copyUser: User [] = []
 
   constructor(private _userService: UserService) {
     this._user= new User(1,"","","","","",false,"")
@@ -140,8 +140,11 @@ export class UsuarioAdministracionComponent {
             if (index !== -1) {
               this.dataSource.data[index] = updatedUser;
               this.dataSource.data = [...this.dataSource.data]; // Para disparar la actualización de Angular
+              
             }
             form.reset();
+            this.getUsers();
+            this.selection.clear(); 
           },
           error: (err) => {
             console.error('Error al actualizar el usuario', err);
@@ -149,4 +152,11 @@ export class UsuarioAdministracionComponent {
         });
       }
     }
+    
+    prepareUpdateForm() {
+      if (this.isExactlyOneSelected()) {
+        this.selectedUser = { ...this.selection.selected[0] };
+      }
+    }
+
 }
