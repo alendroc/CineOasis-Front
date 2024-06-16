@@ -130,24 +130,6 @@ export class UserService{
         };
         return this._http.put(this.urlAPI+`user/${user.id}`, params, options);
     }
-
-    update2(user: User): Observable<any> {
-        const userJson = JSON.stringify(user);
-        const params = `data=${userJson}`;
-        const headersConfig: { [header: string]: string | string[] } = {
-            'Content-Type': 'application/x-www-form-urlencoded'
-        };
-    
-        const bearertoken = sessionStorage.getItem('token');
-        if (bearertoken) {
-            headersConfig['Authorization'] = `Bearer ${bearertoken}`;
-        }
-    
-        const headers = new HttpHeaders(headersConfig);
-        const url = `${this.urlAPI}user/${user.id}`;
-    
-        return this._http.put(url, params, { headers });
-    }
     
 
  //----------------------Login---------------------------------------------
