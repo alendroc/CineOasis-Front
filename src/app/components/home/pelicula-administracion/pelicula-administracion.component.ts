@@ -41,6 +41,10 @@ export class PeliculaAdministracionComponent {
   idiomas: string[] = ['Español','Ingles','Frances','Portugues','Japones'];
   subtitulos: string[] = ['Español','Ingles','Frances','Portugues','Japones','No Posee'];
   animaciones: string[] = [ '2D','3D','Stop-Motion'];
+  generos: string[] = ['Acción', 'Aventura', 'Comedia', 'Drama', 'Terror', 'Ciencia ficción', 'Fantasía', 
+    'Animación', 'Romance', 'Suspenso'];
+
+
 
   clasificaciones = [
     { key: 'G', value: 'Para todos los públicos' },
@@ -61,6 +65,10 @@ export class PeliculaAdministracionComponent {
   ) {
     this._pelicula= new Pelicula(1,'','','','','','','','','','','');
   }
+
+
+  //-------------FUNCION QUE LIMPIA FORM----------------
+  resetForm(form:any){form.reset();}
 
   /****************ESTAS SON FUNCIONES PROPIAS DE LA TABLA PARA EL CHECKBOX Y SELECIONAR****************/
   isAllSelected() {
@@ -133,7 +141,8 @@ export class PeliculaAdministracionComponent {
       next:(response)=>{
         console.log(response);
         if(response.status==201){
-          form.reset();            
+          form.reset();   
+          this.getPeliculas();        
             } else {
               console.error('No se pudo ingrear la pelicula');
             }
@@ -142,7 +151,6 @@ export class PeliculaAdministracionComponent {
             console.error(err);
           }
         });
-        this.getPeliculas();
     }
   }
 
@@ -153,6 +161,7 @@ export class PeliculaAdministracionComponent {
         next: () => {
           this.dataSource.data = this.dataSource.data.filter(u => u.id !== pelicula.id);
           this.selection.clear();
+          this.getPeliculas();   
         },
         error: (err: any) => {
           console.error('Error al eliminar la pelicula', err);
@@ -164,7 +173,10 @@ export class PeliculaAdministracionComponent {
 
   /*****************************  UPDATE  *****************************/
     updatePelicula(form: any): void {
-      if (form.valid) {
+      // console.log('funcion')
+      // if (form.valid) {
+      console.log(this.selectedPelicula.duracion)
+
         this._peliculaService.update(this.selectedPelicula).subscribe({
           next: (updatedPelicula) => {
             const index = this.dataSource.data.findIndex(pelicula => pelicula.id === updatedPelicula.id);
@@ -176,12 +188,13 @@ export class PeliculaAdministracionComponent {
             form.reset();
             this.getPeliculas();
             this.selection.clear(); 
+            console.log('pelicula actualizada',updatedPelicula);
           },
           error: (err) => {
             console.error('Error al actualizar el usuario', err);
           }
         });
-      }
+      // }else{console.log('no entra')}
     }
     
     prepareUpdateForm() {

@@ -200,6 +200,8 @@ updateInfoUser(user:User){
 //------------------------------CERRAR SESION---------------------------------------------------------------
 logOut(){
   sessionStorage.clear();
+  this.identityAux=null;
+  this.identity=null;
 this._router.navigate([''])
 }
 

@@ -17,6 +17,7 @@
 }
 
 .contenedor-tablas{
+  margin: auto;
     width: 90%;
     overflow-x:auto;
     overflow-y:auto;
@@ -237,3 +238,17 @@ width: 100%;
   border-radius: 8px;
   transition: 0.3s;
 } 
+
+#descripcionForPelicula{
+  min-width: 130%;
+  max-width: 150%;
+  min-height: 100px;
+  max-height: 300px;
+}
+
+#descripcionForPeliculaUpdate{
+  min-width: 70%;
+  max-width: 100%;
+  min-height: 100px;
+  max-height: 300px;
+}
