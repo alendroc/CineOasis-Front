@@ -78,7 +78,7 @@
                       <div class="name-input" style="width: 45%; margin-bottom: 10px;">
                         <label for="nombreForComida" class="form-text modal-title">Nombre</label>
                         <input type="text" id="nombreForComida" #nombreForComida="ngModel" name="nombreForComida" 
-                        pattern="^[a-zA-Z]*$" required class="input" [(ngModel)]="comida.nombre" />
+                         required class="input" [(ngModel)]="comida.nombre" />
                       </div>
                       <div class="name-input" style="width: 45%;">
                         <label for="precioForComida" class="form-text modal-title">Precio</label>
@@ -87,10 +87,8 @@
                       </div>
                     </div>
                     <div style="margin-bottom: 20px;">
-                      <label for="imagenForComida" class="form-text modal-title">Imagen URL</label>
-                      <inpu type="imagen" id="imagenForComida" #imagenForComida="ngModel" name="imagenForComida" 
-                       class="input" [(ngModel)]="comida.imagen" />
-                      
+                      <label for="imagenForComida" class="form-text modal-title">Imagen</label>
+                      <input type="file" id="imagenForComida" name="imagen" (change)="onFileChange($event)" required />
                     </div>
                     <input type="submit" class="btn-create" data-bs-dismiss="modal" [disabled]="createForm.invalid" value="Crear Comida">
                     <div class="registrar"></div>
@@ -141,9 +139,9 @@
                       <input class="input" type="number" id="precioForComida" name="precio" [(ngModel)]="selectedComida.precio" required>
                     </div>
                     <div class="mb-3">
-                      <label for="imagenForComida" class="form-text modal-title">Imagen URL</label>
-                      <input class="input" type="url" id="imagenForComida" name="imagen" [(ngModel)]="selectedComida.imagen" required>
-                    </div>
+                        <label for="imagenForComida" class="form-text modal-title">Imagen</label>
+                        <input type="file" id="imagenForComida" name="imagen" (change)="onUpdateFileChange($event)">
+                      </div>
                     <button type="submit" class="btn-create" data-bs-dismiss="modal" [disabled]="updateForm.invalid">Actualizar Comida</button>
                   </form>
                 </div>

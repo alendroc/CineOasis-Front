@@ -14,7 +14,11 @@ export const routes: Routes = [
         {path:'combos',component:CombosComponent},
         {path:'peliculas/:id', component:PeliculaComponent},
         {path:'usuarioAdministracion', component:UsuarioAdministracionComponent},
+<<<<<<< HEAD
         {path:'comidaAdministracion',component:ComidaAdministracionComponent},
         {path:'asientos/:id',component:AsientosComponent}],
+=======
+        {path:'comidaAdministracion',component:ComidaAdministracionComponent}]
+>>>>>>> 7f62d3dbbac43afd01c24045bdd3448e6297d8e7
     }
 ];

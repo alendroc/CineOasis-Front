@@ -114,6 +114,10 @@ export class UserService{
         };
         return this._http.put(this.urlAPI+`user/${user.id}`, params, options);
     }
+<<<<<<< HEAD
+=======
+
+>>>>>>> 7f62d3dbbac43afd01c24045bdd3448e6297d8e7
  //----------------------Login---------------------------------------------
 
     login(user:User):Observable<any>{
