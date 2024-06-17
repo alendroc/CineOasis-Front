@@ -120,7 +120,7 @@
           <!--------------------------------FINAL PARA ELIMINAR COMIDA ---------------------------------->
   
           <!--------------------------------DIALOG PARA ACTUALIZAR COMIDA ---------------------------------->
-  
+
           <div class="modal fade" id="updateComidaModal" tabindex="-1" aria-labelledby="updateComidaModalLabel" aria-hidden="true">
             <div class="modal-dialog">
               <div class="modal-content">
@@ -129,7 +129,8 @@
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                  <form #updateForm="ngForm" (ngSubmit)="updateComida(updateForm)">
+                  <!-- Formulario para actualizar la información y la imagen de la comida -->
+                  <form #updateForm="ngForm" (ngSubmit)="updateComidaImage(updateForm)">
                     <div class="mb-3">
                       <label for="nombreForComida" class="form-text modal-title">Nombre</label>
                       <input class="input" type="text" id="nombreForComida" name="nombre" [(ngModel)]="selectedComida.nombre" required>
@@ -139,16 +140,19 @@
                       <input class="input" type="number" id="precioForComida" name="precio" [(ngModel)]="selectedComida.precio" required>
                     </div>
                     <div class="mb-3">
-                        <label for="imagenForComida" class="form-text modal-title">Imagen</label>
-                        <input type="file" id="imagenForComida" name="imagen" (change)="onUpdateFileChange($event)">
-                      </div>
-                    <button type="submit" class="btn-create" data-bs-dismiss="modal" [disabled]="updateForm.invalid">Actualizar Comida</button>
+                      <label for="imagenForComida" class="form-text modal-title">Imagen</label>
+                      <input type="file" id="imagenForComida" name="imagen" (change)="onUpdateFileChange($event)">
+                    </div>
+                    <button type="submit" class="btn-create" data-bs-dismiss="modal" >Actualizar Comida</button>
                   </form>
                 </div>
               </div>
             </div>
           </div>
-          <!--------------------------------FINAL PARA ACTUALIZAR COMIDA ---------------------------------->
+          
+
+            <!--------------------------------FINAL PARA ACTUALIZAR COMIDA ---------------------------------->
+
         </div>
       </div>
     </div>
