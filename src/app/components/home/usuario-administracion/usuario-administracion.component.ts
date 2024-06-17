@@ -11,11 +11,14 @@ import { UserService } from '../../../services/user.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSlideToggleModule,_MatSlideToggleRequiredValidatorModule,} from '@angular/material/slide-toggle';
+import { ImagenService } from '../../../services/imagen.service';
 
 @Component({
   selector: 'app-usuario-administracion',
   standalone: true,
-  imports: [FormsModule,RouterLink,RouterLinkActive,RouterOutlet,MatFormFieldModule, MatCheckboxModule,MatInputModule, MatTableModule ,MatPaginatorModule, _MatSlideToggleRequiredValidatorModule,MatButtonModule,ReactiveFormsModule, MatSlideToggleModule],
+  imports: [FormsModule,RouterLink,RouterLinkActive,RouterOutlet,MatFormFieldModule, MatCheckboxModule,
+    MatInputModule, MatTableModule ,MatPaginatorModule, _MatSlideToggleRequiredValidatorModule,MatButtonModule,
+    ReactiveFormsModule, MatSlideToggleModule],
   templateUrl: './usuario-administracion.component.html',
   styleUrl: './usuario-administracion.component.css'
 })
@@ -28,7 +31,10 @@ export class UsuarioAdministracionComponent {
   users: User[] = [];
   public selectedUser: User = new User(1, "", "", "", "", "", false, "");
 
-  constructor(private _userService: UserService) {
+  constructor(
+    private _userService: UserService,
+    private _imagenService:ImagenService,
+  ) {
     this._user= new User(1,"","","","","",false,"")
   }
 
@@ -77,6 +83,22 @@ export class UsuarioAdministracionComponent {
     return this.selection.selected.length === 1;
   }
 
+  isUserRow(row: any): boolean {
+    const identity = sessionStorage.getItem('identity');
+    if (identity) {
+      const parsedIdentity = JSON.parse(identity);
+      return row.id === parsedIdentity['iss'];
+    }
+    return false;
+  }
+
+  isRegisteredUserSelected(): boolean {
+    if (!this.selection.isEmpty()) {
+      const selectedUser = this.selection.selected[0];
+      return this.isUserRow(selectedUser);
+    }
+    return false;
+  }
   /*****************************CREACIÓN DE LAS FUNCIONES PRINCIPALES DEL CRUD*****************************/
   
   ngOnInit():void {
@@ -121,6 +143,7 @@ export class UsuarioAdministracionComponent {
     this.selection.selected.forEach(user => {
       this._userService.delete(user.id).subscribe({
         next: () => {
+          // (image!=null)? this.deleteUserImage(image!):console.log('No hay imagenes');
           this.dataSource.data = this.dataSource.data.filter(u => u.id !== user.id);
           this.selection.clear();
         },
@@ -130,6 +153,7 @@ export class UsuarioAdministracionComponent {
       });
     });
   }
+
 
   /*****************************  UPDATE  *****************************/
     updateUser(form: any): void {

@@ -41,7 +41,7 @@ export class ImagenService{
         return this._http.post(this.urlAPI+'imagen/update/'+path+'/'+filename, formData, { headers });
     }
     
-    destroyImage(path:string, filename: string){
+    destroyImage(path:string, filename: string):Observable<any>{
         const bearerToken = sessionStorage.getItem('token');
         let headers = new HttpHeaders();
         if (bearerToken) {
@@ -59,6 +59,10 @@ export class ImagenService{
         return this._http.get(`${this.urlAPI}imagen/show/${path}/${filename}`, { headers, responseType: 'blob' });
     }
 
+    searchImage(path:string, filename: string): Observable<any> {
+        let headers = new HttpHeaders();
+        return this._http.get(`${this.urlAPI}imagen/search/${path}/${filename}`, { headers, responseType: 'blob' });
+    }
 
  //----------------------REST PARA PELICULAS---------------------------------------------
 

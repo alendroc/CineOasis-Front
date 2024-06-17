@@ -9,8 +9,8 @@
               </mat-form-field>
               <div class="btn-table">
                   <button data-bs-toggle="modal" data-bs-target="#crearUsuarioModal"><span class="button_top">Agregar</span></button>
-                  <button data-bs-toggle="modal" data-bs-target="#updateUsuarioModal" [disabled]="!isExactlyOneSelected()"><span class="button_top actualizar" (click)="prepareUpdateForm()">Actualizar</span></button>
-                  <button data-bs-toggle="modal" data-bs-target="#deleteUsuarioModal" [disabled]="!isAtLeastOneSelected()"><span class="button_top eliminar">Eliminar</span></button>
+                  <button data-bs-toggle="modal" data-bs-target="#updateUsuarioModal" [disabled]="!isExactlyOneSelected()||isRegisteredUserSelected()"><span class="button_top actualizar" (click)="prepareUpdateForm()">Actualizar</span></button>
+                  <button data-bs-toggle="modal" data-bs-target="#deleteUsuarioModal" [disabled]="!isAtLeastOneSelected()||isRegisteredUserSelected()"><span class="button_top eliminar">Eliminar</span></button>
               </div>
             </div>
             <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 tabla-redondeada" matSort>
@@ -27,6 +27,7 @@
                   <mat-checkbox (click)="$event.stopPropagation()"
                                 (change)="$event ? selection.toggle(row) : null"
                                 [checked]="selection.isSelected(row)"
+                                [disabled]="isUserRow(row)"
                                 [aria-label]="checkboxLabel(row)">
                   </mat-checkbox>
                 </td>

@@ -29,7 +29,6 @@ export class IndexComponent {
 
   ngOnInit(): void {
     this.indexTodasLasPeliculas();
-    
   }
   indexTodasLasPeliculas(){
      this._imagenService.indexImagesForPelicula().subscribe({
