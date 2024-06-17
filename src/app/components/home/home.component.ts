@@ -28,7 +28,6 @@ export class HomeComponent {
 
   
   public status:number;
-  public cuerpo:string;
   public user:User;
   public identityAux: any;
   public identity:any;
@@ -45,15 +44,11 @@ export class HomeComponent {
     ){
       this.urlAPI = server.url+'imagen/show/';
       this.status=-1;
-      this.cuerpo='';
       this.user=new User(1,"","","","","",false,null);
 
       this.checkIdentity=setInterval(()=>{
         this.identity=_userService.getIdentityFromStorage()
       },1700)
-     
-
-      
     }
   ngOnInit(): void {
     initFlowbite();
@@ -65,7 +60,8 @@ export class HomeComponent {
   //Obtener imagen de usuario
   getUserImage(filename:string)
   {
-    this._imagenService.getImage('usuarios',filename).subscribe({
+    try{
+      this._imagenService.getImage('usuarios',filename).subscribe({
       next: (response: any) => {
         this.imageURL= URL.createObjectURL(response);
       },
@@ -73,7 +69,7 @@ export class HomeComponent {
         //console.log(err);
       }
     });
-
+    }catch(e){}
   }
 
   //FUNCION QUE CARGA AUXILIAR DE INDENTITY PARA ACTUALIZAR EL USUARIO
@@ -137,11 +133,8 @@ onImageFileChange(event: any): void {
 }
 
 updateImageUser(form:any) {
-
-
 this.user=new User(this.identityAux.iss,this.identityAux.name,this.identityAux.apellido,this.identityAux.email,'',
   this.identityAux.fechaNacimiento,this.identityAux.permisoAdmin,this.identityAux.imagen);
-
 
 if(this.selectedFile==null)
   {
@@ -205,6 +198,8 @@ updateInfoUser(user:User){
 //------------------------------CERRAR SESION---------------------------------------------------------------
 logOut(){
   sessionStorage.clear();
+  this.identityAux=null;
+  this.identity=null;
 this._router.navigate([''])
 }
 
@@ -275,10 +270,4 @@ msgAlert= (title:any, text:any, icon:any) =>{
     icon,
   })
 }
-
-
-
-  eleccion(choice:string){
-    this.cuerpo = choice
-  } 
 }

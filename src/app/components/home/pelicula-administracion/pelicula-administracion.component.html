@@ -1,0 +1,378 @@
+<div class="tablaPelicula-body">
+    <div class="Pelicula-container">
+      <div class="contenedor-tablas">
+        <div class="reducir-tabla">
+              <div class="header-table">
+                <mat-form-field>
+                    <mat-label>Filtrar Peliculas</mat-label>
+                    <input matInput (keyup)="applyFilter($event)" placeholder="Buscar" #input>
+                </mat-form-field>
+                <div class="btn-table">
+                    <button data-bs-toggle="modal" data-bs-target="#crearPeliculaModal"><span class="button_top">Agregar</span></button>
+                    <button data-bs-toggle="modal" data-bs-target="#updatePeliculaModal" [disabled]="!isExactlyOneSelected()"><span class="button_top actualizar" (click)="prepareUpdateForm()">Actualizar</span></button>
+                    <button data-bs-toggle="modal" data-bs-target="#deletePeliculaModal" [disabled]="!isAtLeastOneSelected()"><span class="button_top eliminar">Eliminar</span></button>
+                </div>
+              </div>
+              <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 tabla-redondeada" matSort>
+                <!-- Checkbox Column -->
+                <ng-container matColumnDef="select">
+                  <th mat-header-cell *matHeaderCellDef class="mat-column-select">
+                    <mat-checkbox (change)="$event ? toggleAllRows() : null"
+                                  [checked]="selection.hasValue() && isAllSelected()"
+                                  [indeterminate]="selection.hasValue() && !isAllSelected()"
+                                  [aria-label]="checkboxLabel()">
+                    </mat-checkbox>
+                  </th>
+                  <td mat-cell *matCellDef="let row" class="mat-column-select">
+                    <mat-checkbox (click)="$event.stopPropagation()"
+                                  (change)="$event ? selection.toggle(row) : null"
+                                  [checked]="selection.isSelected(row)"
+                                  [aria-label]="checkboxLabel(row)">
+                    </mat-checkbox>
+                  </td>
+                </ng-container>
+                  
+                <!-- Id Column -->
+                <ng-container matColumnDef="id">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header class="mat-column-id"> ID </th>
+                  <td mat-cell *matCellDef="let row" class="mat-column-id"> {{row.id}} </td>
+                </ng-container>
+              
+                <!-- Name Column -->
+                <ng-container matColumnDef="nombre">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header class="mat-column-nombre"> Nombre </th>
+                  <td mat-cell *matCellDef="let row" class="mat-column-nombre"> {{row.nombre}} </td>
+                </ng-container>
+              
+                <!-- descripcion Column -->
+                <ng-container matColumnDef="descripcion">
+                  <th mat-header-cell *matHeaderCellDef class="mat-column-descripcion"> Descripcion </th>
+                  <td mat-cell *matCellDef="let row" class="mat-column-descripcion"> {{row.descripcion}} </td>
+                </ng-container>
+              
+                <!-- duracion Column -->
+                <ng-container matColumnDef="duracion">
+                  <th mat-header-cell *matHeaderCellDef class="mat-column-duracion"> Duracion </th>
+                  <td mat-cell *matCellDef="let row" class="mat-column-duracion"> {{row.duracion}} </td>
+                </ng-container>
+              
+                <!-- idioma Column -->
+                <ng-container matColumnDef="idioma">
+                  <th mat-header-cell *matHeaderCellDef class="mat-column-idioma"> Idioma </th>
+                  <td mat-cell *matCellDef="let row" class="mat-column-idioma"> {{row.idioma}} </td>
+                </ng-container>
+              
+                <!-- subtitulo Column -->
+                <ng-container matColumnDef="subtitulo">
+                  <th mat-header-cell *matHeaderCellDef class="mat-column-subtitulo"> Subtitulo </th>
+                  <td mat-cell *matCellDef="let row" class="mat-column-subtitulo"> {{row.subtitulo}} </td>
+                </ng-container>
+
+                <!-- Genero Column -->
+          <ng-container matColumnDef="genero">
+            <th mat-header-cell *matHeaderCellDef class="mat-column-genero"> Genero </th>
+            <td mat-cell *matCellDef="let row" class="mat-column-genero"> {{row.genero}} </td>
+          </ng-container>
+
+          <!-- Fecha Estreno Column -->
+          <ng-container matColumnDef="fechaEstreno">
+            <th mat-header-cell *matHeaderCellDef class="mat-column-fechaEstreno"> Fecha Estreno </th>
+            <td mat-cell *matCellDef="let row" class="mat-column-fechaEstreno"> {{row.fechaEstreno}} </td>
+          </ng-container>
+
+          <!-- Calificacion Edad Column -->
+          <ng-container matColumnDef="calificacionEdad">
+            <th mat-header-cell *matHeaderCellDef class="mat-column-calificacionEdad"> Calificacion Edad </th>
+            <td mat-cell *matCellDef="let row" class="mat-column-calificacionEdad"> {{row.calificacionEdad}} </td>
+          </ng-container>
+
+          <!-- Animacion Column -->
+          <ng-container matColumnDef="animacion">
+            <th mat-header-cell *matHeaderCellDef class="mat-column-animacion"> Animacion </th>
+            <td mat-cell *matCellDef="let row" class="mat-column-animacion"> {{row.animacion}} </td>
+          </ng-container>
+
+          <!-- Director Column -->
+          <ng-container matColumnDef="director">
+            <th mat-header-cell *matHeaderCellDef class="mat-column-director"> Director </th>
+            <td mat-cell *matCellDef="let row" class="mat-column-director"> {{row.director}} </td>
+          </ng-container>
+
+          <!-- Elenco Column -->
+          <ng-container matColumnDef="elenco">
+            <th mat-header-cell *matHeaderCellDef class="mat-column-elenco"> Elenco </th>
+            <td mat-cell *matCellDef="let row" class="mat-column-elenco"> {{row.elenco}} </td>
+          </ng-container>
+              
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+                    (click)="selection.toggle(row)">
+                </tr>
+              </table>
+              
+              <mat-paginator [pageSizeOptions]="[5, 10]" aria-label="Select page of _users"></mat-paginator>
+  
+  
+              <!--------------------------------DIALOG PARA CREAR PELICULA ---------------------------------->
+  
+              <div class="modal fade" id="crearPeliculaModal" tabindex="-1" aria-labelledby="crearPeliculaLabel" aria-hidden="true" data-bs-backdrop="static">
+                <div class="modal-dialog" style="display: flex; justify-content: center;">
+                  <div class="modal-content segundoModal">
+                    <div class="modal-header">
+                      <h1 class="modal-title fs-5" id="crearPeliculaLabel">Agregar Pelicula</h1>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="resetForm(createForm)"></button>
+                    </div>
+                    <div class="modal-body">
+                      <form #createForm="ngForm" (ngSubmit)="storePelicula(createForm)">
+                        <div class="horizontal">
+                          <div class="name-input" style="width: 45%; margin-bottom: 10px;">
+                          <label for="nameForPelicula"  class="form-text modal-title">Nombre</label>
+                          <input type="text" id="nameForPelicula" #nameForPelicula="ngModel" name="nameForPelicula" pattern="^[a-zA-Z]*$" 
+                          required  class="input" [(ngModel)]="_pelicula.nombre"/>
+              
+                          @if(!nameForPelicula.valid && nameForPelicula.touched){
+                            <small class="invalid-feedback d-block">Formato invalido</small> 
+                        }
+                            
+                          </div>
+                          <div class="name-input" style="width: 45%;">
+                          <label for="descripcionForPelicula"  class="form-text modal-title">Descripcion</label>
+                          <textarea name="text" cols="500" rows="10" id="descripcionForPelicula" #descripcionForPelicula="ngModel" 
+                          name="descripcionForPelicula" required  class="input" [(ngModel)]="_pelicula.descripcion" 
+                          placeholder="Digita la descripcion de la pelicula">
+                          </textarea>
+                          @if(!descripcionForPelicula.valid && descripcionForPelicula.touched){
+                            <small class="invalid-feedback d-block">Formato invalido</small> 
+                        }
+              
+                          </div>
+                        </div>
+                        <div style=" margin-bottom: 20px; ">
+                          <label for="duracionForPelicula"  class="form-text modal-title">Duracion</label>
+                          <input type="time" id="duracionForPelicula" #duracionForPelicula="ngModel" name="duracionForPelicula"
+                          required class="input" [(ngModel)]="_pelicula.duracion"/>
+              
+                          @if(!duracionForPelicula.valid && duracionForPelicula.touched){
+                            <small class="invalid-feedback d-block">Formato invalido</small> 
+                        }
+              
+                        </div>
+                         <div style="margin-bottom: 20px;">
+                          <label for="idiomaForPelicula" class="form-text modal-title">Idioma</label>
+                          <select id="idiomaForPelicula" required class="form-select input" [(ngModel)]="_pelicula.idioma" name="idiomaForPelicula">
+                            <option selected disabled hidden>Seleccione un idioma</option>
+                            @for (item of idiomas; track $index) {
+                              <option  [value]="item">{{item}}</option>
+                            }
+                          </select>
+                        </div>
+
+                        <div style="margin-bottom: 20px;">
+                          <label for="subtituloForPelicula" class="form-text modal-title">Subtítulo</label>
+                          <select id="subtituloForPelicula" required class="form-select input" [(ngModel)]="_pelicula.subtitulo" name="subtituloForPelicula">
+                            <option selected disabled hidden>Seleccione un subtítulo</option>
+                            @for (item of subtitulos; track $index) {
+                              <option  [value]="item">{{item}}</option>
+                            }
+                          </select>
+                        </div>
+
+                        <div style=" margin-bottom: 20px; ">
+                          <label for="generoForPelicula"  class="form-text modal-title">Género</label>
+                          <select id="generoForPelicula" required class="form-select input" [(ngModel)]="_pelicula.genero" 
+                          name="generoForPelicula">
+                            <option selected disabled hidden>Seleccione un genero</option>
+                            @for (item of generos; track $index) {
+                              <option  [value]="item">{{item}}</option>
+                            }
+                          </select>
+                        </div>
+
+                        <div style=" margin-bottom: 20px; ">
+                          <label for="dateEstrenoForPelicula"  class="form-text modal-title">Fecha Estreno</label>
+                          <input type="date" id="dateEstrenoForPelicula" #dateEstrenoForPelicula="ngModel" name="dateEstrenoForPelicula"
+                          required class="input" [(ngModel)]="_pelicula.fechaEstreno"/>
+                        </div>
+
+                        <div style="margin-bottom: 20px;">
+                          <label for="calificacionEdadForPelicula" class="form-text modal-title">Calificación de Edad</label>
+                          <select id="calificacionEdadForPelicula" required class="form-select input" [(ngModel)]="_pelicula.calificacionEdad" name="calificacionEdadForPelicula">
+                            <option selected disabled hidden>Seleccione una calificación</option>
+                            @for (item of clasificaciones; track $index) {
+                              <option [value]="item.key">{{ item.key }} - {{ item.value }}</option>
+                            }
+                          </select>
+                        </div>
+                        
+                        <div style="margin-bottom: 20px;">
+                          <label for="animacionForPelicula" class="form-text modal-title">Animación</label>
+                          <select id="animacionForPelicula" required class="form-select input" [(ngModel)]="_pelicula.animacion" name="animacionForPelicula">
+                            <option selected disabled hidden>Seleccione una animación</option>
+                            @for (item of animaciones; track $index) {
+                              <option  [value]="item">{{item}}</option>
+                            }
+                          </select>
+                        </div>
+
+                        <div style="margin-bottom: 20px;">
+                          <label for="directorForPelicula" class="form-text modal-title">Director</label>
+                          <input type="text" id="directorForPelicula" #directorForPelicula="ngModel" name="directorForPelicula" required class="input" [(ngModel)]="_pelicula.director"/>
+                        </div>
+                        
+                        <div style="margin-bottom: 20px;">
+                          <label for="elencoForPelicula" class="form-text modal-title">Elenco</label>
+                          <input type="text" id="elencoForPelicula" #elencoForPelicula="ngModel" name="elencoForPelicula" required class="input" [(ngModel)]="_pelicula.elenco"/>
+                        </div>
+
+                        <input type="submit" class="btn-create" data-bs-dismiss="modal" [disabled]="createForm.invalid" value="Crear Pelicula">
+                        
+                        <div class="registrar">
+                      
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!--------------------------------FINAL PARA CREAR PELICULA ---------------------------------->
+  
+              <!--------------------------------DIALOG PARA ELIMINAR PELICULA ---------------------------------->
+              <div class="modal fade" id="deletePeliculaModal" tabindex="-1" aria-labelledby="deletePeliculaModalLabel" aria-hidden="true" data-bs-backdrop="static">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="deletePeliculaModalLabel">Eliminar Pelicula</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                      ¿Está seguro que desea eliminar la pelicula?
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button"  class="btn-cancel" data-bs-dismiss="modal">Cancelar</button>
+                      <button type="button" class="btn-delete" data-bs-dismiss="modal" (click)="deleteSelectedPeliculas()">Eliminar</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!--------------------------------FINAL PARA ELIMINAR PELICULA ---------------------------------->
+  
+              <!--------------------------------DIALOG PARA ACTUALIZAR PELICULA ---------------------------------->
+  
+              <div class="modal fade" id="updatePeliculaModal" tabindex="-1" aria-labelledby="updatePeliculaModalLabel" aria-hidden="true" data-bs-backdrop="static">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="updatePeliculaModalLabel">Actualizar Pelicula</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="resetForm(updateForm)"></button>
+                    </div>
+                    <div class="modal-body">
+                      <form #updateForm="ngForm" (ngSubmit)="updatePelicula(updateForm)">
+                        <div class="mb-3">
+                          <label for="nameForPeliculaUpdate" class="form-text modal-title">Nombre</label>
+                          <input class="input" type="text" id="nameForPeliculaUpdate" name="nameForPeliculaUpdate" [(ngModel)]="selectedPelicula.nombre" required>
+                        </div>
+                        <div class="mb-3">
+                          <label for="descripcionForPeliculaUpdate" class="form-text modal-title">Descripción</label>
+                          <textarea name="text" cols="500" rows="10" id="descripcionForPeliculaUpdate" #descripcionForPeliculaUpdate="ngModel" 
+                          name="descripcionForPeliculaUpdate" required  class="input" [(ngModel)]="selectedPelicula.descripcion" 
+                          value="{{selectedPelicula.descripcion}}">
+                          </textarea>
+                        </div>
+
+                        <div class="mb-3">
+                          <label for="duracionForPeliculaUpdate" class="form-text modal-title">Duración</label>
+                          <input class="input" type="time" id="duracionForPeliculaUpdate" name="duracionForPeliculaUpdate"  [(ngModel)]="selectedPelicula.duracion" 
+                          value="{{selectedPelicula.duracion}}">
+                        </div>
+                      
+                        <!-- Idioma -->
+                        <div class="mb-3">
+                          <label for="idiomaForPeliculaUpdate" class="form-text modal-title">Idioma</label>
+                            <select id="idiomaForPeliculaUpdate" required class="form-select input" [(ngModel)]="selectedPelicula.idioma" 
+                            name="idiomaForPeliculaUpdate">
+                              <option selected disabled hidden>{{selectedPelicula.idioma}}</option>
+                              @for (item of idiomas; track $index) {
+                                <option  [value]="item">{{item}}</option>
+                              }
+                            </select>
+                        </div>
+                      
+                        <!-- Subtitulo -->
+                        <div class="mb-3">
+                          <label for="subtituloForPeliculaUpdate" class="form-text modal-title">Subtítulo</label>
+                            <select id="subtituloForPeliculaUpdate" required class="form-select input" [(ngModel)]="selectedPelicula.subtitulo" 
+                            name="subtituloForPeliculaUpdate">
+                              <option selected disabled hidden>{{selectedPelicula.subtitulo}}</option>
+                              @for (item of subtitulos; track $index) {
+                                <option  [value]="item">{{item}}</option>
+                              }
+                            </select>
+                        </div>
+
+                         <!-- Genero -->
+                         <div class="mb-3">
+                          <label for="generoForPeliculaUpdate" class="form-text modal-title">Género</label>
+                            <select id="generoForPeliculaUpdate" required class="form-select input" [(ngModel)]="selectedPelicula.genero" 
+                            name="generoForPeliculaUpdate">
+                              <option selected disabled hidden>{{selectedPelicula.genero}}</option>
+                              @for (item of generos; track $index) {
+                                <option  [value]="item">{{item}}</option>
+                              }
+                            </select>
+                        </div>
+
+                         <!-- Fecha estreno -->
+                         <div class="mb-3">
+                          <label for="fechaEstrenoForPeliculaUpdate" class="form-text modal-title">Fecha Estreno</label>
+                          <input class="input" type="date" id="fechaEstrenoForPeliculaUpdate" name="fechaEstrenoForPeliculaUpdate" 
+                          [(ngModel)]="selectedPelicula.fechaEstreno"  value="{{selectedPelicula.fechaEstreno}}">
+                        </div>
+                      
+                        <!-- Calificación de Edad -->
+                        <div class="mb-3">
+                          <label for="calificacionEdadForPeliculaUpdate" class="form-text modal-title">Calificación de Edad</label>
+                          <select id="calificacionEdadForPeliculaUpdate" required class="form-select input" 
+                          [(ngModel)]="selectedPelicula.calificacionEdad" name="calificacionEdadForPeliculaUpdate">
+                            <option selected disabled hidden>{{selectedPelicula.calificacionEdad}}</option>
+                            @for (item of clasificaciones; track $index) {
+                              <option [value]="item.key">{{ item.key }} - {{ item.value }}</option>
+                            }
+                          </select>
+                        </div>
+                      
+                        <!-- Animación -->
+                        <div class="mb-3">
+                          <label for="animacionForPeliculaUpdate" class="form-text modal-title">Animación</label>
+                          <select id="animacionForPeliculaUpdate" required class="form-select input" [(ngModel)]="selectedPelicula.animacion" 
+                          name="animacionForPeliculaUpdate">
+                            <option selected disabled hidden>{{selectedPelicula.animacion}}</option>
+                            @for (item of animaciones; track $index) {
+                              <option  [value]="item">{{item}}</option>
+                            }
+                          </select>
+                        </div>
+                      
+                        <!-- Director -->
+                        <div class="mb-3">
+                          <label for="directorForPeliculaUpdate" class="form-text modal-title">Director</label>
+                          <input class="input" type="text" id="directorForPeliculaUpdate" name="directorForPeliculaUpdate" [(ngModel)]="selectedPelicula.director" required>
+                        </div>
+                      
+                        <!-- Elenco -->
+                        <div class="mb-3">
+                          <label for="elencoForPeliculaUpdate" class="form-text modal-title">Elenco</label>
+                          <input class="input" type="text" id="elencoForPeliculaUpdate" name="elencoForPeliculaUpdate" [(ngModel)]="selectedPelicula.elenco" required>
+                        </div>
+
+                        <button type="submit" class="btn-create" data-bs-dismiss="modal" [disabled]="updateForm.invalid">Actualizar Pelicula</button>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+  
+              <!--------------------------------FINAL PARA ACTUALIZAR PELICULA ---------------------------------->
+        </div>
+      </div>
+    </div>
+  </div>

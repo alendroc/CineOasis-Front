@@ -23,7 +23,7 @@ export class PeliculaService{
         let options = {
             headers
         };
-        return this._http.get(this.urlAPI+'funpeliculacion', options);
+        return this._http.get(this.urlAPI+'pelicula', options);
     }
 
     show(id:any):Observable<any>{
