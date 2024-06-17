@@ -16,10 +16,14 @@ export const routes: Routes = [
         {path:'combos',component:CombosComponent},
         {path:'peliculas/:id', component:PeliculaComponent},
         {path:'usuarioAdministracion', component:UsuarioAdministracionComponent},
+        {path:'comidaAdministracion',component:ComidaAdministracionComponent},
+        {path:'asientos/:id',component:AsientosComponent},
+        {path:'comidaAdministracion',component:ComidaAdministracionComponent},
         {path:'peliculaAdministracion', component:PeliculaAdministracionComponent},
         {path:'comidaAdministracion',component:ComidaAdministracionComponent},
         {path:'asientos/:id',component:AsientosComponent},
-        {path:'funcionAdministracion', component:FuncionAdministracionComponent}
-    ]
+        {path:'funcionAdministracion', component:FuncionAdministracionComponent},
+        {path:'asientos/:id',component:AsientosComponent}]
+
     }
 ];
