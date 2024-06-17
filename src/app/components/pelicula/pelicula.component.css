@@ -10,7 +10,9 @@
 .movie-container {
     display: flex;
     flex-direction: column;
-    width: 100%;
+    width: 75rem;
+    
+    height: 100%;
     overflow: hidden;
     align-items: center;
     justify-content: space-evenly;
@@ -24,12 +26,13 @@
 
 .image-container img {
     width: 100%;
-    height: 55vh;
+    height: 45vh;
    
 }
 .movie-details {
     flex: 1;
-    margin-top: 50px;
+    margin-top: 30px;
+    margin-bottom: 33px;
     display: flex;
     flex-direction: row;
     justify-content: space-around;
@@ -37,7 +40,7 @@
 }
 
 .movie-details h1 {
-    font-size: 2.7em;
+    font-size: 3rem;
     color: #f3af3d;
     margin: 0 0 20px 0;
 }
@@ -48,26 +51,37 @@
 .another-info{
     width: 35%;
     color:#fff;
+    padding-top: 6%;
 }
 .movie-options {
+    line-height: 30px;
     list-style: none;
     padding: 0;
+}
+.showtimes{
+    margin-top: 30px;
 }
 .showtimes button {
     background: linear-gradient(145deg, #8DB575, #225348);
     border: none;
     color: #ffffff;
-    margin: 10px 80px 20px 0px;
     padding-top: 5px;
-    padding: 5px;
     cursor: pointer;
-    font-size: 1.0em;
+    font-size: 1.3rem;
     font-family: "Timmana", sans-serif;
     font-weight: 400;
     font-style: normal;
     border-radius: 5px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
     transition: background 0.3s, box-shadow 0.3s;
+}
+.today{
+    margin-bottom: 10px;
+    color: black;
+    border-radius: 6px;
+    padding: 6px 12px;
+    width: fit-content;
+    background: linear-gradient(90deg, rgba(239, 195, 101, 1) 0%, rgba(179, 128, 18, 1) 100%);
 }
 
 .showtimes button:hover {
@@ -86,16 +100,23 @@
     font-weight: bold;
     font-style: normal;
 }
-
+.boton-contenedor{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+}
 
 /*Responsive*/
 @media (max-width: 768px) {
+    .home-body{
+        height: 0px;
+    }
     .movie-container {
         flex-direction: column;
     }
     .movie-info{
         width: 98%;
-        margin: 5px;
+        margin: 0px 5px;
     }
     .image-container {
         width: 95%;
@@ -103,10 +124,13 @@
 
     .movie-details {
         flex-direction: column;
+        padding: 0 10px;
+        margin-top: 10px;
     }
 
     .another-info {
         width: 95%;
         margin: 5px;
+        padding-top: 0px;
     }
 }

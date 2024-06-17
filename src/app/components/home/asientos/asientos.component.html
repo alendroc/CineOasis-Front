@@ -1,0 +1,31 @@
+<div class="asientos-body">
+   <div class="contenido-asientos">
+      <div class="cuerpo2">
+        <h1>Seleccione la <span style="color: #EDBB4F;">cantidad</span> de asientos deseados </h1>
+        <p style="color:#69936E; font-size: 12px; margin: 20px 0;">Cada asiento tiene un costo de <span style="color: #EDBB4F;">3500 </span>colones </p>
+        <div class="asiento">
+            <div class="instruccion">
+                <div style="display: flex; align-items: center;">
+                    <div class="cuboInstruccion"></div>
+                    <p style="margin-left: 10px;">Desocupado</p>
+                </div>
+                <div style="display: flex; align-items: center;">
+                    <div class="cuboInstruccion" style="background-color: #EDBB4F;"></div>
+                    <p style="margin-left: 10px;">Ocupado</p>
+                </div>
+            </div>
+            <div class="otroMas">
+            <div class="contenido-complicado" style="width: 100%;">
+                <div class="pantalla">PANTALLA</div>
+                <div>
+                    <div class="gridAsientos">
+                    <div class="asientoIndividual" *ngFor="let asiento of asientos"
+                    (click)="veridAsiento(asiento.numero,asiento.fila)"></div>
+                </div> 
+                </div>
+               </div>
+            </div>
+        </div>
+      </div>
+   </div>
+</div>
