@@ -8,7 +8,7 @@ import { UsuarioAdministracionComponent } from './components/home/usuario-admini
 import { PeliculaAdministracionComponent } from './components/home/pelicula-administracion/pelicula-administracion.component';
 import { ComidaAdministracionComponent } from './components/home/comida-administracion/comida-administracion.component';
 import { AsientosComponent } from './components/home/asientos/asientos.component';
-
+import { FuncionAdministracionComponent } from './components/home/funcion-administracion/funcion-administracion.component';
 
 export const routes: Routes = [
     {path:'',component: HomeComponent, children:[
@@ -18,6 +18,8 @@ export const routes: Routes = [
         {path:'usuarioAdministracion', component:UsuarioAdministracionComponent},
         {path:'peliculaAdministracion', component:PeliculaAdministracionComponent},
         {path:'comidaAdministracion',component:ComidaAdministracionComponent},
-        {path:'asientos/:id',component:AsientosComponent}]
+        {path:'asientos/:id',component:AsientosComponent},
+        {path:'funcionAdministracion', component:FuncionAdministracionComponent}
+    ]
     }
 ];
