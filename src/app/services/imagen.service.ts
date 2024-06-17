@@ -84,21 +84,15 @@ showImageForPelicula(filename:string):Observable<any>{
     return this._http.get(this.urlAPI+`imagen/pelicula/${filename}`, options);
 }
 
-createImageForPelicula(imagen:Imagen):Observable<any>{
-    let imagenJson=JSON.stringify(imagen);
-    let params='data='+imagenJson;
-    let headers;
-    let bearertoken = sessionStorage.getItem('token');
-    if (bearertoken){
-        headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded').set('bearertoken', bearertoken);
-    } else {
-        headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+createImageForPelicula(formData: FormData): Observable<any> {
+    let headers = new HttpHeaders();
+    const bearertoken = sessionStorage.getItem('token');
+    if (bearertoken) {
+      headers = headers.set('bearertoken', bearertoken);
     }
-    let options={
-        headers
-    }
-    return this._http.post(this.urlAPI+'imagen/pelicula',params,options);
-}
+
+    return this._http.post(this.urlAPI + 'imagen/pelicula', formData, { headers });
+  }
 
 updateImageForPelicula(imagen:Imagen): Observable<any> {
     let imagenJson=JSON.stringify(imagen);
@@ -116,4 +110,20 @@ updateImageForPelicula(imagen:Imagen): Observable<any> {
     return this._http.put(this.urlAPI+`imagen/pelicula/${imagen.id}`, params, options);
 }
  
+
+destroyImagePelicula(id: number): Observable<any> {
+    const bearertoken = sessionStorage.getItem('token');
+    let headers = new HttpHeaders().set('Content-Type', 'application/json');
+
+    if (bearertoken) {
+      headers = headers.set('Authorization', `Bearer ${bearertoken}`);
+    }
+
+    const options = {
+      headers: headers
+    };
+
+    // Asumiendo que el endpoint para eliminar imágenes acepta DELETE requests
+    return this._http.delete(`${this.urlAPI}imagen/pelicula/${id}`, options);
+  }
 }
