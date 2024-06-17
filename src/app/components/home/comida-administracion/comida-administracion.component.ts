@@ -13,6 +13,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatButtonModule } from '@angular/material/button';
 import { Imagen } from '../../../models/Imagen';
 import { ImagenService } from '../../../services/imagen.service';
+import { server } from '../../../services/global';
 
 @Component({
   selector: 'app-comida-administracion',
@@ -33,15 +34,19 @@ export class ComidaAdministracionComponent {
   updateFile: File | null = null;
   comida: Comida = new Comida(0, '', 0, '');
   public selectedComida = new Comida(1,"",1,"")
-
+  prueba:string | undefined;
+  public Comidas: Comida[] = [];
   public _comida: Comida;
   public _imagen:Imagen;
+  urlAPI: string | undefined;
+  public imageURL:string='';
   constructor(
     private _comidaService: ComidaService,
     private _imagenService: ImagenService
   ) {
     this._comida = new Comida(1,"",0,"")
     this._imagen = new Imagen(1,1,"","")
+    this.urlAPI = server.url+'imagen/show/comidas/';
   }
 
   applyFilter(event: Event): void {
@@ -82,29 +87,47 @@ export class ComidaAdministracionComponent {
   
   ngOnInit():void {
     this.getComidas();
+    
   }
 
   /*****************************  GET  *****************************/
 
+
   getComidas() {
     this._comidaService.index().subscribe({
-      next: async (response: any) => {
-        const comidas = response['data'] as Comida[];
-        for (let comida of comidas) {
-          try {
-            const imageBlob = await this._imagenService.getImage('comidas', comida.imagen).toPromise();
-            comida.imagen = URL.createObjectURL(imageBlob);
-          } catch (error) {
-            console.error('Error al cargar la imagen de la comida', error);
-          }
-        }
-        this.dataSource.data = comidas;
-      },
+    next: (response: any) => {
+     console.log("entro")
+      this.dataSource.data= response['data'];
+      console.log(this.dataSource.data)
+      console.log(response)
+      this.dataSource.data.forEach(comida => {
+        this.getComidasImage(comida.imagen, comida); // Asumiendo que `filename` es el campo correcto a pasar
+      });
+    },
       error: (err: Error) => {
         console.error('Error al cargar las comidas', err);
       }
     });
   }
+
+  getComidasImage(filename: string, comida: Comida) {
+    console.log("Obteniendo imagen para", filename);
+    this._imagenService.getImage('comidas', filename).subscribe({
+      next: (response: any) => {
+        comida.imagen = URL.createObjectURL(response); // Agregar imageURL a la comida
+        console.log("Imagen obtenida:", comida.imagen);
+        comida.originalImagen = filename; // Guardar el nombre original de la imagen
+        // Actualizar la fila correspondiente en la tabla
+        this.dataSource._updateChangeSubscription();
+      },
+      error: (err: Error) => {
+        // Manejar el error adecuadamente
+        console.error('Error al obtener la imagen', err);
+      }
+    });
+  }
+  
+
 
   /*****************************  STORE  *****************************/
   
@@ -162,57 +185,69 @@ export class ComidaAdministracionComponent {
   }
 
   /*****************************  UPDATE  *****************************/
-  onUpdateFileChange(event: any): void {
-    const file = event.target.files[0];
-    if (file) {
-      this.updateFile = file;
-    }
-  }
-
   prepareUpdateForm(): void {
     if (this.isExactlyOneSelected()) {
       this.selectedComida = this.selection.selected[0];
     }
   }
 
-  updateComida(form: any): void {
-    if (form.valid) {
+  updateComidaImage(form: any): void {
+    if (form.valid || this.updateFile) {
       if (this.updateFile) {
-        this._imagenService.uploadImageStore(this.updateFile, 'comidas').subscribe({
+        const filename = this.selectedComida.originalImagen; // Usar el nombre de la imagen original
+      this._imagenService.updateImage(this.updateFile, 'comidas', filename).subscribe({
           next: (response) => {
+            console.log("Imagen actualizada:", response.filename);
             this.selectedComida.imagen = response.filename;
-            this._comidaService.update(this.selectedComida).subscribe({
-              next: () => {
-                this.getComidas();
-                form.resetForm();
-                this.selection.clear();
-                this.updateFile = null;
-              },
-              error: (err) => {
-                console.error('Error al actualizar la comida', err);
-              }
-            });
+            // Si el formulario es válido, actualizar la información de la comida
+            if (form.valid) {
+              this.updateComidaInfo(form);
+            } else {
+              this.resetForm(form);
+            }
           },
           error: (err) => {
             console.error('Error al subir la imagen', err);
+            this.errorMessage = err.error.message || 'Error al subir la imagen';
           }
         });
       } else {
-        this._comidaService.update(this.selectedComida).subscribe({
-          next: () => {
-            this.getComidas();
-            form.resetForm();
-            this.selection.clear();
-          },
-          error: (err) => {
-            console.error('Error al actualizar la comida', err);
-          }
-        });
+        // Si no hay nueva imagen pero el formulario es válido, actualizar los datos de la comida
+        if (form.valid) {
+          this.updateComidaInfo(form);
+        } else {
+          this.errorMessage = 'Debe seleccionar una nueva imagen o completar el formulario correctamente para actualizar la comida.';
+        }
       }
     } else {
       this.errorMessage = 'Formulario inválido';
     }
   }
+  
+  updateComidaInfo(form: any): void {
+    this._comidaService.update(this.selectedComida).subscribe({
+      next: () => {
+        console.log("Comida actualizada");
+        this.getComidas();
+        this.resetForm(form);
+      },
+      error: (err) => {
+        console.error('Error al actualizar la comida', err);
+        this.errorMessage = err.error.message || 'Error al actualizar la comida';
+      }
+    });
+  }
+  
+    resetForm(form: any): void {
+      form.resetForm();
+      this.selection.clear();
+      this.updateFile = null;
+    }
 
+    onUpdateFileChange(event: any): void {
+      if (event.target.files && event.target.files[0]) {
+        this.updateFile = event.target.files[0];
+      }
+    }
   
 }

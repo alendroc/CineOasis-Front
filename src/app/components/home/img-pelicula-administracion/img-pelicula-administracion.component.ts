@@ -11,6 +11,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatButtonModule } from '@angular/material/button';
 import { Imagen } from '../../../models/Imagen';
 import { ImagenService } from '../../../services/imagen.service';
+import { server } from '../../../services/global';
 
 @Component({
   selector: 'app-img-pelicula-administracion',
@@ -31,10 +32,12 @@ export class ImgPeliculaAdministracionComponent {
   public selectedImagen = new Imagen(0,0,'','');
   public _imagenPelicula:Imagen;
   public imagenesPeliculas:Imagen[]=[];
+  imageURL:string;
   constructor(
     private _imagenService: ImagenService
   ) {
-    this._imagenPelicula = new Imagen(1,1,"","")
+    this._imagenPelicula = new Imagen(1,1,"",""),
+    this.imageURL=server.url+'imagen/pelicula/'
   }
 
   applyFilter(event: Event): void {
@@ -91,6 +94,8 @@ export class ImgPeliculaAdministracionComponent {
     });
   }
 
+ 
+
   /*****************************  STORE  *****************************/
   
 
@@ -106,13 +111,16 @@ export class ImgPeliculaAdministracionComponent {
       const formData = new FormData();
       formData.append('file', this.selectedFile);
       formData.append('data', JSON.stringify({
-        idPelicula: form.value.idPelicula,
-        descripcion: form.value.descripcion
+        idPelicula: this._imagenPelicula.idPelicula,
+        descripcion: this._imagenPelicula.descripcion
       }));
 
       this._imagenService.createImageForPelicula(formData).subscribe({
-        next:()=>{
-          console.log('imagen pelicula creada')
+        next:(response)=>{
+          console.log('imagen pelicula creada',response);
+          this.getImagenesPelicula();
+          form.resetForm();
+          this.selectedFile = null;
         },
         error:(err:Error)=>{
           console.log(err);
@@ -151,43 +159,46 @@ export class ImgPeliculaAdministracionComponent {
     }
   }
 
-  updateImagenPelicula(form: any): void {
-    if (form.valid) {
-      if (this.updateFile) {
-        this._imagenService.uploadImageStore(this.updateFile, 'comidas').subscribe({
-          next: (response) => {
-            this.selectedImagen.imagen = response.filename;
-            this._comidaService.update(this.selectedImagen).subscribe({
-              next: () => {
-                this.getImagenesPelicula();
-                form.resetForm();
-                this.selection.clear();
-                this.updateFile = null;
-              },
-              error: (err) => {
-                console.error('Error al actualizar la comida', err);
-              }
-            });
-          },
-          error: (err) => {
-            console.error('Error al subir la imagen', err);
-          }
-        });
-      } else {
-        this._comidaService.update(this.selectedImagen).subscribe({
-          next: () => {
+  updateImagePelicula(form:any) {
+ console.log(this.selectedImagen);
+    if(this.selectedFile && this.selectedFile.size > 0)
+      {
+        console.log('tiene file');
+
+        const formData = new FormData();
+      formData.append('data', JSON.stringify({descripcion: this.selectedImagen.descripcion}));
+        formData.append('file', this.selectedFile);
+       
+        this._imagenService.updateImageForPelicula(formData,this.selectedImagen.id).subscribe({
+          next:(response:any)=>{
+            console.log(response);
             this.getImagenesPelicula();
             form.resetForm();
-            this.selection.clear();
+            this.selectedFile = null;
           },
-          error: (err) => {
-            console.error('Error al actualizar la comida', err);
+          error:(err:Error)=>{
+            console.log(err);
           }
         });
-      }
-    } else {
-      this.errorMessage = 'Formulario inválido';
+       
+      }else{
+        console.log('no tiene file');
+        const formData = new FormData();
+        formData.append('data', JSON.stringify({descripcion: this.selectedImagen.descripcion}));
+        this._imagenService.updateImageForPelicula(formData,this.selectedImagen.id).subscribe({
+          next:(response:any)=>{
+            console.log(response);
+            this.getImagenesPelicula();
+            form.resetForm();
+            this.selectedFile = null;
+          },
+          error:(err:Error)=>{
+            console.log(err);
+          }
+        });
+
     }
-  }
+    }
+    
 
 }

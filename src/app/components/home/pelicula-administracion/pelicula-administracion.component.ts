@@ -175,7 +175,8 @@ export class PeliculaAdministracionComponent {
     updatePelicula(form: any): void {
       // console.log('funcion')
       // if (form.valid) {
-      console.log(this.selectedPelicula.duracion)
+      //console.log('nueva duracion',this.selectedPelicula.duracion);
+      this.selectedPelicula.duracion=this.formatTime(this.selectedPelicula.duracion);
 
         this._peliculaService.update(this.selectedPelicula).subscribe({
           next: (updatedPelicula) => {
@@ -202,5 +203,18 @@ export class PeliculaAdministracionComponent {
         this.selectedPelicula = { ...this.selection.selected[0] };
       }
     }
+
+  formatTime(time: string): string {
+  const parts = time.split(':');
+  if (parts.length === 2) {
+    const [hours, minutes] = parts;
+    return `${hours.padStart(2, '0')}:${minutes.padStart(2, '0')}:00`;
+  } else if (parts.length === 3) {
+    const [hours, minutes, seconds] = parts;
+    return `${hours.padStart(2, '0')}:${minutes.padStart(2, '0')}:${seconds.padStart(2, '0')}`;
+  } else {
+    return time; // o devuelve un valor predeterminado si la cadena no tiene el formato correcto
+  }
+}
 
 }
