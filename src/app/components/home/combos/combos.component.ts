@@ -3,6 +3,7 @@ import { ComidaService } from '../../../services/comida.service';
 import { ImagenService } from '../../../services/imagen.service';
 import { Router } from '@angular/router';
 import { Comida } from '../../../models/Comida';
+import { server } from '../../../services/global';
 
 @Component({
   selector: 'app-combos',
@@ -16,12 +17,19 @@ export class CombosComponent {
 
 public comida:Comida;
 public comidas:Comida[]=[];
+imageURL: string;
   constructor(
     private comidaService:ComidaService,
     private imagenService:ImagenService,
     private router: Router,
   ){
     this.comida=new Comida(1,'',0,'');
+    this.imageURL=server.url+'imagen/search/comidas/';
+ 
+  }
+
+  ngOnInit():void{
+       this.getComidas();
   }
 
   getComidas(){
@@ -34,4 +42,6 @@ public comidas:Comida[]=[];
       }
     });
   }
+
+
 }

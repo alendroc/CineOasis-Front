@@ -59,6 +59,11 @@ export class ImagenService{
         return this._http.get(`${this.urlAPI}imagen/show/${path}/${filename}`, { headers, responseType: 'blob' });
     }
 
+    searchImage(path:string, filename: string): Observable<any> {
+        let headers = new HttpHeaders();
+        return this._http.get(`${this.urlAPI}imagen/search/${path}/${filename}`, { headers, responseType: 'blob' });
+    }
+
 
  //----------------------REST PARA PELICULAS---------------------------------------------
 

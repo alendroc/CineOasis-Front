@@ -6,49 +6,42 @@
         </div>
         <div class="movie-details">
             <div class="movie-info">
-                <h1 class="font-roboto">El niño y la garza</h1>
-                <p>En el año 1943, durante la Guerra del Pacífico, Hisako, la madre de Mahito Maki, de 12 años, muere en un incendio. 
-                    El padre de Mahito, propietario de una fábrica de municiones de fotogramas, se vuelve a casar con la hermana menor 
-                    de su difunta esposa y se trasladan a su finca en el campo, donde viven con varias sirvientes. ​Mahito lucha en 
-                    la nueva ciudad mientras continúa lidiando con el dolor por la muerte de su madre, no encaja en la escuela y soporta 
-                    una relación tensa con Natsuko, quien ahora está embarazada. Mahito también se encuentra con una misteriosa garza real 
-                    en la finca que lo molesta con frecuencia.</p>
-                <li style="display: flex; gap: 10px;">   
-                    <p class="font-racing" ><strong>ELENCO:</strong></p>
-                    <p>Soma Santoki, Masaki Suda, Aimyon, Yoshino Kimura, Takuya Kimura</p>
+                <h1 class="font-roboto">{{pelicula.nombre}}</h1>
+                <p style="margin-bottom: 10px;">{{pelicula.descripcion}}</p>
+                <li style="display: flex; gap: 10px;margin-bottom: 5px;">   
+                    <p class="font-racing">ELENCO:</p>
+                    <p>{{pelicula.elenco}}</p>
                 </li>
                 <li style="display: flex; gap: 10px;"> 
-                    <p class="font-racing" ><strong>DIRECTOR:</strong></p>
-                    <p>Hayao Miyazaki</p>
+                    <p class="font-racing">DIRECTOR:</p>
+                    <p>{{pelicula.director}}</p>
                 </li>
             </div>
             <div class="another-info">
                 <ul class="movie-options">
                     <li style="display: flex; gap: 10px;">
-                        <p class="font-racing" ><strong>RESTRICCIÓN:</strong></p>
-                        <p>M18 - MAYORES DE 18 AÑOS</p>
+                        <p class="font-racing" >RESTRICCIÓN:</p>
+                        <p>{{pelicula.calificacionEdad}}</p>
                     </li>
                     <li style="display: flex; gap: 10px;">
-                        <p class="font-racing" ><strong>DURACIÓN:</strong></p>
-                        <p>1:25:00</p>
+                        <p class="font-racing">DURACIÓN:</p>
+                        <p>{{pelicula.duracion}}</p>
                     </li>
                     <li style="display: flex; gap: 10px;">
-                        <p class="font-racing" ><strong>Lenguaje:</strong></p>
-                        <p>Italiano</p>
+                        <p class="font-racing">Lenguaje:</p>
+                        <p>{{pelicula.idioma}}</p>
                     </li>
                     <li style="display: flex; gap: 10px;">
-                        <p class="font-racing" ><strong>Subtítulos:</strong></p>
-                        <p>Italiano</p>
+                        <p class="font-racing">Subtítulos:</p>
+                        <p>{{pelicula.subtitulo}}</p>
                     </li>
                 </ul>
-                <div class="showtimes">
-                    <p class="font-racing" >HOY</p>
-                    <button>3:40 (2D)</button>
-                    <button>3:40 (2D)</button>
-                    <button>3:40 (2D)</button>
-                    <button>3:40 (2D)</button>
-                    <button>3:40 (2D)</button>
-                    <button>3:40 (2D)</button>
+                <div class="showtimes ">
+                    <p class="font-racing today">HOY</p>
+                    <div class="boton-contenedor">
+                    <button *ngFor="let hora of funcionesAux" [routerLink]="['/asientos', hora.id]" >{{hora.horaInicio.substring(0, 5)}} ({{pelicula.animacion}})</button> 
+                    </div>
+                    
                 </div>
             </div>
         </div>

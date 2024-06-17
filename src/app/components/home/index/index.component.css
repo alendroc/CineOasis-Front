@@ -101,7 +101,6 @@
 }
    
 .card1::before {
-    
     content: 'Comprar ticket';
     letter-spacing: 0.2em;
     position: absolute;

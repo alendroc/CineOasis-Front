@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { ImagenService } from '../../../services/imagen.service';
 import { server } from '../../../services/global';
 import { RouterModule } from '@angular/router';
+import { filter } from 'rxjs';
 
 @Component({
   selector: 'app-index',
@@ -16,6 +17,7 @@ import { RouterModule } from '@angular/router';
 export class IndexComponent {
   public imagenPeli:Imagen;
   public imagenesPeli: Imagen[] = [];
+  public imagenesPeliAux: Imagen[] = [];
   urlAPI: string | undefined;
 
   constructor(
@@ -32,10 +34,11 @@ export class IndexComponent {
      this._imagenService.indexImagesForPelicula().subscribe({
       next: (response:any) =>{
       this.imagenesPeli = response['data'];
-      console.log(this.imagenesPeli)
+        this.imagenesPeliAux = this.imagenesPeli.filter((imagen: Imagen) => 
+        imagen.descripcion.toLowerCase().includes('vertical'))
+      console.log(this.imagenesPeliAux)
     },
       error: (err: Error) => {}
     });
-
   }
 }

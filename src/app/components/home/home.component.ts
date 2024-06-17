@@ -70,8 +70,6 @@ export class HomeComponent {
       }
     });
     }catch(e){}
-   
-
   }
 
   //FUNCION QUE CARGA AUXILIAR DE INDENTITY PARA ACTUALIZAR EL USUARIO

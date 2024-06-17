@@ -7,13 +7,13 @@
 
         <div class="card-container">
           <div class="image-div">
-            <img class="image-combo" src="../../../../assets/img/Nachos.jpeg" alt="">
+            <img class="image-combo" src="{{imageURL}}{{item.imagen}}" alt="Imagen comida">
           </div>
           <div class="info-combo">
-              <h5 class="title-combo">{{comida.nombre}}</h5>
+              <h5 class="title-combo">{{item.nombre}}</h5>
               <div style="display: flex; gap: 10px;">
                 <span class="text-combo">Precio:</span>
-                <span class="text-combo"><strong> {{comida.precio}}</strong></span>
+                <span class="text-combo"><strong> {{item.precio}}</strong></span>
               </div>
           </div>
         </div>
