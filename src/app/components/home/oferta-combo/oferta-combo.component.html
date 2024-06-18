@@ -1,0 +1,32 @@
+<div class="combo-body" style="height: 100%;">
+  <div class="combo-container">
+    <h3>Alimentos</h3>
+    <div class="div-scroll">
+
+      @for (item of comidas; track $index) {
+
+      <div class="card-container">
+        <div class="image-div">
+          <img class="image-combo" src="{{imageURL}}{{item.imagen}}" alt="Imagen comida">
+        </div>
+        <div class="info-combo">
+            <h5 class="title-combo">{{item.nombre}}</h5>
+            <div style="display: flex; gap: 10px;">
+              <span class="text-combo">Precio:</span>
+              <span class="text-combo"><strong> {{item.precio}}</strong></span>
+            </div>
+            <div class="spinner-div" style="display: flex; align-items: center;">
+              <label class="text-combo" for="cantidad" style="margin-right: 10px;">Cantidad</label>
+              <button class="decrement" (click)="decrement(item)">-</button>
+              <input type="number" class="quantity-spinner" [value]="getQuantity(item)" min="0" max="20">
+              <button class="increment" (click)="increment(item)">+</button>
+            </div>
+        </div>
+      </div>
+      }
+  </div>
+  <div style="display: flex; justify-content: flex-end; margin-bottom: 20px;">
+    <button (click)="enviarServiceCompartido()"  class="botonSiguiente">Siguiente</button> 
+</div>
+</div>
+</div>

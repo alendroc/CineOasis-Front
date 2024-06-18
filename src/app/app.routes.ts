@@ -8,6 +8,8 @@ import { UsuarioAdministracionComponent } from './components/home/usuario-admini
 import { PeliculaAdministracionComponent } from './components/home/pelicula-administracion/pelicula-administracion.component';
 import { ComidaAdministracionComponent } from './components/home/comida-administracion/comida-administracion.component';
 import { AsientosComponent } from './components/home/asientos/asientos.component';
+import { OfertaComboComponent } from './components/home/oferta-combo/oferta-combo.component';
+import { PagoComponent } from './components/home/pago/pago.component';
 
 
 export const routes: Routes = [
@@ -16,15 +18,10 @@ export const routes: Routes = [
         {path:'combos',component:CombosComponent},
         {path:'peliculas/:id', component:PeliculaComponent},
         {path:'usuarioAdministracion', component:UsuarioAdministracionComponent},
-<<<<<<< HEAD
-        {path:'comidaAdministracion',component:ComidaAdministracionComponent},
-        {path:'asientos/:id',component:AsientosComponent},
-        {path:'comidaAdministracion',component:ComidaAdministracionComponent}]
-
-=======
         {path:'peliculaAdministracion', component:PeliculaAdministracionComponent},
         {path:'comidaAdministracion',component:ComidaAdministracionComponent},
-        {path:'asientos/:id',component:AsientosComponent}]
->>>>>>> 7498edd014f4cf98d89eaacebfa17d1e85bb4631
-    }
+        {path:'asientos/:id',component:AsientosComponent},
+        {path:'comidaAdministracion',component:ComidaAdministracionComponent},
+        {path:'ofertaCombo',component:OfertaComboComponent},
+        {path:'pago',component:PagoComponent},]}
 ];

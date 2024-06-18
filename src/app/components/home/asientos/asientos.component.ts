@@ -5,11 +5,11 @@ import { AsientoService } from '../../../services/asiento.service';
 import { FuncionAsientoService } from '../../../services/funcionAsiento.service';
 import { Funcion } from '../../../models/Funcion';
 import { FuncionService } from '../../../services/funcion.service';
-import { data } from 'jquery';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FuncionAsiento } from '../../../models/FuncionAsiento';
-import { HttpErrorResponse } from '@angular/common/http';
+import Swal from 'sweetalert2';
 import { AsientoCompartidoService } from '../../../services/asientoCompartido.service';
+import { UserService } from '../../../services/user.service';
 
 @Component({
   selector: 'app-asientos',
@@ -22,16 +22,20 @@ export class AsientosComponent {
   selectedAsientos: Asiento[]=[];
   asiento: Asiento;
   funcion: Funcion;
+  idFuncion: number =0;
   funcionesAsientos: FuncionAsiento[]=[];
+  funcionesAsientosAux: FuncionAsiento[]=[];
   asientos: Asiento[]=[];
   funcionAsientos: FuncionAsiento;
-
+  flagSesion: boolean = false;
+  public identity:any;
   constructor(
     private _asientoService:AsientoService,
     private _funcionAsientoService: FuncionAsientoService,
     private _funcionService:FuncionService,
     private _funcionCompartida:AsientoCompartidoService,
-    private router: Router, 
+    private _userService: UserService, 
+    private _router:Router,
     private route: ActivatedRoute 
   ){
    this.asiento = new Asiento(1,0,"")
@@ -40,10 +44,12 @@ export class AsientosComponent {
   }
 
   ngOnInit(): void { 
-    this.getAsientos();
+    this.getAsientos();   
+    this.recibirFuncionAsientos()
     const id = this.route.snapshot.paramMap.get('id');
     this.obtenerFuncion(id);
-    this.recibirFuncionAsientos()
+ 
+    this.loadIdentuty()
   }
 
   getAsientos(){
@@ -79,6 +85,7 @@ export class AsientosComponent {
   }
 
   obtenerFuncion(id:any){
+    this._funcionCompartida.setSelectFuncion(id);
     this._funcionService.show(id).subscribe(
       data=>{
         this.funcion = data['funcion']
@@ -87,27 +94,56 @@ export class AsientosComponent {
     )
   }
 /** AGREGAR FUNCION */
- /* enviarFuncionAsientos(){
+    enviarFuncionAsientos(){
     this.selectedAsientos.forEach(element => {
     this.funcionAsientos.idFuncion =  this.funcion.id;
     this.funcionAsientos.idAsiento = element.id
     this.funcionAsientos.estado = true
-    this._funcionAsientoService.create(this.funcionAsientos).subscribe({
+    
+    this.funcionesAsientosAux.push(this.funcionAsientos)
+    });
+
+   /* this._funcionAsientoService.create(this.funcionAsientos).subscribe({
       next:(response)=>{
         console.log(response)
       },error:(error:HttpErrorResponse)=>{
+      if(error.message === "No tiene privilegios para acceso al recurso")
         console.log(error)
-    }   
+        
+      }   
     })
-    });
   }*/
+  }
+  loadIdentuty(){this.identity = this._userService.getIdentityFromStorage(); console.log(this.identity)}
 
-    /*enviarServiceCompartido(){
-      this._funcionCompartida.setSelectedAsientos(){
 
+    enviarServiceCompartido(){
+      if(this.identity == null){
+        console.log('hola mundo')
+      }else{
+        this. enviarFuncionAsientos()
+        if(this.funcionesAsientosAux.length == 0){
+          console.log("no hay asientos seleccionados")
+        }else{
+          this.funcionesAsientosAux =[]
+          this.selectedAsientos.forEach(element => {
+            // Creamos una nueva instancia de FuncionAsiento para cada elemento seleccionado
+            let nuevoFuncionAsiento = new FuncionAsiento(0,0,0,false);
+            nuevoFuncionAsiento.idFuncion = this.funcion.id;
+            nuevoFuncionAsiento.idAsiento = element.id;
+            nuevoFuncionAsiento.estado = true;
+        
+            // Agregamos el nuevo objeto FuncionAsiento al array funcionesAsientosAux
+            this.funcionesAsientosAux.push(nuevoFuncionAsiento);
+          });
+         this._funcionCompartida.setSelectedAsientos(this.funcionesAsientosAux)
+         console.log("asientos GET:",this._funcionCompartida.getSelectedAsientos())
+         this._router.navigate(['/ofertaCombo']);
+        }
+        
       }
-    }*/
-
+    }
+  
   recibirFuncionAsientos(){
     this._funcionAsientoService.index().subscribe({
       next:(response:any)=>{   console.log("entro funcion"),
