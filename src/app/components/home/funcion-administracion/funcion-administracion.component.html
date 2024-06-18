@@ -41,7 +41,7 @@
                     <!-- Id Pelicula Column -->
                     <ng-container matColumnDef="idPelicula">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header class="mat-column-idPelicula"> ID Película </th>
-                        <td mat-cell *matCellDef="let row" class="mat-column-idPelicula"> {{row.idPelicula}} </td>
+                        <td mat-cell *matCellDef="let row" class="mat-column-idPelicula"> {{getPeliculaNameById(row.idPelicula)}} </td>
                     </ng-container>
 
                     <!-- Sala Column -->
@@ -94,10 +94,17 @@
                                 <form #createForm="ngForm" (ngSubmit)="storeFuncion(createForm)">
                                     <div class="horizontal">
                                         <div class="name-input" style="width: 45%; margin-bottom: 10px;">
-                                            <label for="idPeliculaForFuncion" class="form-text modal-title">ID Película</label>
-                                            <input type="number" id="idPeliculaForFuncion" #idPeliculaForFuncion="ngModel" name="idPeliculaForFuncion"
-                                            required class="input" [(ngModel)]="_funcion.idPelicula" />
-                                        </div>
+                                            <label for="idPeliculaForFuncion" class="form-text modal-title">Película</label>
+                                            <select id="idPeliculaForFuncion" #idPeliculaForFuncion="ngModel" name="idPeliculaForFuncion"
+                                              required class="form-select input" [(ngModel)]="_funcion.idPelicula">
+                                              <option disabled selected value="">Selecciona una película</option>
+                                              <option *ngFor="let pelicula of peliculas" [value]="pelicula.id">
+                                                {{ getPeliculaNameById(_funcion.idPelicula) }}</option>
+                                                @for (item of peliculasList; track $index) {
+                                                    <option [value]="item.key">{{ item.key }} - {{ item.value }}</option>
+                                                }
+                                            </select>
+                                          </div>
                                         <div class="name-input" style="width: 45%;">
                                             <label for="salaForFuncion" class="form-text modal-title">Sala</label>
                                             <select id="salaForPe" required class="form-select input" [(ngModel)]="_funcion.sala" name="salaForFuncion" >
@@ -111,7 +118,7 @@
                                     <div class="horizontal">
                                         <div class="name-input" style="width: 45%; margin-bottom: 10px;">
                                             <label for="fechaForFuncion" class="form-text modal-title">Fecha</label>
-                                            <input type="date" id="date" #date="ngModel" name="date"
+                                            <input type="date" id="fechaForFuncion" #date="ngModel" name="date"
                                                 required class="input" [(ngModel)]="_funcion.fecha" placeholder="Fecha" />
                                         </div>
                                         <div class="name-input" style="width: 45%;">
@@ -172,28 +179,28 @@
                                 <!-- Formulario para actualizar la información y la imagen de la función -->
                                 <form #updateForm="ngForm" (ngSubmit)="updateFuncion(updateForm)">
                                     <div class="mb-3">
-                                        <label for="idPeliculaForFuncion" class="form-text modal-title">ID Película</label>
-                                        <input class="input" type="number" id="idPeliculaForFuncion" name="idPelicula" [(ngModel)]="selectedFuncion.idPelicula" required>
+                                        <label for="idPeliculaFuncion" class="form-text modal-title">ID Película</label>
+                                        <input class="input" type="number" id="idPeliculaFuncion" name="idPelicula" [(ngModel)]="selectedFuncion.idPelicula" required>
                                     </div>
                                     <div class="mb-3">
-                                        <label for="salaForFuncion" class="form-text modal-title">Sala</label>
-                                        <input class="input" type="text" id="salaForFuncion" name="sala" [(ngModel)]="selectedFuncion.sala" required>
+                                        <label for="salaFuncion" class="form-text modal-title">Sala</label>
+                                        <input class="input" type="text" id="salaFuncion" name="sala" [(ngModel)]="selectedFuncion.sala" required>
                                     </div>
                                     <div class="mb-3">
-                                        <label for="fechaForFuncion" class="form-text modal-title">Fecha</label>
-                                        <input class="input" type="date" id="fechaForFuncion" name="fecha" [(ngModel)]="selectedFuncion.fecha" required>
+                                        <label for="fechaFuncion" class="form-text modal-title">Fecha</label>
+                                        <input class="input" type="date" id="fechaFuncion" name="fecha" [(ngModel)]="selectedFuncion.fecha" required>
                                     </div>
                                     <div class="mb-3">
-                                        <label for="horaInicioForFuncion" class="form-text modal-title">Hora Inicio</label>
-                                        <input class="input" type="time" id="horaInicioForFuncion" name="horaInicio" [(ngModel)]="selectedFuncion.horaInicio" required>
+                                        <label for="horaInicioFuncion" class="form-text modal-title">Hora Inicio</label>
+                                        <input class="input" type="time" id="horaInicioFuncion" name="horaInicio" [(ngModel)]="selectedFuncion.horaInicio" required>
                                     </div>
                                     <div class="mb-3">
-                                        <label for="horaFinalForFuncion" class="form-text modal-title">Hora Final</label>
-                                        <input class="input" type="time" id="horaFinalForFuncion" name="horaFinal" [(ngModel)]="selectedFuncion.horaFinal" required>
+                                        <label for="horaFinalFuncion" class="form-text modal-title">Hora Final</label>
+                                        <input class="input" type="time" id="horaFinalFuncion" name="horaFinal" [(ngModel)]="selectedFuncion.horaFinal" required>
                                     </div>
                                     <div class="mb-3">
-                                        <label for="precioForFuncion" class="form-text modal-title">Precio</label>
-                                        <input class="input" type="number" id="precioForFuncion" name="precio" [(ngModel)]="selectedFuncion.precio" required>
+                                        <label for="precioFuncion" class="form-text modal-title">Precio</label>
+                                        <input class="input" type="number" id="precioFuncion" name="precio" [(ngModel)]="selectedFuncion.precio" required>
                                     </div>
                                     <button type="submit" class="btn-create" data-bs-dismiss="modal" >Actualizar Función</button>
                                 </form>

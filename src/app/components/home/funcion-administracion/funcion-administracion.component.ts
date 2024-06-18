@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Funcion } from '../../../models/Funcion';
+import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -29,8 +30,9 @@ export class FuncionAdministracionComponent {
   public selectedFuncion = new Funcion(1,0,"","","","",0)
   salas=['A','B','C','D','E'];
   public _funcion:Funcion
+  public peliculas: Pelicula[] = [];
   public _pelicula:Pelicula
-
+  peliculasList: { key: number, value: string }[] = [];
   constructor(
     private _funcionService: FuncionService,
     private _peliculaService: PeliculaService
@@ -78,7 +80,6 @@ export class FuncionAdministracionComponent {
   
   ngOnInit():void {
     this.getFunciones();
-    
   }
 
 /*****************************  GET  *****************************/
@@ -89,6 +90,9 @@ export class FuncionAdministracionComponent {
       this.dataSource.data= response['data'];
       console.log(this.dataSource.data)
       console.log(response)
+      this.dataSource.data.forEach(e => {
+        this.loadPeliculaName(e.idPelicula);
+      });
     },
       error: (err: Error) => {
         console.error('Error al cargar las funciones', err);
@@ -161,5 +165,29 @@ export class FuncionAdministracionComponent {
         this.selectedFuncion = { ...this.selection.selected[0] };
       }
     }
+
+    /*****************************  Obtener nombre  *****************************/
+    loadPeliculaName(id:number) {
+      this._peliculaService.show(id).subscribe({
+        next: (response: any) => {
+          let pelicula = response['pelicula'];
+          this.peliculasList.push({
+            key: pelicula.id,
+            value: pelicula.nombre
+          });
+        },
+        error: (err: Error) => {
+          console.error('Error al buscar la pelicula', err);
+        }
+      });
+    }
+    
+    getPeliculaNameById(id: number): string {
+      const pelicula = this.peliculasList.find(p => p.key === id);
+      return pelicula ? pelicula.value : 'Desconocido';
+    }
+    
+
+
 }
 
