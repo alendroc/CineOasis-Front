@@ -12,6 +12,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { Imagen } from '../../../models/Imagen';
 import { ImagenService } from '../../../services/imagen.service';
 import { server } from '../../../services/global';
+import { PeliculaService } from '../../../services/pelicula.service';
+import { Pelicula } from '../../../models/Pelicula';
 
 @Component({
   selector: 'app-img-pelicula-administracion',
@@ -27,14 +29,17 @@ export class ImgPeliculaAdministracionComponent {
   displayedColumns: string[] = ['select', 'id', 'pelicula', 'descripcion', 'imagen'];
   dataSource = new MatTableDataSource<Imagen>([]);
   selection = new SelectionModel<Imagen>(true, []);
+  peliculasList: { key: number, value: string }[] = [];
   errorMessage: string | null = null;
   selectedFile: File | null = null;
   public selectedImagen = new Imagen(0,0,'','');
   public _imagenPelicula:Imagen;
   public imagenesPeliculas:Imagen[]=[];
+  public peliculas:Pelicula[]=[];
   imageURL:string;
   constructor(
-    private _imagenService: ImagenService
+    private _imagenService: ImagenService,
+    private _peliculaService:PeliculaService
   ) {
     this._imagenPelicula = new Imagen(1,1,"",""),
     this.imageURL=server.url+'imagen/pelicula/'
@@ -87,6 +92,16 @@ export class ImgPeliculaAdministracionComponent {
       next: async (response: any) => {
         this.imagenesPeliculas = response['data'];
         this.dataSource.data = this.imagenesPeliculas;
+
+        console.log('response',this.dataSource.data);
+
+        this.peliculasList=[];
+        this.dataSource.data.forEach(e => {
+          this.loadPeliculaName(e.idPelicula);
+        });
+
+        console.log('lista de peliculas',this.peliculasList);
+        
       },
       error: (err: Error) => {
         console.error('Error al cargar las imagenes de las peliculas', err);
@@ -175,6 +190,7 @@ export class ImgPeliculaAdministracionComponent {
             this.getImagenesPelicula();
             form.resetForm();
             this.selectedFile = null;
+            this.selection.clear();
           },
           error:(err:Error)=>{
             console.log(err);
@@ -191,6 +207,7 @@ export class ImgPeliculaAdministracionComponent {
             this.getImagenesPelicula();
             form.resetForm();
             this.selectedFile = null;
+            this.selection.clear();
           },
           error:(err:Error)=>{
             console.log(err);
@@ -200,5 +217,28 @@ export class ImgPeliculaAdministracionComponent {
     }
     }
     
+//------------TRAE PELICULA-------------------------
+
+loadPeliculaName(id:number) {
+  this._peliculaService.show(id).subscribe({
+    next: (response: any) => {
+      //console.log(response)
+      let pelicula = response['pelicula'];
+      this.peliculasList.push({
+        key: pelicula.id,
+        value: pelicula.nombre
+      });
+
+    },
+    error: (err: Error) => {
+      console.error('Error al buscar la pelicula', err);
+    }
+  });
+}
+
+getPeliculaNameById(id: number): string {
+  const pelicula = this.peliculasList.find(p => p.key === id);
+  return pelicula ? pelicula.value : 'Desconocido';
+}
 
 }
