@@ -60,25 +60,34 @@
           </div>
           <div class="comida">
             <p class="titule-about-body">A L I M E N T O S</p>
-            <div class="comida1">
-              <div class="comida-foto">a</div>
+            
+            <div class="cardComida" *ngIf="comidas.length > 0">
+              <div class="comida-foto">
+                <img class="image-combo" [src]="imageURL + comidas[0].imagen" alt="Imagen comida" />
+              </div>
               <div class="comida-info">
-                <h3>Sushi</h3>
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloremque nisi, illo cum illum, non delectus maxime nemo repellat culpa deserunt ipsum laboriosam, dolorem quaerat optio! Qui velit ipsam voluptatibus voluptatum.</p>
+                <h3>{{ comidas[0].nombre }}</h3>
+                <div style="display: flex; gap: 10px;">
+                  <span class="text-combo">Precio:</span>
+                  <span class="text-combo"><strong>{{ comidas[0].precio }}</strong></span>
+                </div>
               </div>
             </div>
-            <div class="comida1">
-              <div class="comida-info">
-                <h3>Sushi</h3>
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloremque nisi, illo cum illum, non delectus maxime nemo repellat culpa deserunt ipsum laboriosam, dolorem quaerat optio! Qui velit ipsam voluptatibus voluptatum.</p>
+
+            <div class="cardComida2" *ngIf="comidas.length > 1">
+              <div class="comida-info" style="margin-top: 40px;">
+                <h3>{{ comidas[1].nombre }}</h3>
+                <div style="display: flex; gap: 10px;">
+                  <span class="text-combo">Precio:</span>
+                  <span class="text-combo"><strong>{{ comidas[1].precio }}</strong></span>
+                </div>
               </div>
-              <div class="comida-foto" style="margin-left: 20px; margin-right: 0;">a</div>
+              <div class="comida-foto" style="margin-left: 20px; margin-right: 0;">
+                <img class="image-combo" [src]="imageURL + comidas[1].imagen" alt="Imagen comida" />
+              </div>
             </div>
           </div>
-        </div>
 
-        <div>
-          
         </div>
     </div>
 
@@ -86,9 +95,9 @@
     <div class="footer">
       <div style="display: flex; padding-top: 20px;justify-content: space-around; color: aliceblue;">
         <div>
-          <p>CINE OASIS <strong>© 2023</strong> </p>
+          <p>CINE OASIS <strong>© 2024</strong> </p>
         </div>
-        <div style="line-height: 2px; display: flex;flex-direction: row; align-items: center;">
+        <div class="footer-dev" >
           <p>Desarrolladores:</p>
           <p>Josue Solorzano | Jose Alejandro Chaves | Daniel Gonzalez</p>
         </div>

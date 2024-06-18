@@ -270,6 +270,8 @@ msgAlert= (title:any, text:any, icon:any) =>{
   })
 }
 
+
+
 //-------------------------Activar modal inicio de sesion en asiento---------------------------------------------------------//
 /*activarModal(): void {
   this._servicioCompartido.modalTrigger$.subscribe(() => {
