@@ -19,11 +19,19 @@
                 <div class="pantalla">PANTALLA</div>
                 <div>
                     <div class="gridAsientos">
-                    <div class="asientoIndividual" *ngFor="let asiento of asientos"
-                    (click)="veridAsiento(asiento.numero,asiento.fila)"></div>
-                </div> 
+                        <div 
+                          class="asientoIndividual" 
+                          *ngFor="let asiento of asientos"
+                          [ngStyle]="{'background-color': isOccupied(asiento) ? '#EDBB4F' : (isSelected(asiento) ? '#EDBB4F' : 'white')}"
+                          (click)="veridAsiento(asiento)"
+                          [class.occupied]="isOccupied(asiento)">
+                        </div>
+                      </div>
                 </div>
                </div>
+            </div>
+            <div style="display: flex; justify-content: flex-end; margin-bottom: 20px;">
+                <button   class="botonSiguiente">Siguiente</button> 
             </div>
         </div>
       </div>

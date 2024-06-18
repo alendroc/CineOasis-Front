@@ -9,7 +9,8 @@ import { PeliculaAdministracionComponent } from './components/home/pelicula-admi
 import { ComidaAdministracionComponent } from './components/home/comida-administracion/comida-administracion.component';
 import { AsientosComponent } from './components/home/asientos/asientos.component';
 import { ImgPeliculaAdministracionComponent } from './components/home/img-pelicula-administracion/img-pelicula-administracion.component';
-
+import { FuncionAdministracionComponent } from './components/home/funcion-administracion/funcion-administracion.component';
+import { FuncionAsientoAdministracionComponent } from './components/home/funcion-asiento-administracion/funcion-asiento-administracion.component';
 
 export const routes: Routes = [
     {path:'',component: HomeComponent, children:[
@@ -17,9 +18,16 @@ export const routes: Routes = [
         {path:'combos',component:CombosComponent},
         {path:'peliculas/:id', component:PeliculaComponent},
         {path:'usuarioAdministracion', component:UsuarioAdministracionComponent},
+        {path:'comidaAdministracion',component:ComidaAdministracionComponent},
+        {path:'asientos/:id',component:AsientosComponent},
+        {path:'comidaAdministracion',component:ComidaAdministracionComponent},
         {path:'peliculaAdministracion', component:PeliculaAdministracionComponent},
         {path:'imgPeliculaAdministracion', component:ImgPeliculaAdministracionComponent},
         {path:'comidaAdministracion',component:ComidaAdministracionComponent},
+        {path:'asientos/:id',component:AsientosComponent},
+        {path:'funcionAdministracion', component:FuncionAdministracionComponent},
+        {path:'funcionAsientoAdministracion', component:FuncionAsientoAdministracionComponent},
         {path:'asientos/:id',component:AsientosComponent}]
+
     }
 ];

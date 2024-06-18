@@ -91,8 +91,6 @@ export class ComidaAdministracionComponent {
   }
 
   /*****************************  GET  *****************************/
-
-
   getComidas() {
     this._comidaService.index().subscribe({
     next: (response: any) => {
