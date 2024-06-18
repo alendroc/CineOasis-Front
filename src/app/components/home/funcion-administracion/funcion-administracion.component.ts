@@ -14,6 +14,9 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { FuncionService } from '../../../services/funcion.service';
 import { PeliculaService } from '../../../services/pelicula.service';
 import { Pelicula } from '../../../models/Pelicula';
+import Swal from 'sweetalert2';
+import { timer } from 'rxjs';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-funcion-administracion',
@@ -24,20 +27,22 @@ import { Pelicula } from '../../../models/Pelicula';
   styleUrl: './funcion-administracion.component.css'
 })
 export class FuncionAdministracionComponent {
-  displayedColumns: string[] = ['select', 'id', 'idPelicula', 'sala', 'fecha', 'horaInicio', 'horaFinal','precio'];
-  dataSource = new MatTableDataSource<Funcion>([]);
-  selection = new SelectionModel<Funcion>(true, []);
+  public displayedColumns: string[] = ['select', 'id', 'idPelicula', 'sala', 'fecha', 'horaInicio', 'horaFinal','precio'];
+  public dataSource = new MatTableDataSource<Funcion>([]);
+  public selection = new SelectionModel<Funcion>(true, []);
   public selectedFuncion = new Funcion(1,0,"","","","",0)
-  salas=['A','B','C','D','E'];
+  public salas=['A','B','C','D','E'];
   public _funcion:Funcion
   public peliculas: Pelicula[] = [];
-  public _pelicula:Pelicula
-  peliculasList: { key: number, value: string }[] = [];
+  public _pelicula:Pelicula;
+  public peliculasList: { key: number, value: string }[] = [];
+  public errores:string[]=[];
+  public activateErrors:boolean=false;
   constructor(
     private _funcionService: FuncionService,
     private _peliculaService: PeliculaService
   ) {
-    this._funcion = new Funcion(1,0,"","","","",0)
+    this._funcion = new Funcion(1,0,"","","","",3500)
     this._pelicula = new Pelicula(1,"","","","","","","","","","","")
     //this.urlAPI = server.url+'imagen/show/comidas/';
   }
@@ -90,9 +95,7 @@ export class FuncionAdministracionComponent {
       this.dataSource.data= response['data'];
       console.log(this.dataSource.data)
       console.log(response)
-      this.dataSource.data.forEach(e => {
-        this.loadPeliculaName(e.idPelicula);
-      });
+      this.loadPeliculaName();
     },
       error: (err: Error) => {
         console.error('Error al cargar las funciones', err);
@@ -102,23 +105,36 @@ export class FuncionAdministracionComponent {
 
    /*****************************  CREATE  *****************************/
    storeFuncion(form: any): void {
-    if (form.valid) {
+    
       console.log(this._funcion)
       this._funcionService.create(this._funcion).subscribe({
       next:(response)=>{
         console.log(response);
-        this.getFunciones();
         if(response.status==201){
           form.reset();            
+          this.getFunciones();
+          this.msgAlert('Funcion agregada correctamente','','success'); 
             } else {
-              console.error('No se pudo ingrear la funcion');
+              console.error('No se pudo ingresar la funcion');
             }
           },
-          error: (err: any) => {
-            console.error(err);
+          error: (error: HttpErrorResponse) => {
+            if (error.status === 406 && error.error && error.error.error) {
+              this.errores = [];
+              const errorObj = error.error.error;
+              for (const key in errorObj) {
+                if (errorObj.hasOwnProperty(key)) {
+                  this.errores.push(...errorObj[key]);
+                }
+              }
+              this.changeActivateErrors(true)
+            } else {
+              console.error('Otro tipo de error:', error);
+              this.msgAlert('Error desde el servidor, contacte con un administrador', '', 'error');
+            }
           }
         });
-    }
+    
   }
 
   /*****************************  DELETE  *****************************/
@@ -129,9 +145,11 @@ export class FuncionAdministracionComponent {
           // (image!=null)? this.deleteUserImage(image!):console.log('No hay imagenes');
           this.dataSource.data = this.dataSource.data.filter(u => u.id !== user.id);
           this.selection.clear();
+          this.msgAlert('Funcion eliminada','','success'); 
         },
         error: (err: any) => {
           console.error('Error al eliminar la funcion', err);
+          this.msgAlert('Error desde el servidor, contacte con un administrador', '', 'error');
         }
       });
     });
@@ -140,7 +158,10 @@ export class FuncionAdministracionComponent {
 
   /*****************************  UPDATE  *****************************/
     updateFuncion(form: any): void {
-      if (form.valid) {
+      // if (form.valid) {
+        this.selectedFuncion.horaInicio=this.formatTime(this.selectedFuncion.horaInicio);
+        this.selectedFuncion.horaFinal=this.formatTime(this.selectedFuncion.horaFinal);
+
         this._funcionService.update(this.selectedFuncion).subscribe({
           next: (updatedFuncion) => {
             const index = this.dataSource.data.findIndex(user => user.id === updatedFuncion.id);
@@ -152,12 +173,25 @@ export class FuncionAdministracionComponent {
             form.reset();
             this.getFunciones();
             this.selection.clear(); 
+            this.msgAlert('Funcion actualizada','','success'); 
           },
-          error: (err) => {
-            console.error('Error al actualizar la funcion', err);
+          error: (error:HttpErrorResponse) => {
+            if (error.status === 406 && error.error && error.error.error) {
+              this.errores = [];
+              const errorObj = error.error.error;
+              for (const key in errorObj) {
+                if (errorObj.hasOwnProperty(key)) {
+                  this.errores.push(...errorObj[key]);
+                }
+              }
+              this.changeActivateErrors(true)
+            } else {
+              console.error('Otro tipo de error:', error);
+              this.msgAlert('Error desde el servidor, contacte con un administrador', '', 'error');
+            }
           }
         });
-      }
+      // }
     }
     
     prepareUpdateForm() {
@@ -167,32 +201,60 @@ export class FuncionAdministracionComponent {
     }
 
     /*****************************  Obtener nombre  *****************************/
-    loadPeliculaName(id: number) {
-      const peliculaExistente = this.peliculasList.find(p => p.key === id);
-      if (!peliculaExistente) {
-        this._peliculaService.show(id).subscribe({
-          next: (response: any) => {
-            let pelicula = response['pelicula'];
-            if (!this.peliculasList.some(p => p.key === pelicula.id)) {
-              this.peliculasList.push({
-                key: pelicula.id,
-                value: pelicula.nombre
-              });
-            }
-          },
-          error: (err: Error) => {
-            console.error('Error al buscar la pelicula', err);
-          }
-        });
-      }
+
+    loadPeliculaName() {
+      this._peliculaService.index().subscribe({
+        next: (response: any) => {
+          console.log(response)
+          let peliculas = response['data'];
+    peliculas.forEach((e:any) => {
+      this.peliculasList.push({
+            key: e.id,
+            value: e.nombre
+          });
+    });
+    
+        },
+        error: (err: Error) => {
+          console.error('Error al buscar la pelicula', err);
+        }
+      });
     }
   
     getPeliculaNameById(id: number): string {
       const pelicula = this.peliculasList.find(p => p.key === id);
       return pelicula ? pelicula.value : 'Desconocido';
     }
-  
+    //----------------MODIFICA EL FORMATO DE TIEMPO--------------------------------
+    formatTime(time: string): string {
+      const parts = time.split(':');
+      if (parts.length === 2) {
+        const [hours, minutes] = parts;
+        return `${hours.padStart(2, '0')}:${minutes.padStart(2, '0')}:00`;
+      } else if (parts.length === 3) {
+        const [hours, minutes, seconds] = parts;
+        return `${hours.padStart(2, '0')}:${minutes.padStart(2, '0')}:${seconds.padStart(2, '0')}`;
+      } else {
+        return time;
+      }
+    }
+    
+ //--------------------------FUNCIONES DE ALERTAS-------------------------------------------------------------------
+ msgAlert= (title:any, text:any, icon:any) =>{
+  Swal.fire({
+    title,
+    text,
+    icon,
+  })
+}
 
+changeActivateErrors(val:boolean){
+  this.activateErrors=val;
+  let countdown=timer(5000);
+  countdown.subscribe(n=>{
+    this.activateErrors=false;
+  })
+}
 
 }
 

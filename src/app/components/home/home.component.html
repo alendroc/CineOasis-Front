@@ -56,10 +56,7 @@
                 <a class="nav-link" [routerLink]="['/']" routerLinkActive="active" data-bs-dismiss="offcanvas" [routerLinkActiveOptions]="{exact: true}">Home</a>
               </li>
               <li class="nav-item mx-lg-2">
-                <a class="nav-link" [routerLink]="['/combos']" data-bs-dismiss="offcanvas" routerLinkActive="active">Combos</a>
-              </li>
-              <li class="nav-item mx-lg-2">
-                <a class="nav-link" [routerLink]="['/cartelera']" routerLinkActive="active">Cartelera</a>
+                <a class="nav-link" [routerLink]="['/combos']" data-bs-dismiss="offcanvas" routerLinkActive="active">Comidas</a>
               </li>
               <!--Parte del admin-->
               @if(identityAux&&identityAux.permisoAdmin==1){
@@ -68,12 +65,10 @@
                     aria-expanded="false">Administrar</a>
                   <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <li class="li-drop" [routerLink]="['/usuarioAdministracion']" ><a class="nav-link"><i class="fa-solid fa-user" style="margin-right: 10px;"></i> Usuarios</a></li>
-                    <li class="li-drop" [routerLink]="['/peliculaAdministracion']"><a class="nav-link"><i class="fa-solid fa-play" style="margin-right: 10px;"></i> Peliculas</a></li>
-                    <li class="li-drop" [routerLink]="['']"><a class="nav-link"><i class="fa-solid fa-play" style="margin-right: 10px;"></i> IMG Peliculas</a></li>   
-                    <li class="li-drop" [routerLink]="['/funcionAdministracion']"><a class="nav-link"><i class="fa-solid fa-utensils" style="margin-right: 10px;"></i> Funciones</a></li>
-                    <li class="li-drop" [routerLink]="['/funcionAsientoAdministracion']"><a class="nav-link"><i class="fa-solid fa-utensils" style="margin-right: 10px;"></i> Funcione/Asiento</a></li>
+                    <li class="li-drop" [routerLink]="['/peliculaAdministracion']"><a class="nav-link"><i class="fa-solid fa-clapperboard" style="margin-right: 10px;"></i> Peliculas</a></li>
+                    <li class="li-drop" [routerLink]="['/imgPeliculaAdministracion']"><a class="nav-link"><i class="fa-solid fa-photo-film" style="margin-right: 10px;"></i> IMG Peliculas</a></li>
+                    <li class="li-drop" [routerLink]="['/funcionAdministracion']"><a class="nav-link"><i class="fa-solid fa-calendar" style="margin-right: 10px;"></i> Funciones</a></li>
                     <li class="li-drop" [routerLink]="['/comidaAdministracion']"><a class="nav-link"><i class="fa-solid fa-utensils" style="margin-right: 10px;"></i> Comidas</a></li>
-                    <li class="li-drop" ><a class="nav-link"><i class="fa-solid fa-chair" style="margin-right: 10px;"></i> Asientos</a></li>
                   </ul>
                 </li>
               }
@@ -146,7 +141,7 @@
           <input type="submit" class="btn-sesion" value="Iniciar sesión en tu cuenta">
           <div class="registrar">
             <p>¿No estás registrado?</p>
-            <a href="#" (click)="this.resetForm(loginForm)" style="text-decoration: none;" data-bs-dismiss="modal" data-bs-target="#registrarModal" data-bs-toggle="modal">Crear cuenta</a>
+            <a href="#" (click)="this.resetForm(loginForm)" class="crearCuenta-a" data-bs-dismiss="modal" data-bs-target="#registrarModal" data-bs-toggle="modal">Crear cuenta</a>
           </div>
         </form>
       </div>
@@ -223,7 +218,7 @@
             <input type="date" id="date" #date="ngModel" name="date"
             required class="input" [(ngModel)]="user.fechaNacimiento"/>
           </div >
-          <input type="submit" class="btn-sesion" [disabled]="signupForm.invalid" value="Registrar nueva cuenta">
+          <input type="submit" class="btn-sesion"  value="Registrar nueva cuenta">
           
           <div class="registrar">
         

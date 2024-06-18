@@ -65,8 +65,8 @@
             
               <!-- Permiso Admin Column -->
               <ng-container matColumnDef="permisoAdmin">
-                <th mat-header-cell *matHeaderCellDef class="mat-column-permisoAdmin"> Permiso Admin </th>
-                <td mat-cell *matCellDef="let row" class="mat-column-permisoAdmin"> {{row.permisoAdmin}} </td>
+                <th mat-header-cell *matHeaderCellDef class="mat-column-permisoAdmin"> Permisos </th>
+                <td mat-cell *matCellDef="let row" class="mat-column-permisoAdmin"> {{nombreRol(row.permisoAdmin)}} </td>
               </ng-container>
             
               <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
@@ -80,7 +80,7 @@
 
             <!--------------------------------DIALOG PARA CREAR USUARIO ---------------------------------->
 
-            <div class="modal fade" id="crearUsuarioModal" tabindex="-1" aria-labelledby="crearUsuarioLabel" aria-hidden="true">
+            <div class="modal fade" id="crearUsuarioModal" tabindex="-1" aria-labelledby="crearUsuarioLabel" aria-hidden="true" data-bs-backdrop="static">
               <div class="modal-dialog" style="display: flex; justify-content: center;">
                 <div class="modal-content segundoModal">
                   <div class="modal-header">
@@ -88,6 +88,18 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                   </div>
                   <div class="modal-body">
+
+                    @if(activateErrors)
+                    {
+                       <span>
+                        @for (error of errores; track $index) {
+                           <div class="alert alert-danger">
+                                <p>{{ error }}</p>
+                          </div>
+                        }
+                      </span>
+                    }
+                   
                     <form #createForm="ngForm" (ngSubmit)="storeUser(createForm)">
                       <div class="horizontal">
                         <div class="name-input" style="width: 45%; margin-bottom: 10px;">
@@ -131,7 +143,8 @@
                         <input type="date" id="date" #date="ngModel" name="date"
                         required class="input" [(ngModel)]="_user.fechaNacimiento"/>
                       </div >
-                      <input type="submit" class="btn-create" data-bs-dismiss="modal" [disabled]="createForm.invalid" value="Crear Usuario">
+                      
+                      <input type="submit" class="btn-create" value="Crear Usuario">
                       
                       <div class="registrar">
                     
@@ -144,7 +157,7 @@
             <!--------------------------------FINAL PARA CREAR USUARIO ---------------------------------->
 
             <!--------------------------------DIALOG PARA ELIMINAR USUARIO ---------------------------------->
-            <div class="modal fade" id="deleteUsuarioModal" tabindex="-1" aria-labelledby="deleteUsuarioModalLabel" aria-hidden="true">
+            <div class="modal fade" id="deleteUsuarioModal" tabindex="-1" aria-labelledby="deleteUsuarioModalLabel" aria-hidden="true" data-bs-backdrop="static">
               <div class="modal-dialog">
                 <div class="modal-content">
                   <div class="modal-header">
@@ -165,7 +178,7 @@
 
             <!--------------------------------DIALOG PARA ACTUALIZAR USUARIO ---------------------------------->
 
-            <div class="modal fade" id="updateUsuarioModal" tabindex="-1" aria-labelledby="updateUsuarioModalLabel" aria-hidden="true">
+            <div class="modal fade" id="updateUsuarioModal" tabindex="-1" aria-labelledby="updateUsuarioModalLabel" aria-hidden="true" data-bs-backdrop="static">
               <div class="modal-dialog">
                 <div class="modal-content">
                   <div class="modal-header">
@@ -173,26 +186,38 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                   </div>
                   <div class="modal-body">
+
+                    @if(activateErrors)
+                    {
+                       <span>
+                        @for (error of errores; track $index) {
+                           <div class="alert alert-danger">
+                                <p>{{ error }}</p>
+                          </div>
+                        }
+                      </span>
+                    }
+                    
                     <form #updateForm="ngForm" (ngSubmit)="updateUser(updateForm)">
                       <div class="mb-3">
-                        <label for="nameForUser" class="form-text modal-title">Nombre</label>
-                        <input class="input" type="text" id="nameForUser" name="name"  [(ngModel)]="selectedUser.name" required>
+                        <label for="nameForUserUpdate" class="form-text modal-title">Nombre</label>
+                        <input class="input" type="text" id="nameForUserUpdate" name="nameForUserUpdate"  [(ngModel)]="selectedUser.name" required>
                       </div>
                       <div class="mb-3">
-                        <label for="apellidoForUser" class="form-text modal-title">Apellido</label>
-                        <input class="input" type="text" id="apellidoForUser" name="apellido"  [(ngModel)]="selectedUser.apellido" required>
+                        <label for="apellidoForUserUpdate" class="form-text modal-title">Apellido</label>
+                        <input class="input" type="text" id="apellidoForUserUpdate" name="apellidoForUserUpdate"  [(ngModel)]="selectedUser.apellido" required>
                       </div>
                       <div class="mb-3">
-                        <label for="emailForUser" class="form-text modal-title">Correo</label>
-                        <input class="input" type="email" id="emailForUser" name="email" [placeholder]="selectedUser.email" disabled>
+                        <label for="emailForUserUpdate" class="form-text modal-title">Correo</label>
+                        <input class="input" type="email" id="emailForUserUpdate" name="emailForUserUpdate" [placeholder]="selectedUser.email" disabled>
                       </div>
                       <div class="mb-3">
-                        <label for="fechaNacimientoForUser" class="form-text modal-title">Fecha de Nacimiento</label>
-                        <input class="input" type="date" id="fechaNacimientoForUser" name="fechaNacimiento"  [(ngModel)]="selectedUser.fechaNacimiento" required>
+                        <label for="fechaNacimientoForUserUpdate" class="form-text modal-title">Fecha de Nacimiento</label>
+                        <input class="input" type="date" id="fechaNacimientoForUserUpdate" name="fechaNacimientoForUserUpdate"  [(ngModel)]="selectedUser.fechaNacimiento" required>
                       </div>
                       <div class="mb-3">
-                        <label for="permisoAdminForUser" class="form-text modal-title">Permiso Admin</label>
-                        <mat-slide-toggle id="permisoAdminForUser" name="permisoAdmin" [(ngModel)]="selectedUser.permisoAdmin"></mat-slide-toggle>
+                        <label for="permisoAdminForUserUpdate" class="form-text modal-title">Permiso Admin</label>
+                        <mat-slide-toggle id="permisoAdminForUserUpdate" name="permisoAdminForUserUpdate" [(ngModel)]="selectedUser.permisoAdmin"></mat-slide-toggle>
                       </div>
                       <button type="submit" class="btn-create"   data-bs-dismiss="modal"[disabled]="updateForm.invalid">Actualizar Usuario</button>
                     </form>

@@ -1,1 +1,182 @@
-<p>img-pelicula-administracion works!</p>
+<div class="tablaImgPelicula-body">
+    <div class="imgPelicula-container">
+      <div class="contenedor-tablas">
+        <div class="reducir-tabla">
+          <div class="header-table">
+            <mat-form-field>
+              <mat-label>Filtrar Img Pelicula</mat-label>
+              <input matInput (keyup)="applyFilter($event)" placeholder="Buscar" #input>
+            </mat-form-field>
+            <div class="btn-table">
+              <button data-bs-toggle="modal" data-bs-target="#crearImgPeliculaModal"><span class="button_top">Agregar</span></button>
+              <button data-bs-toggle="modal" data-bs-target="#updateImgPeliculaModal" [disabled]="!isExactlyOneSelected()"><span class="button_top actualizar" (click)="prepareUpdateForm()">Actualizar</span></button>
+              <button data-bs-toggle="modal" data-bs-target="#deleteImgPeliculaModal" [disabled]="!isAtLeastOneSelected()"><span class="button_top eliminar">Eliminar</span></button>
+            </div>
+          </div>
+          <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 tabla-redondeada" matSort>
+            <!-- Checkbox Column -->
+            <ng-container matColumnDef="select">
+              <th mat-header-cell *matHeaderCellDef class="mat-column-select">
+                <mat-checkbox (change)="$event ? toggleAllRows() : null"
+                              [checked]="selection.hasValue() && isAllSelected()"
+                              [indeterminate]="selection.hasValue() && !isAllSelected()"
+                              [aria-label]="checkboxLabel()">
+                </mat-checkbox>
+              </th>
+              <td mat-cell *matCellDef="let row" class="mat-column-select">
+                <mat-checkbox (click)="$event.stopPropagation()"
+                              (change)="$event ? selection.toggle(row) : null"
+                              [checked]="selection.isSelected(row)"
+                              [aria-label]="checkboxLabel(row)">
+                </mat-checkbox>
+              </td>
+            </ng-container>
+  
+            <!-- Id Column -->
+            <ng-container matColumnDef="id">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header class="mat-column-id"> ID </th>
+              <td mat-cell *matCellDef="let row" class="mat-column-id"> {{row.id}} </td>
+            </ng-container>
+  
+            <!-- pelicula Column -->
+            <ng-container matColumnDef="pelicula">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header class="mat-column-pelicula"> Pelicula </th>
+              <td mat-cell *matCellDef="let row" class="mat-column-pelicula"> {{getPeliculaNameById(row.idPelicula)}} </td>
+            </ng-container>
+  
+            <!-- descripcion Column -->
+            <ng-container matColumnDef="descripcion">
+              <th mat-header-cell *matHeaderCellDef class="mat-column-descripcion"> Descripcion </th>
+              <td mat-cell *matCellDef="let row" class="mat-column-descripcion"> {{row.descripcion}} </td>
+            </ng-container>
+  
+            <!-- Imagen Column -->
+            <ng-container matColumnDef="imagen">
+              <th mat-header-cell *matHeaderCellDef class="mat-column-imagen"> Imagen </th>
+              <td mat-cell *matCellDef="let row" class="mat-column-imagen"> <img src="{{imageURL}}{{row.imagen}}" alt="{{row.descripcion}}" width="100"> </td>
+            </ng-container>
+  
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="selection.toggle(row)">
+            </tr>
+          </table>
+  
+          <mat-paginator [pageSizeOptions]="[5, 10]" aria-label="Select page of comidas"></mat-paginator>
+  
+          <!--------------------------------DIALOG PARA CREAR ImgPelicula ---------------------------------->
+  
+          <div class="modal fade" id="crearImgPeliculaModal" tabindex="-1" aria-labelledby="crearImgPeliculaLabel" aria-hidden="true" data-bs-backdrop="static">
+            <div class="modal-dialog" style="display: flex; justify-content: center;">
+              <div class="modal-content segundoModal">
+                <div class="modal-header">
+                  <h1 class="modal-title fs-5" id="crearImgPeliculaLabel">Agregar Img Pelicula</h1>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+
+                  @if(activateErrors)
+                  {
+                     <span>
+                      @for (error of errores; track $index) {
+                         <div class="alert alert-danger">
+                              <p>{{ error }}</p>
+                        </div>
+                      }
+                    </span>
+                  }
+
+                  <form #createForm="ngForm" (ngSubmit)="storeImagePelicula(createForm)">
+                    <div class="horizontal">
+                      <div class="name-input" style="width: 45%; margin-bottom: 10px;">
+                        <label for="peliculaForImgPelicula" class="form-text modal-title">Pelicula</label>
+
+                        <select id="peliculaForImgPelicula" required class="form-select input" 
+                        [(ngModel)]="_imagenPelicula.idPelicula" name="peliculaForImgPelicula">
+                          <option selected disabled hidden>{{getPeliculaNameById(selectedImagen.idPelicula)}}</option>
+                          @for (item of peliculasList; track $index) {
+                            <option [value]="item.key">{{ item.key }} - {{ item.value }}</option>
+                          }
+                        </select>
+                      </div>
+                      <div class="name-input" style="width: 45%;">
+                        <label for="descripcionForImgPelicula" class="form-text modal-title">Descripcion</label>
+
+                        <select id="descripcionForImgPelicula" required class="form-select input" #descripcionForImgPelicula="ngModel" 
+                        [(ngModel)]="_imagenPelicula.descripcion" name="descripcionForImgPelicula">
+                          <option selected disabled hidden>Seleccione una animación</option>
+                          @for (item of descripcion; track $index) {
+                            <option  [value]="item">{{item}}</option>
+                          }
+                        </select>
+                      </div>
+                    </div>
+                    <div style="margin-bottom: 20px;">
+                      <label for="imagenForImgPelicula" class="form-text modal-title">Imagen</label>
+                      <input type="file" id="imagenForImgPelicula" name="imagenForImgPelicula" (change)="onFileChange($event)" required />
+                    </div>
+                    <input type="submit" class="btn-create" value="Añadir Img Pelicula">
+                    <div class="registrar"></div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!--------------------------------FINAL PARA CREAR Img Pelicula ---------------------------------->
+  
+          <!--------------------------------DIALOG PARA ELIMINAR Img Pelicula ---------------------------------->
+          <div class="modal fade" id="deleteImgPeliculaModal" tabindex="-1" aria-labelledby="deleteImgPeliculaModalLabel" aria-hidden="true" data-bs-backdrop="static">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="deleteImgPeliculaModalLabel">Eliminar Img Pelicula</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  ¿Está seguro que desea eliminar la imagen de la película?
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn-cancel" data-bs-dismiss="modal">Cancelar</button>
+                  <button type="button" class="btn-delete" data-bs-dismiss="modal" (click)="deleteSelectedImagenesPelicula()">Eliminar</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!--------------------------------FINAL PARA ELIMINAR ImgPelicula ---------------------------------->
+  
+          <!--------------------------------DIALOG PARA ACTUALIZAR ImgPelicula ---------------------------------->
+  
+          <div class="modal fade" id="updateImgPeliculaModal" tabindex="-1" aria-labelledby="updateImgPeliculaModalLabel" aria-hidden="true" data-bs-backdrop="static">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="updateImgPeliculaModalLabel">Actualizar Imagen de Pelicula</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <form #updateForm="ngForm" (ngSubmit)="updateImagePelicula(updateForm)">
+                    <div class="mb-3">
+                      <label for="descripcionForImgPeliculaUpdate" class="form-text modal-title">Descripcion</label>
+
+                      <select id="descripcionForImgPeliculaUpdate" required class="form-select input" #descripcionForImgPeliculaUpdate="ngModel" 
+                      [(ngModel)]="selectedImagen.descripcion" name="descripcionForImgPeliculaUpdate">
+                        <option selected disabled hidden>Seleccione una animación</option>
+                        @for (item of descripcion; track $index) {
+                          <option  [value]="item">{{item}}</option>
+                        }
+                      </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="imagenForImgPeliculaUpdate" class="form-text modal-title">Imagen</label>
+                        <input type="file" id="imagenForImgPeliculaUpdate" name="imagenForImgPeliculaUpdate" (change)="onUpdateFileChange($event)">
+                      </div>
+                    <button type="submit" class="btn-create" data-bs-dismiss="modal" [disabled]="updateForm.invalid">Actualizar Img Pelicula</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!--------------------------------FINAL PARA ACTUALIZAR COMIDA ---------------------------------->
+        </div>
+      </div>
+    </div>
+  </div>

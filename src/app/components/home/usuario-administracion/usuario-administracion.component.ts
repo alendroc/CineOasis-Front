@@ -12,6 +12,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSlideToggleModule,_MatSlideToggleRequiredValidatorModule,} from '@angular/material/slide-toggle';
 import { ImagenService } from '../../../services/imagen.service';
+import { HttpErrorResponse } from '@angular/common/http';
+import Swal from 'sweetalert2';
+import { timer } from 'rxjs';
 
 @Component({
   selector: 'app-usuario-administracion',
@@ -23,12 +26,13 @@ import { ImagenService } from '../../../services/imagen.service';
   styleUrl: './usuario-administracion.component.css'
 })
 export class UsuarioAdministracionComponent {
-  displayedColumns: string[] = ['select', 'id', 'name', 'apellido', 'email', 'fechaNacimiento', 'permisoAdmin'];
-  dataSource = new MatTableDataSource<User>([]);
-  selection = new SelectionModel<User>(true, []);
-  
+  public displayedColumns: string[] = ['select', 'id', 'name', 'apellido', 'email', 'fechaNacimiento', 'permisoAdmin'];
+  public dataSource = new MatTableDataSource<User>([]);
+  public selection = new SelectionModel<User>(true, []);
+  public errores:string[]=[];
+  public activateErrors:boolean=false;
   public _user: User;
-  users: User[] = [];
+  public users: User[] = [];
   public selectedUser: User = new User(1, "", "", "", "", "", false, "");
 
   constructor(
@@ -38,7 +42,11 @@ export class UsuarioAdministracionComponent {
     this._user= new User(1,"","","","","",false,"")
   }
 
-  /****************ESTAS SON FUNCIONES PROPIAS DE LA TABLA PARA EL CHECKBOX Y SELECIONAR****************/
+
+  //cambiar el nombre del rol en la tabla
+  nombreRol(rol:boolean):string{return (rol==true)?'Admin':(rol==false)?'Usuario':'';}
+
+  /****************ESTAS SON FUNCIONES PROPIAS DE LA TABLA PARA EL CHECKBOX Y SELECCIONAR****************/
   isAllSelected() {
     const numSelected = this.selection.selected.length;
     const numRows = this.dataSource.data.length;
@@ -120,22 +128,36 @@ export class UsuarioAdministracionComponent {
 
   /*****************************  CREATE  *****************************/
   storeUser(form: any): void {
-    if (form.valid) {
+    //if (form.valid) {
       this._userService.create(this._user).subscribe({
       next:(response)=>{
         console.log(response);
         if(response.status==201){
-          form.reset();            
+          form.reset();
+          this.getUsers();
+          this.msgAlert('Usuario agregado correctamente','','success');
             } else {
-              console.error('No se pudo ingrear el usuario');
+              console.error('No se pudo ingresar el usuario');
             }
           },
-          error: (err: any) => {
-            console.error(err);
+          error: (error: HttpErrorResponse) => {
+            if (error.status === 406 && error.error && error.error.error) {
+              this.errores = [];
+              const errorObj = error.error.error;
+              for (const key in errorObj) {
+                if (errorObj.hasOwnProperty(key)) {
+                  this.errores.push(...errorObj[key]);
+                }
+              }
+              this.changeActivateErrors(true)
+            } else {
+              console.error('Otro tipo de error:', error);
+              this.msgAlert('Error desde el servidor, contacte con un administrador', '', 'error');
+            }
           }
         });
-        this.getUsers();
-    }
+        
+    //}
   }
 
   /*****************************  DELETE  *****************************/
@@ -146,9 +168,11 @@ export class UsuarioAdministracionComponent {
           // (image!=null)? this.deleteUserImage(image!):console.log('No hay imagenes');
           this.dataSource.data = this.dataSource.data.filter(u => u.id !== user.id);
           this.selection.clear();
+          this.msgAlert('Usuario eliminado','','success');
         },
         error: (err: any) => {
           console.error('Error al eliminar el usuario', err);
+          this.msgAlert('Error desde el servidor, contacte con un administrador', '', 'error');
         }
       });
     });
@@ -164,14 +188,27 @@ export class UsuarioAdministracionComponent {
             if (index !== -1) {
               this.dataSource.data[index] = updatedUser;
               this.dataSource.data = [...this.dataSource.data]; // Para disparar la actualización de Angular
-              
             }
             form.reset();
             this.getUsers();
-            this.selection.clear(); 
+            this.selection.clear();
+            this.msgAlert('Usuario actualizado','','success'); 
           },
-          error: (err) => {
-            console.error('Error al actualizar el usuario', err);
+          error: (error:HttpErrorResponse) => {
+            if (error.status === 406 && error.error && error.error.error) {
+              this.errores = [];
+              const errorObj = error.error.error;
+              for (const key in errorObj) {
+                if (errorObj.hasOwnProperty(key)) {
+                  this.errores.push(...errorObj[key]);
+                }
+              }
+              console.error(this.errores);
+              this.changeActivateErrors(true)
+            } else {
+              console.error('Otro tipo de error:', error);
+              this.msgAlert('Error desde el servidor, contacte con un administrador', '', 'error');
+            }
           }
         });
       }
@@ -183,4 +220,20 @@ export class UsuarioAdministracionComponent {
       }
     }
 
+    //--------------------------FUNCIONES DE ALERTAS-------------------------------------------------------------------
+msgAlert= (title:any, text:any, icon:any) =>{
+  Swal.fire({
+    title,
+    text,
+    icon,
+  })
+}
+
+changeActivateErrors(val:boolean){
+  this.activateErrors=val;
+  let countdown=timer(5000);
+  countdown.subscribe(n=>{
+    this.activateErrors=false;
+  })
+}
 }

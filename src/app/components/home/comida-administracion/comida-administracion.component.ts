@@ -18,7 +18,9 @@ import { server } from '../../../services/global';
 @Component({
   selector: 'app-comida-administracion',
   standalone: true,
-  imports: [FormsModule,RouterLink,RouterLinkActive,RouterOutlet,MatFormFieldModule, MatCheckboxModule,MatInputModule, MatTableModule ,MatPaginatorModule, _MatSlideToggleRequiredValidatorModule,MatButtonModule,ReactiveFormsModule, MatSlideToggleModule],
+  imports: [FormsModule,RouterLink,RouterLinkActive,RouterOutlet,MatFormFieldModule, 
+    MatCheckboxModule,MatInputModule, MatTableModule ,MatPaginatorModule, _MatSlideToggleRequiredValidatorModule,
+    MatButtonModule,ReactiveFormsModule, MatSlideToggleModule],
   templateUrl: './comida-administracion.component.html',
   styleUrl: './comida-administracion.component.css'
 })
