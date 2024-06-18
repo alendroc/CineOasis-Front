@@ -167,26 +167,31 @@ export class FuncionAdministracionComponent {
     }
 
     /*****************************  Obtener nombre  *****************************/
-    loadPeliculaName(id:number) {
-      this._peliculaService.show(id).subscribe({
-        next: (response: any) => {
-          let pelicula = response['pelicula'];
-          this.peliculasList.push({
-            key: pelicula.id,
-            value: pelicula.nombre
-          });
-        },
-        error: (err: Error) => {
-          console.error('Error al buscar la pelicula', err);
-        }
-      });
+    loadPeliculaName(id: number) {
+      const peliculaExistente = this.peliculasList.find(p => p.key === id);
+      if (!peliculaExistente) {
+        this._peliculaService.show(id).subscribe({
+          next: (response: any) => {
+            let pelicula = response['pelicula'];
+            if (!this.peliculasList.some(p => p.key === pelicula.id)) {
+              this.peliculasList.push({
+                key: pelicula.id,
+                value: pelicula.nombre
+              });
+            }
+          },
+          error: (err: Error) => {
+            console.error('Error al buscar la pelicula', err);
+          }
+        });
+      }
     }
-    
+  
     getPeliculaNameById(id: number): string {
       const pelicula = this.peliculasList.find(p => p.key === id);
       return pelicula ? pelicula.value : 'Desconocido';
     }
-    
+  
 
 
 }
