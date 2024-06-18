@@ -54,7 +54,11 @@
     color: #D79A16;
 }
 
-
+.crearCuenta-a{
+text-decoration: none;
+color: #224e27;
+border-bottom: 2px solid;
+}
 
 .modal-header{
     border-bottom: none;

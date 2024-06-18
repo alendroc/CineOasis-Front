@@ -53,23 +53,30 @@ export class HomeComponent {
   ngOnInit(): void {
     initFlowbite();
     this.loadIndentityAux();
-    try{ this.getUserImage(this.identityAux.imagen);}catch(e){this.imageURL="../../../assets/img/R.jpg";console.log(e)}
- 
+
+    if (this.identityAux && this.identityAux.imagen) {
+      this.getUserImage(this.identityAux.imagen);
+    } else {
+      this.imageURL = "../../../assets/img/R.jpg";
+    }
   }
 
   //Obtener imagen de usuario
   getUserImage(filename:string)
-  {
-    try{
+  {if(filename==''){
+  this.imageURL = "../../../assets/img/R.jpg";
+}else{
       this._imagenService.getImage('usuarios',filename).subscribe({
       next: (response: any) => {
         this.imageURL= URL.createObjectURL(response);
       },
       error: (err: Error) => {
-        //console.log(err);
+        console.log('error',err);
+        this.imageURL = "../../../assets/img/R.jpg"; 
       }
     });
-    }catch(e){}
+
+  }
   }
 
   //FUNCION QUE CARGA AUXILIAR DE INDENTITY PARA ACTUALIZAR EL USUARIO
@@ -133,21 +140,21 @@ onImageFileChange(event: any): void {
 }
 
 updateImageUser(form:any) {
-this.user=new User(this.identityAux.iss,this.identityAux.name,this.identityAux.apellido,this.identityAux.email,'',
+let user=new User(this.identityAux.iss,this.identityAux.name,this.identityAux.apellido,this.identityAux.email,'',
   this.identityAux.fechaNacimiento,this.identityAux.permisoAdmin,this.identityAux.imagen);
 
 if(this.selectedFile==null)
   {
-    this.updateInfoUser(this.user);
+    this.updateInfoUser(user);
    
   }else{
 
-  if(this.user.imagen===''){
+  if(user.imagen===''){
     this._imagenService.uploadImageStore(this.selectedFile!,"usuarios").subscribe({
       next: (response: any) => {
-        this.user.imagen=response['filename'];
-        this.updateInfoUser(this.user);
-        this.getUserImage(this.identityAux.imagen);
+        user.imagen=response['filename'];
+        this.updateInfoUser(user);
+        this.getUserImage(response['filename']);
         this.resetForm(form);
       },
       error: (err: Error) => {
@@ -155,10 +162,10 @@ if(this.selectedFile==null)
       }
     });
   }else{
-    this._imagenService.updateImage(this.selectedFile!,"usuarios", this.user.imagen!).subscribe({
+    this._imagenService.updateImage(this.selectedFile!,"usuarios", user.imagen!).subscribe({
       next: (response: any) => {
 
-        this.updateInfoUser(this.user);
+        this.updateInfoUser(user);
         this.getUserImage(this.identityAux.imagen)
         this.resetForm(form);
       },
@@ -190,6 +197,7 @@ updateInfoUser(user:User){
     },
     error: (err: Error) => {
       console.log(err);
+      this.msgAlert('Error del servidor, contacte con un administrador','','error');
     }
   });
 }

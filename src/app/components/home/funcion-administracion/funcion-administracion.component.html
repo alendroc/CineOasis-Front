@@ -83,7 +83,7 @@
 
                 <!--------------------------------DIALOG PARA CREAR FUNCION ---------------------------------->
 
-                <div class="modal fade" id="crearFuncionModal" tabindex="-1" aria-labelledby="crearFuncionLabel" aria-hidden="true">
+                <div class="modal fade" id="crearFuncionModal" tabindex="-1" aria-labelledby="crearFuncionLabel" aria-hidden="true" data-bs-backdrop="static">
                     <div class="modal-dialog" style="display: flex; justify-content: center;">
                         <div class="modal-content segundoModal">
                             <div class="modal-header">
@@ -91,6 +91,19 @@
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
+
+                                
+                      @if(activateErrors)
+                      {
+                         <span>
+                          @for (error of errores; track $index) {
+                             <div class="alert alert-danger">
+                                  <p>{{ error }}</p>
+                            </div>
+                          }
+                        </span>
+                      }
+
                                 <form #createForm="ngForm" (ngSubmit)="storeFuncion(createForm)">
                                     <div class="horizontal">
                                         <div class="name-input" style="width: 45%; margin-bottom: 10px;">
@@ -132,13 +145,8 @@
                                             <input type="time" id="horaFinalForFuncion" #horaFinalForFuncion="ngModel" name="horaFinalForFuncion"
                                             min="08:00:00" max="21:00:00"  step="3600"  required class="input" [(ngModel)]="_funcion.horaFinal" placeholder="HH:mm:ss" />
                                         </div>
-                                        <div class="name-input" style="width: 45%;">
-                                            <label for="precioForFuncion" class="form-text modal-title">Precio</label>
-                                            <input type="number" id="precioForFuncion" #precioForFuncion="ngModel" name="precioForFuncion"
-                                            required class="input" [(ngModel)]="_funcion.precio" placeholder="Precio" />
-                                        </div>
                                     </div>
-                                    <input type="submit" class="btn-create" data-bs-dismiss="modal" [disabled]="createForm.invalid" value="Crear Función">
+                                    <input type="submit" class="btn-create"  value="Crear Función">
                                     <div class="registrar"></div>
                                 </form>
                             </div>
@@ -148,7 +156,7 @@
                 <!--------------------------------FINAL PARA CREAR FUNCION ---------------------------------->
 
                 <!--------------------------------DIALOG PARA ELIMINAR FUNCION ---------------------------------->
-                <div class="modal fade" id="deleteFuncionModal" tabindex="-1" aria-labelledby="deleteFuncionModalLabel" aria-hidden="true">
+                <div class="modal fade" id="deleteFuncionModal" tabindex="-1" aria-labelledby="deleteFuncionModalLabel" aria-hidden="true" data-bs-backdrop="static">
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -168,7 +176,7 @@
                 <!--------------------------------FINAL PARA ELIMINAR FUNCION ---------------------------------->
 
                 <!--------------------------------DIALOG PARA ACTUALIZAR FUNCION ---------------------------------->
-                <div class="modal fade" id="updateFuncionModal" tabindex="-1" aria-labelledby="updateFuncionModalLabel" aria-hidden="true">
+                <div class="modal fade" id="updateFuncionModal" tabindex="-1" aria-labelledby="updateFuncionModalLabel" aria-hidden="true" data-bs-backdrop="static">
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -177,13 +185,31 @@
                             </div>
                             <div class="modal-body">
                                 <!-- Formulario para actualizar la información y la imagen de la función -->
+
+                                
+                      @if(activateErrors)
+                      {
+                         <span>
+                          @for (error of errores; track $index) {
+                             <div class="alert alert-danger">
+                                  <p>{{ error }}</p>
+                            </div>
+                          }
+                        </span>
+                      }
+
                                 <form #updateForm="ngForm" (ngSubmit)="updateFuncion(updateForm)">
-                                    <div class="mb-3">
-                                        <label for="idPeliculaFuncion" class="form-text modal-title">ID Película</label>
-                                        <input class="input" type="number" id="idPeliculaFuncion" name="idPelicula" [(ngModel)]="selectedFuncion.idPelicula" required>
-                                    </div>
+                                    
                                     <div class="mb-3">
                                         <label for="salaFuncion" class="form-text modal-title">Sala</label>
+
+                                        <select id="salaFuncion" required class="form-select input" [(ngModel)]="_funcion.sala" name="salaFuncion" >
+                                            <option disabled selected hidden>{{selectedFuncion.sala}}</option>
+                                            @for (item of salas; track $index) {
+                                              <option  [value]="item">{{item}}</option>
+                                            }
+                                          </select>
+
                                         <input class="input" type="text" id="salaFuncion" name="sala" [(ngModel)]="selectedFuncion.sala" required>
                                     </div>
                                     <div class="mb-3">
@@ -197,10 +223,6 @@
                                     <div class="mb-3">
                                         <label for="horaFinalFuncion" class="form-text modal-title">Hora Final</label>
                                         <input class="input" type="time" id="horaFinalFuncion" name="horaFinal" [(ngModel)]="selectedFuncion.horaFinal" required>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="precioFuncion" class="form-text modal-title">Precio</label>
-                                        <input class="input" type="number" id="precioFuncion" name="precio" [(ngModel)]="selectedFuncion.precio" required>
                                     </div>
                                     <button type="submit" class="btn-create" data-bs-dismiss="modal" >Actualizar Función</button>
                                 </form>

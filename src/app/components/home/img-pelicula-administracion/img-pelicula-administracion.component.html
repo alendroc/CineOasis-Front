@@ -65,7 +65,7 @@
   
           <!--------------------------------DIALOG PARA CREAR ImgPelicula ---------------------------------->
   
-          <div class="modal fade" id="crearImgPeliculaModal" tabindex="-1" aria-labelledby="crearImgPeliculaLabel" aria-hidden="true">
+          <div class="modal fade" id="crearImgPeliculaModal" tabindex="-1" aria-labelledby="crearImgPeliculaLabel" aria-hidden="true" data-bs-backdrop="static">
             <div class="modal-dialog" style="display: flex; justify-content: center;">
               <div class="modal-content segundoModal">
                 <div class="modal-header">
@@ -73,6 +73,18 @@
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
+
+                  @if(activateErrors)
+                  {
+                     <span>
+                      @for (error of errores; track $index) {
+                         <div class="alert alert-danger">
+                              <p>{{ error }}</p>
+                        </div>
+                      }
+                    </span>
+                  }
+
                   <form #createForm="ngForm" (ngSubmit)="storeImagePelicula(createForm)">
                     <div class="horizontal">
                       <div class="name-input" style="width: 45%; margin-bottom: 10px;">
@@ -88,15 +100,21 @@
                       </div>
                       <div class="name-input" style="width: 45%;">
                         <label for="descripcionForImgPelicula" class="form-text modal-title">Descripcion</label>
-                        <input type="text" id="descripcionForImgPelicula" #descripcionForImgPelicula="ngModel" name="descripcionForImgPelicula" 
-                        required class="input" [(ngModel)]="_imagenPelicula.descripcion"/>
+
+                        <select id="descripcionForImgPelicula" required class="form-select input" #descripcionForImgPelicula="ngModel" 
+                        [(ngModel)]="_imagenPelicula.descripcion" name="descripcionForImgPelicula">
+                          <option selected disabled hidden>Seleccione una animación</option>
+                          @for (item of descripcion; track $index) {
+                            <option  [value]="item">{{item}}</option>
+                          }
+                        </select>
                       </div>
                     </div>
                     <div style="margin-bottom: 20px;">
                       <label for="imagenForImgPelicula" class="form-text modal-title">Imagen</label>
                       <input type="file" id="imagenForImgPelicula" name="imagenForImgPelicula" (change)="onFileChange($event)" required />
                     </div>
-                    <input type="submit" class="btn-create" data-bs-dismiss="modal" [disabled]="createForm.invalid" value="Añadir Img Pelicula">
+                    <input type="submit" class="btn-create" value="Añadir Img Pelicula">
                     <div class="registrar"></div>
                   </form>
                 </div>
@@ -106,7 +124,7 @@
           <!--------------------------------FINAL PARA CREAR Img Pelicula ---------------------------------->
   
           <!--------------------------------DIALOG PARA ELIMINAR Img Pelicula ---------------------------------->
-          <div class="modal fade" id="deleteImgPeliculaModal" tabindex="-1" aria-labelledby="deleteImgPeliculaModalLabel" aria-hidden="true">
+          <div class="modal fade" id="deleteImgPeliculaModal" tabindex="-1" aria-labelledby="deleteImgPeliculaModalLabel" aria-hidden="true" data-bs-backdrop="static">
             <div class="modal-dialog">
               <div class="modal-content">
                 <div class="modal-header">
@@ -127,7 +145,7 @@
   
           <!--------------------------------DIALOG PARA ACTUALIZAR ImgPelicula ---------------------------------->
   
-          <div class="modal fade" id="updateImgPeliculaModal" tabindex="-1" aria-labelledby="updateImgPeliculaModalLabel" aria-hidden="true">
+          <div class="modal fade" id="updateImgPeliculaModal" tabindex="-1" aria-labelledby="updateImgPeliculaModalLabel" aria-hidden="true" data-bs-backdrop="static">
             <div class="modal-dialog">
               <div class="modal-content">
                 <div class="modal-header">
@@ -138,7 +156,14 @@
                   <form #updateForm="ngForm" (ngSubmit)="updateImagePelicula(updateForm)">
                     <div class="mb-3">
                       <label for="descripcionForImgPeliculaUpdate" class="form-text modal-title">Descripcion</label>
-                      <input class="input" type="text" id="descripcionForImgPeliculaUpdate" name="descripcionForImgPeliculaUpdate" [(ngModel)]="selectedImagen.descripcion" required>
+
+                      <select id="descripcionForImgPeliculaUpdate" required class="form-select input" #descripcionForImgPeliculaUpdate="ngModel" 
+                      [(ngModel)]="selectedImagen.descripcion" name="descripcionForImgPeliculaUpdate">
+                        <option selected disabled hidden>Seleccione una animación</option>
+                        @for (item of descripcion; track $index) {
+                          <option  [value]="item">{{item}}</option>
+                        }
+                      </select>
                     </div>
                     <div class="mb-3">
                         <label for="imagenForImgPeliculaUpdate" class="form-text modal-title">Imagen</label>

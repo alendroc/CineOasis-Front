@@ -123,11 +123,23 @@
                       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="resetForm(createForm)"></button>
                     </div>
                     <div class="modal-body">
+
+                      @if(activateErrors)
+                      {
+                         <span>
+                          @for (error of errores; track $index) {
+                             <div class="alert alert-danger">
+                                  <p>{{ error }}</p>
+                            </div>
+                          }
+                        </span>
+                      }
+
                       <form #createForm="ngForm" (ngSubmit)="storePelicula(createForm)">
                         <div class="horizontal">
                           <div class="name-input" style="width: 45%; margin-bottom: 10px;">
                           <label for="nameForPelicula"  class="form-text modal-title">Nombre</label>
-                          <input type="text" id="nameForPelicula" #nameForPelicula="ngModel" name="nameForPelicula" pattern="^[a-zA-Z]*$" 
+                          <input type="text" id="nameForPelicula" #nameForPelicula="ngModel" name="nameForPelicula"
                           required  class="input" [(ngModel)]="_pelicula.nombre"/>
               
                           @if(!nameForPelicula.valid && nameForPelicula.touched){
@@ -224,7 +236,7 @@
                           <input type="text" id="elencoForPelicula" #elencoForPelicula="ngModel" name="elencoForPelicula" required class="input" [(ngModel)]="_pelicula.elenco"/>
                         </div>
 
-                        <input type="submit" class="btn-create" data-bs-dismiss="modal" [disabled]="createForm.invalid" value="Crear Pelicula">
+                        <input type="submit" class="btn-create" value="Crear Pelicula">
                         
                         <div class="registrar">
                       
@@ -266,6 +278,18 @@
                       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="resetForm(updateForm)"></button>
                     </div>
                     <div class="modal-body">
+
+                      @if(activateErrors)
+                      {
+                         <span>
+                          @for (error of errores; track $index) {
+                             <div class="alert alert-danger">
+                                  <p>{{ error }}</p>
+                            </div>
+                          }
+                        </span>
+                      }
+
                       <form #updateForm="ngForm" (ngSubmit)="updatePelicula(updateForm)">
                         <div class="mb-3">
                           <label for="nameForPeliculaUpdate" class="form-text modal-title">Nombre</label>

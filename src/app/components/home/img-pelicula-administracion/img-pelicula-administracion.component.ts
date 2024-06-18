@@ -14,6 +14,9 @@ import { ImagenService } from '../../../services/imagen.service';
 import { server } from '../../../services/global';
 import { PeliculaService } from '../../../services/pelicula.service';
 import { Pelicula } from '../../../models/Pelicula';
+import Swal from 'sweetalert2';
+import { timer } from 'rxjs';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-img-pelicula-administracion',
@@ -26,17 +29,19 @@ import { Pelicula } from '../../../models/Pelicula';
 })
 export class ImgPeliculaAdministracionComponent {
 
-  displayedColumns: string[] = ['select', 'id', 'pelicula', 'descripcion', 'imagen'];
-  dataSource = new MatTableDataSource<Imagen>([]);
-  selection = new SelectionModel<Imagen>(true, []);
-  peliculasList: { key: number, value: string }[] = [];
-  errorMessage: string | null = null;
-  selectedFile: File | null = null;
+  public displayedColumns: string[] = ['select', 'id', 'pelicula', 'descripcion', 'imagen'];
+  public descripcion: string[] = ['vertical','horizontal'];
+  public dataSource = new MatTableDataSource<Imagen>([]);
+  public selection = new SelectionModel<Imagen>(true, []);
+  public peliculasList: { key: number, value: string }[] = [];
+  public selectedFile: File | null = null;
   public selectedImagen = new Imagen(0,0,'','');
   public _imagenPelicula:Imagen;
   public imagenesPeliculas:Imagen[]=[];
   public peliculas:Pelicula[]=[];
-  imageURL:string;
+  public errores:string[]=[];
+public activateErrors:boolean=false;
+public imageURL:string;
   constructor(
     private _imagenService: ImagenService,
     private _peliculaService:PeliculaService
@@ -93,14 +98,8 @@ export class ImgPeliculaAdministracionComponent {
         this.imagenesPeliculas = response['data'];
         this.dataSource.data = this.imagenesPeliculas;
 
-        console.log('response',this.dataSource.data);
-
         this.peliculasList=[];
-        this.dataSource.data.forEach(e => {
-          this.loadPeliculaName(e.idPelicula);
-        });
-
-        console.log('lista de peliculas',this.peliculasList);
+        this.loadPeliculaName();
         
       },
       error: (err: Error) => {
@@ -136,9 +135,24 @@ export class ImgPeliculaAdministracionComponent {
           this.getImagenesPelicula();
           form.resetForm();
           this.selectedFile = null;
+          this.msgAlert('Imagen para la pelicula agregada correctamente','','success');  
         },
-        error:(err:Error)=>{
-          console.log(err);
+        error:(error:HttpErrorResponse)=>{
+          console.log('response',error);
+
+          if (error.status === 406 && error.error && error.error.error) {
+            this.errores = [];
+            const errorObj = error.error.error;
+            for (const key in errorObj) {
+              if (errorObj.hasOwnProperty(key)) {
+                this.errores.push(...errorObj[key]);
+              }
+            }
+            this.changeActivateErrors(true)
+          } else {
+            console.error('Otro tipo de error:', error);
+            this.msgAlert('Error desde el servidor, contacte con un administrador', '', 'error');
+          }
         }
     });
   }
@@ -152,9 +166,11 @@ export class ImgPeliculaAdministracionComponent {
         next: () => {
           this.getImagenesPelicula();
           this.selection.clear(); 
+          this.msgAlert('Imagen eliminada','','success');  
         },
         error: (err: Error) => {
           console.error('Error al eliminar la imagen pelicula', err);
+          this.msgAlert('Error desde el servidor, contacte con un administrador', '', 'error');
         }
       });
     });
@@ -191,9 +207,11 @@ export class ImgPeliculaAdministracionComponent {
             form.resetForm();
             this.selectedFile = null;
             this.selection.clear();
+            this.msgAlert('Imagen actualizada','','success'); 
           },
           error:(err:Error)=>{
             console.log(err);
+            this.msgAlert('Error desde el servidor, contacte con un administrador', '', 'error');
           }
         });
        
@@ -203,14 +221,16 @@ export class ImgPeliculaAdministracionComponent {
         formData.append('data', JSON.stringify({descripcion: this.selectedImagen.descripcion}));
         this._imagenService.updateImageForPelicula(formData,this.selectedImagen.id).subscribe({
           next:(response:any)=>{
-            console.log(response);
+            
             this.getImagenesPelicula();
             form.resetForm();
             this.selectedFile = null;
             this.selection.clear();
+            this.msgAlert('Datos de la Imagen actualizados','','success'); 
           },
           error:(err:Error)=>{
             console.log(err);
+            this.msgAlert('Error desde el servidor, contacte con un administrador', '', 'error');
           }
         });
 
@@ -219,15 +239,17 @@ export class ImgPeliculaAdministracionComponent {
     
 //------------TRAE PELICULA-------------------------
 
-loadPeliculaName(id:number) {
-  this._peliculaService.show(id).subscribe({
+loadPeliculaName() {
+  this._peliculaService.index().subscribe({
     next: (response: any) => {
-      //console.log(response)
-      let pelicula = response['pelicula'];
-      this.peliculasList.push({
-        key: pelicula.id,
-        value: pelicula.nombre
+     
+      let peliculas = response['data'];
+peliculas.forEach((e:any) => {
+  this.peliculasList.push({
+        key: e.id,
+        value: e.nombre
       });
+});
 
     },
     error: (err: Error) => {
@@ -239,6 +261,23 @@ loadPeliculaName(id:number) {
 getPeliculaNameById(id: number): string {
   const pelicula = this.peliculasList.find(p => p.key === id);
   return pelicula ? pelicula.value : 'Desconocido';
+}
+
+ //--------------------------FUNCIONES DE ALERTAS-------------------------------------------------------------------
+ msgAlert= (title:any, text:any, icon:any) =>{
+  Swal.fire({
+    title,
+    text,
+    icon,
+  })
+}
+
+changeActivateErrors(val:boolean){
+  this.activateErrors=val;
+  let countdown=timer(5000);
+  countdown.subscribe(n=>{
+    this.activateErrors=false;
+  })
 }
 
 }
