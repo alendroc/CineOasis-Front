@@ -1,0 +1,88 @@
+<div class="pago-body">
+    <div class="contenido-pago">
+      <div class="cuerpo2">
+        <h1>METODO DE <span style="color: #EDBB4F;">PAGO</span></h1>
+        <div style="display: flex; justify-content: space-between;margin-top: 30px;">
+          <p class="monto-text">MONTO POR PAGAR</p>
+          <p class="sumid-text"><span style="color: #EDBB4F;">3000</span> colones</p>
+        </div>
+        <div class="input-pagos">
+          <form #paymentForm="ngForm" (ngSubmit)="onSubmit(paymentForm)">
+            <div class="input-group">
+              <label for="credit-card">Número de tarjeta de crédito</label>
+              <input
+                type="text"
+                id="credit-card"
+                class="input-field"
+                placeholder="XXX-XXX-XXX-XXX"
+                [(ngModel)]="creditCardNumber"
+                name="creditCardNumber"
+                (input)="handleInput($event)"
+                maxlength="19"
+                required
+              />
+            </div>
+            <div class="input-group" style="margin-bottom: 10px;">
+              <label for="credit-card-name">Nombre de tarjeta</label>
+              <input
+                type="text"
+                id="credit-card-name"
+                class="input-field"
+                maxlength="19"
+                required
+                name="creditCardName"
+                [(ngModel)]="creditCardName"
+              />
+            </div>
+            <div>
+              <label style="font-size: 16px; margin-bottom: 10px;">EXPIRA</label>
+              <div class="expiracion">
+                <div style="display: flex; flex-direction: column; margin-bottom: 10px;">
+                  <label for="expiration-month">MES</label>
+                  <select id="expiration-month" class="input-field-time" required name="expirationMonth" [(ngModel)]="expirationMonth">
+                    <option value="" disabled selected>Seleccione</option>
+                    <option class="dropD" *ngFor="let month of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]">{{ month }}</option>
+                  </select>
+                </div>
+                <div style="display: flex; flex-direction: column;margin-bottom: 10px;">
+                  <label for="expiration-year">AÑO</label>
+                  <input
+                    type="text"
+                    id="expiration-year"
+                    class="input-field-time"
+                    [(ngModel)]="expirationYear"
+                    name="expirationYear"
+                    (input)="handleYearInput($event)"
+                    maxlength="4"
+                    required
+                  />
+                </div>
+              </div>
+              <div>
+                <div style="display: flex; flex-direction: column;margin-bottom: 10px;">
+                  <label for="cvc">CVC/CCV</label>
+                  <input
+                    type="text"
+                    id="cvc"
+                    class="input-field-time"
+                    [(ngModel)]="cvc"
+                    name="cvc"
+                    (input)="handleCVCInput($event)"
+                    maxlength="3"
+                    required
+                  />
+                </div>
+              </div>
+            </div>
+            <div style="display: flex; align-items: center; justify-content: center; margin: 40px 0;">
+              <button [disabled]="!paymentForm.form.valid">
+                <span class="shadow"></span>
+                <span class="edge"></span>
+                <span class="front text"> Realizar compra </span>
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>

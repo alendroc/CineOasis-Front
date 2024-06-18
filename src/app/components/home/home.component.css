@@ -240,10 +240,7 @@ td, th {
   display: none;
 }
 @media (max-width:768px) {
-  .home-body{
-  height: auto;
-  }
-  
+
 }
 }
 
