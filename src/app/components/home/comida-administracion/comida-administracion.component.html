@@ -65,7 +65,7 @@
   
           <!--------------------------------DIALOG PARA CREAR COMIDA ---------------------------------->
   
-          <div class="modal fade" id="crearComidaModal" tabindex="-1" aria-labelledby="crearComidaLabel" aria-hidden="true">
+          <div class="modal fade" id="crearComidaModal" tabindex="-1" aria-labelledby="crearComidaLabel" aria-hidden="true" data-bs-backdrop="static">
             <div class="modal-dialog" style="display: flex; justify-content: center;">
               <div class="modal-content segundoModal">
                 <div class="modal-header">
@@ -78,7 +78,7 @@
                       <div class="name-input" style="width: 45%; margin-bottom: 10px;">
                         <label for="nombreForComida" class="form-text modal-title">Nombre</label>
                         <input type="text" id="nombreForComida" #nombreForComida="ngModel" name="nombreForComida" 
-                         required class="input" [(ngModel)]="comida.nombre" />
+                         required class="input" [(ngModel)]="comida.nombre" placeholder="Digita el nombre" />
                       </div>
                       <div class="name-input" style="width: 45%;">
                         <label for="precioForComida" class="form-text modal-title">Precio</label>
@@ -90,7 +90,7 @@
                       <label for="imagenForComida" class="form-text modal-title">Imagen</label>
                       <input type="file" id="imagenForComida" name="imagen" (change)="onFileChange($event)" required />
                     </div>
-                    <input type="submit" class="btn-create" data-bs-dismiss="modal" [disabled]="createForm.invalid" value="Crear Comida">
+                    <input type="submit" class="btn-create" value="Crear Comida">
                     <div class="registrar"></div>
                   </form>
                 </div>
@@ -100,7 +100,7 @@
           <!--------------------------------FINAL PARA CREAR COMIDA ---------------------------------->
   
           <!--------------------------------DIALOG PARA ELIMINAR COMIDA ---------------------------------->
-          <div class="modal fade" id="deleteComidaModal" tabindex="-1" aria-labelledby="deleteComidaModalLabel" aria-hidden="true">
+          <div class="modal fade" id="deleteComidaModal" tabindex="-1" aria-labelledby="deleteComidaModalLabel" aria-hidden="true" data-bs-backdrop="static">
             <div class="modal-dialog">
               <div class="modal-content">
                 <div class="modal-header">
@@ -121,7 +121,7 @@
   
           <!--------------------------------DIALOG PARA ACTUALIZAR COMIDA ---------------------------------->
 
-          <div class="modal fade" id="updateComidaModal" tabindex="-1" aria-labelledby="updateComidaModalLabel" aria-hidden="true">
+          <div class="modal fade" id="updateComidaModal" tabindex="-1" aria-labelledby="updateComidaModalLabel" aria-hidden="true" data-bs-backdrop="static">
             <div class="modal-dialog">
               <div class="modal-content">
                 <div class="modal-header">
@@ -132,16 +132,16 @@
                   <!-- Formulario para actualizar la información y la imagen de la comida -->
                   <form #updateForm="ngForm" (ngSubmit)="updateComidaImage(updateForm)">
                     <div class="mb-3">
-                      <label for="nombreForComida" class="form-text modal-title">Nombre</label>
-                      <input class="input" type="text" id="nombreForComida" name="nombre" [(ngModel)]="selectedComida.nombre" required>
+                      <label for="nombreForComidaUpdate" class="form-text modal-title">Nombre</label>
+                      <input class="input" type="text" id="nombreForComidaUpdate" name="nombre" [(ngModel)]="selectedComida.nombre" required>
                     </div>
                     <div class="mb-3">
-                      <label for="precioForComida" class="form-text modal-title">Precio</label>
-                      <input class="input" type="number" id="precioForComida" name="precio" [(ngModel)]="selectedComida.precio" required>
+                      <label for="precioForComidaUpdate" class="form-text modal-title">Precio</label>
+                      <input class="input" type="number" id="precioForComidaUpdate" name="precio" [(ngModel)]="selectedComida.precio" required>
                     </div>
                     <div class="mb-3">
-                      <label for="imagenForComida" class="form-text modal-title">Imagen</label>
-                      <input type="file" id="imagenForComida" name="imagen" (change)="onUpdateFileChange($event)">
+                      <label for="imagenForComidaUpdate" class="form-text modal-title">Imagen</label>
+                      <input type="file" id="imagenForComidaUpdate" name="imagen" (change)="onUpdateFileChange($event)">
                     </div>
                     <button type="submit" class="btn-create" data-bs-dismiss="modal" >Actualizar Comida</button>
                   </form>

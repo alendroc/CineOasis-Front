@@ -91,10 +91,11 @@ export class FuncionAdministracionComponent {
   getFunciones() {
     this._funcionService.index().subscribe({
     next: (response: any) => {
-    console.log("entro")
+    //console.log("entro")
       this.dataSource.data= response['data'];
-      console.log(this.dataSource.data)
-      console.log(response)
+      //console.log(this.dataSource.data)
+      //console.log(response)
+      this.peliculasList=[];
       this.loadPeliculaName();
     },
       error: (err: Error) => {
@@ -106,10 +107,10 @@ export class FuncionAdministracionComponent {
    /*****************************  CREATE  *****************************/
    storeFuncion(form: any): void {
     
-      console.log(this._funcion)
+      //console.log(this._funcion)
       this._funcionService.create(this._funcion).subscribe({
       next:(response)=>{
-        console.log(response);
+       // console.log(response);
         if(response.status==201){
           form.reset();            
           this.getFunciones();
@@ -162,6 +163,8 @@ export class FuncionAdministracionComponent {
         this.selectedFuncion.horaInicio=this.formatTime(this.selectedFuncion.horaInicio);
         this.selectedFuncion.horaFinal=this.formatTime(this.selectedFuncion.horaFinal);
 
+        //console.log(this.selectedFuncion);
+
         this._funcionService.update(this.selectedFuncion).subscribe({
           next: (updatedFuncion) => {
             const index = this.dataSource.data.findIndex(user => user.id === updatedFuncion.id);
@@ -205,7 +208,7 @@ export class FuncionAdministracionComponent {
     loadPeliculaName() {
       this._peliculaService.index().subscribe({
         next: (response: any) => {
-          console.log(response)
+          //console.log(response)
           let peliculas = response['data'];
     peliculas.forEach((e:any) => {
       this.peliculasList.push({

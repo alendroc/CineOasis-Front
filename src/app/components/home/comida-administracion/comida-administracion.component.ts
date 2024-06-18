@@ -8,44 +8,44 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatInputModule } from '@angular/material/input';
-import { MatSlideToggleModule, _MatSlideToggleRequiredValidatorModule } from '@angular/material/slide-toggle';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatButtonModule } from '@angular/material/button';
 import { Imagen } from '../../../models/Imagen';
 import { ImagenService } from '../../../services/imagen.service';
 import { server } from '../../../services/global';
+import Swal from 'sweetalert2';
+import { timer } from 'rxjs';
 
 @Component({
   selector: 'app-comida-administracion',
   standalone: true,
   imports: [FormsModule,RouterLink,RouterLinkActive,RouterOutlet,MatFormFieldModule, 
-    MatCheckboxModule,MatInputModule, MatTableModule ,MatPaginatorModule, _MatSlideToggleRequiredValidatorModule,
+    MatCheckboxModule,MatInputModule, MatTableModule ,MatPaginatorModule,
     MatButtonModule,ReactiveFormsModule, MatSlideToggleModule],
   templateUrl: './comida-administracion.component.html',
   styleUrl: './comida-administracion.component.css'
 })
 export class ComidaAdministracionComponent {
 
-  displayedColumns: string[] = ['select', 'id', 'nombre', 'precio', 'imagen'];
-  dataSource = new MatTableDataSource<Comida>([]);
-  selection = new SelectionModel<Comida>(true, []);
-  errorMessage: string | null = null;
-  selectedFile: File | null = null;
-  updateFile: File | null = null;
-  comida: Comida = new Comida(0, '', 0, '');
+  public displayedColumns: string[] = ['select', 'id', 'nombre', 'precio', 'imagen'];
+  public dataSource = new MatTableDataSource<Comida>([]);
+  public selection = new SelectionModel<Comida>(true, []);
+  public selectedFile: File | null = null;
+  public updateFile: File | null = null;
+  public comida: Comida = new Comida(0, '', 0, '');
   public selectedComida = new Comida(1,"",1,"")
-  prueba:string | undefined;
+  public prueba:string | undefined;
   public Comidas: Comida[] = [];
   public _comida: Comida;
-  public _imagen:Imagen;
-  urlAPI: string | undefined;
+  public urlAPI: string | undefined;
   public imageURL:string='';
+  public activateErrors:boolean=false;
   constructor(
     private _comidaService: ComidaService,
     private _imagenService: ImagenService
   ) {
     this._comida = new Comida(1,"",0,"")
-    this._imagen = new Imagen(1,1,"","")
     this.urlAPI = server.url+'imagen/show/comidas/';
   }
 
@@ -94,10 +94,10 @@ export class ComidaAdministracionComponent {
   getComidas() {
     this._comidaService.index().subscribe({
     next: (response: any) => {
-     console.log("entro")
+    // console.log("entro")
       this.dataSource.data= response['data'];
-      console.log(this.dataSource.data)
-      console.log(response)
+      // console.log(this.dataSource.data)
+      // console.log(response)
       this.dataSource.data.forEach(comida => {
         this.getComidasImage(comida.imagen, comida); // Asumiendo que `filename` es el campo correcto a pasar
       });
@@ -109,11 +109,11 @@ export class ComidaAdministracionComponent {
   }
 
   getComidasImage(filename: string, comida: Comida) {
-    console.log("Obteniendo imagen para", filename);
+    //console.log("Obteniendo imagen para", filename);
     this._imagenService.getImage('comidas', filename).subscribe({
       next: (response: any) => {
         comida.imagen = URL.createObjectURL(response); // Agregar imageURL a la comida
-        console.log("Imagen obtenida:", comida.imagen);
+       // console.log("Imagen obtenida:", comida.imagen);
         comida.originalImagen = filename; // Guardar el nombre original de la imagen
         // Actualizar la fila correspondiente en la tabla
         this.dataSource._updateChangeSubscription();
@@ -149,20 +149,21 @@ export class ComidaAdministracionComponent {
               this.getComidas();
               form.resetForm();
               this.selectedFile = null;
+              this.msgAlert('Comida agregada correctamente','','success');
             },
             error: (err) => {
               console.error('Error al crear la comida', err);
-              this.errorMessage = err.error.message || 'Error al crear la comida';
+              this.msgAlert('Error al agregar la comida','','error');
             }
           });
         },
         error: (err) => {
           console.error('Error al subir la imagen', err);
-          this.errorMessage = err.error.message || 'Error al subir la imagen';
+          this.msgAlert('Error al agregar la imagen','','error');
         }
       });
     } else {
-      this.errorMessage = 'Formulario inválido o imagen no seleccionada';
+      this.msgAlert('Datos inválidos o imagen no seleccionada','','error');
     }
   }
   
@@ -174,9 +175,11 @@ export class ComidaAdministracionComponent {
         next: () => {
           this.getComidas();
           this.selection.clear(); 
+          this.msgAlert('Comida eliminada','','success');
         },
         error: (err: Error) => {
           console.error('Error al eliminar la comida', err);
+          this.msgAlert('Error al eliminar la comida','','error');
         }
       });
     });
@@ -195,8 +198,9 @@ export class ComidaAdministracionComponent {
         const filename = this.selectedComida.originalImagen; // Usar el nombre de la imagen original
       this._imagenService.updateImage(this.updateFile, 'comidas', filename).subscribe({
           next: (response) => {
-            console.log("Imagen actualizada:", response.filename);
+            //console.log("Imagen actualizada:", response.filename);
             this.selectedComida.imagen = response.filename;
+            this.msgAlert('Comida actualizada','','success');
             // Si el formulario es válido, actualizar la información de la comida
             if (form.valid) {
               this.updateComidaInfo(form);
@@ -206,7 +210,7 @@ export class ComidaAdministracionComponent {
           },
           error: (err) => {
             console.error('Error al subir la imagen', err);
-            this.errorMessage = err.error.message || 'Error al subir la imagen';
+            this.msgAlert('Error al actualizar la imagen','','error');
           }
         });
       } else {
@@ -214,24 +218,26 @@ export class ComidaAdministracionComponent {
         if (form.valid) {
           this.updateComidaInfo(form);
         } else {
-          this.errorMessage = 'Debe seleccionar una nueva imagen o completar el formulario correctamente para actualizar la comida.';
-        }
+          this.msgAlert('Error al actualizar la comida',
+            'Debe seleccionar una nueva imagen o completar el formulario correctamente para actualizar la comida','error');
+         }
       }
     } else {
-      this.errorMessage = 'Formulario inválido';
+      this.msgAlert('Formulario inválido','','error');
     }
   }
   
   updateComidaInfo(form: any): void {
     this._comidaService.update(this.selectedComida).subscribe({
       next: () => {
-        console.log("Comida actualizada");
+        //console.log("Comida actualizada");
         this.getComidas();
         this.resetForm(form);
+       this.msgAlert('Comida Actualizada','','success');
       },
       error: (err) => {
-        console.error('Error al actualizar la comida', err);
-        this.errorMessage = err.error.message || 'Error al actualizar la comida';
+       // console.error('Error al actualizar la comida', err);
+        this.msgAlert('Error al actualizar los datos de la comida','','error');
       }
     });
   }
@@ -247,5 +253,22 @@ export class ComidaAdministracionComponent {
         this.updateFile = event.target.files[0];
       }
     }
+
+    //--------------------------FUNCIONES DE ALERTAS-------------------------------------------------------------------
+ msgAlert= (title:any, text:any, icon:any) =>{
+  Swal.fire({
+    title,
+    text,
+    icon,
+  })
+}
+
+changeActivateErrors(val:boolean){
+  this.activateErrors=val;
+  let countdown=timer(5000);
+  countdown.subscribe(n=>{
+    this.activateErrors=false;
+  })
+}
   
 }
