@@ -2,24 +2,39 @@ import { Injectable } from '@angular/core';
 import { Asiento } from '../models/Asiento';
 import { Funcion } from '../models/Funcion';
 import { FuncionAsiento } from '../models/FuncionAsiento';
+import { Subject } from 'rxjs';
+import { Comida } from '../models/Comida';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AsientoCompartidoService {
-  private selectedAsientos: FuncionAsiento[] = [];
-  private selectedFuncionId: number | undefined;
+  public comidasSeleccionadas: { comida: Comida, cantidad: number }[] = [];
+  public selectedAsientos: FuncionAsiento[] = [];
+  public selectedFuncionId: number = 0;
+  public modalTriggerSource = new Subject<void>();
+  modalTrigger$ = this.modalTriggerSource.asObservable();
 
-  setSelectedAsientos(asientos: FuncionAsiento[], funcionId: number) {
+  /*---------Select--------*/
+  setSelectedAsientos(asientos: FuncionAsiento[]) {
     this.selectedAsientos = asientos;
-    this.selectedFuncionId = funcionId;
   }
-
+  setSelectedComidas(comidas: { comida: Comida, cantidad: number }[]) {
+    this.comidasSeleccionadas = comidas;
+  }
+  setSelectFuncion(funcion:number){
+    this.selectedFuncionId = funcion
+  }
+  /*---------Get--------*/
   getSelectedAsientos(): FuncionAsiento[] {
     return this.selectedAsientos;
   }
 
-  getSelectedFuncionId(): number | undefined {
+  getSelectedFuncionId(): number {
     return this.selectedFuncionId;
+  }
+
+  getSelectedComidas(){
+   return this.comidasSeleccionadas
   }
 }

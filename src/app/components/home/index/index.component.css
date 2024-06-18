@@ -130,23 +130,37 @@
 .comida{
     height: 100%;
     margin-bottom: 4rem;
-     padding: 0 30px;
+    padding: 0 30px;
+    gap: 40px;
 }
-.comida1{
+.cardComida{
     display: flex;
-    margin-bottom: 30px;
-   
+    margin-bottom: 5rem;
+    align-items: center;
+    justify-content: flex-start
+}
+.cardComida2{
+    display: flex;
+    margin-bottom: 5rem;
+    align-items: center;
+    justify-content: flex-end;
 }
 .comida-foto{
     border-radius: 20px;
     width: 25%;
     height: 15vh;
-    background-color: bisque;
     margin-right: 20px;
 }
+.image-combo {
+    border-radius: 20px;
+    width: 25%;
+    height: 15vh;
+    width: 100%;
+    height: auto;
+    object-fit: cover; 
+  }
 .comida-info{
-    width: 70%;
-    font-size: clamp(0.2rem, 2vw, 1rem);
+    font-size: clamp(0.4rem, 3vw, 2rem);
 }
 
 @media (max-width:771px){
@@ -172,7 +186,15 @@
 }
 .footer{
     width: 100%;
-    height: 15vh;
+    height: 10vh;
     background-image: linear-gradient(45deg, rgb(22, 22, 22),rgb(121, 121, 121)),linear-gradient(45deg, rgb(86, 33, 11) 0%, rgb(86, 33, 11) 19%,rgb(105, 58, 15) 19%, rgb(105, 58, 15) 64%,rgb(125, 83, 19) 64%, rgb(125, 83, 19) 68%,rgb(144, 109, 22) 68%, rgb(144, 109, 22) 81%,rgb(164, 134, 26) 81%, rgb(164, 134, 26) 87%,rgb(183, 159, 30) 87%, rgb(183, 159, 30) 100%),linear-gradient(135deg, rgb(86, 33, 11) 0%, rgb(86, 33, 11) 19%,rgb(105, 58, 15) 19%, rgb(105, 58, 15) 64%,rgb(125, 83, 19) 64%, rgb(125, 83, 19) 68%,rgb(144, 109, 22) 68%, rgb(144, 109, 22) 81%,rgb(164, 134, 26) 81%, rgb(164, 134, 26) 87%,rgb(183, 159, 30) 87%, rgb(183, 159, 30) 100%); background-blend-mode:overlay,overlay,normal;
+}
+
+.footer-dev{
+    line-height: 2px; 
+    display: flex;
+    flex-direction: row; 
+    align-items: center;
+    font-size: clamp(0.2rem, 2vw, 1rem);
 }
 /* Media queries para responsividad */

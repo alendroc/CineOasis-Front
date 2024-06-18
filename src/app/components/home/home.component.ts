@@ -8,12 +8,11 @@ import { User } from '../../models/User';
 import { HttpErrorResponse } from '@angular/common/http';
 import { timer } from 'rxjs';
 import { UserService } from '../../services/user.service';
-
 import { initFlowbite } from 'flowbite';
-
 import Swal from 'sweetalert2';
 import { ImagenService } from '../../services/imagen.service';
 import { server } from '../../services/global';
+import { AsientoCompartidoService } from '../../services/asientoCompartido.service';
 
 
 @Component({
@@ -41,6 +40,7 @@ export class HomeComponent {
       private _userService:UserService,
       private _imagenService:ImagenService,
       private _router: Router,
+      private _servicioCompartido: AsientoCompartidoService
     ){
       this.urlAPI = server.url+'imagen/show/';
       this.status=-1;
@@ -60,7 +60,7 @@ export class HomeComponent {
       this.imageURL = "../../../assets/img/R.jpg";
     }
   }
-
+  
   //Obtener imagen de usuario
   getUserImage(filename:string)
   {if(filename==''){
@@ -278,4 +278,20 @@ msgAlert= (title:any, text:any, icon:any) =>{
     icon,
   })
 }
+
+
+
+//-------------------------Activar modal inicio de sesion en asiento---------------------------------------------------------//
+/*activarModal(): void {
+  this._servicioCompartido.modalTrigger$.subscribe(() => {
+    const modalElement = document.getElementById('exampleModal');
+
+    if (modalElement) {
+      const modalInstance = new bootstrap.Modal(modalElement);
+      modalInstance.show();
+    } else {
+      console.error('Elemento modal no encontrado');
+    }
+  });
+}*/
 }

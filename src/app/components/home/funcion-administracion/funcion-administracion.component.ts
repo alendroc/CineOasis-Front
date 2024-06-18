@@ -201,6 +201,7 @@ export class FuncionAdministracionComponent {
     }
 
     /*****************************  Obtener nombre  *****************************/
+
     loadPeliculaName() {
       this._peliculaService.index().subscribe({
         next: (response: any) => {
@@ -219,13 +220,11 @@ export class FuncionAdministracionComponent {
         }
       });
     }
-    
+  
     getPeliculaNameById(id: number): string {
       const pelicula = this.peliculasList.find(p => p.key === id);
       return pelicula ? pelicula.value : 'Desconocido';
     }
-
-
     //----------------MODIFICA EL FORMATO DE TIEMPO--------------------------------
     formatTime(time: string): string {
       const parts = time.split(':');
