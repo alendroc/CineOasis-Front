@@ -84,9 +84,10 @@ export class AsientoService{
 
  //----------------------RELLENAR ASIENTO (CREAR SEGUN UNA CANTIDAD DIGITADA)---------------------------------------------
  
- rellenar(asiento:Asiento):Observable<any>{
-    let asientoJson=JSON.stringify(asiento);
-    let params='data='+asientoJson;
+ rellenar(cantidad:number):Observable<any>{
+
+     let data = { cantidad: cantidad };
+     let params = 'data=' + JSON.stringify(data);
     let headers;
     let bearertoken = sessionStorage.getItem('token');
     if (bearertoken){

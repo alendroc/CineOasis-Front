@@ -59,6 +59,7 @@ export class HomeComponent {
     } else {
       this.imageURL = "../../../assets/img/R.jpg";
     }
+    
   }
   
   //Obtener imagen de usuario
@@ -294,4 +295,6 @@ msgAlert= (title:any, text:any, icon:any) =>{
     }
   });
 }*/
+
+
 }

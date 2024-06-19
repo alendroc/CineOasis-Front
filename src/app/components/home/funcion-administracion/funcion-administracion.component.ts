@@ -8,7 +8,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatInputModule } from '@angular/material/input';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
-import { MatSlideToggleModule, _MatSlideToggleRequiredValidatorModule } from '@angular/material/slide-toggle';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatButtonModule } from '@angular/material/button';
 import { SelectionModel } from '@angular/cdk/collections';
 import { FuncionService } from '../../../services/funcion.service';
@@ -17,12 +17,13 @@ import { Pelicula } from '../../../models/Pelicula';
 import Swal from 'sweetalert2';
 import { timer } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
+import { AsientoService } from '../../../services/asiento.service';
 
 @Component({
   selector: 'app-funcion-administracion',
   standalone: true,
   imports: [FormsModule,RouterLink,RouterLinkActive,RouterOutlet,MatFormFieldModule, MatCheckboxModule,MatInputModule, 
-    MatTableModule ,MatPaginatorModule, _MatSlideToggleRequiredValidatorModule,MatButtonModule,ReactiveFormsModule, MatSlideToggleModule],
+    MatTableModule ,MatPaginatorModule,MatButtonModule,ReactiveFormsModule, MatSlideToggleModule],
   templateUrl: './funcion-administracion.component.html',
   styleUrl: './funcion-administracion.component.css'
 })
@@ -40,7 +41,8 @@ export class FuncionAdministracionComponent {
   public activateErrors:boolean=false;
   constructor(
     private _funcionService: FuncionService,
-    private _peliculaService: PeliculaService
+    private _peliculaService: PeliculaService,
+    private _asientoService:AsientoService
   ) {
     this._funcion = new Funcion(1,0,"","","","",3500)
     this._pelicula = new Pelicula(1,"","","","","","","","","","","")
@@ -85,6 +87,7 @@ export class FuncionAdministracionComponent {
   
   ngOnInit():void {
     this.getFunciones();
+    this.verifyAsientosExists();
   }
 
 /*****************************  GET  *****************************/
@@ -258,6 +261,38 @@ changeActivateErrors(val:boolean){
     this.activateErrors=false;
   })
 }
+
+
+//---------------------------FUNCIONES QUE ASIGNAN LOS ASIENTOS EN LA BD----------------------------------------
+
+verifyAsientosExists(){
+  this._asientoService.index().subscribe({
+    next: (response: any) => {
+      //console.log(response)
+      let asientos = response['data'];
+      //console.log('asientos',asientos)
+      if(asientos.length>0)
+        {console.log('ya existen asientos registrados')
+      }else{this.rellenarAsientos(140);console.log('Se crearon nuevos asientos')}
+  
+    },
+    error: (err: Error) => {
+      console.error('Error al buscar los asientos', err);
+    }
+  });
+  }
+  
+  rellenarAsientos(cantidad:number){
+    this._asientoService.rellenar(cantidad).subscribe({
+      next: (response: any) => {
+        //console.log(response);
+      },
+      error: (err: Error) => {
+        console.error('Error al rellenar los asientos', err);
+      }
+    });
+    }
+
 
 }
 
