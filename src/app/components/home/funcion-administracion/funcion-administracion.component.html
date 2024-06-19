@@ -108,15 +108,14 @@
                                     <div class="horizontal">
                                         <div class="name-input" style="width: 45%; margin-bottom: 10px;">
                                             <label for="idPeliculaForFuncion" class="form-text modal-title">Película</label>
-                                            <select id="idPeliculaForFuncion" #idPeliculaForFuncion="ngModel" name="idPeliculaForFuncion"
-                                              required class="form-select input" [(ngModel)]="_funcion.idPelicula">
+
+                                            <select id="idPeliculaForFuncion" required class="form-select input" [(ngModel)]="_funcion.idPelicula" name="idPeliculaForFuncion">
                                               <option disabled selected value="">Selecciona una película</option>
-                                              <option *ngFor="let pelicula of peliculas" [value]="pelicula.id">
-                                                {{ getPeliculaNameById(_funcion.idPelicula) }}</option>
                                                 @for (item of peliculasList; track $index) {
                                                     <option [value]="item.key">{{ item.key }} - {{ item.value }}</option>
                                                 }
                                             </select>
+
                                           </div>
                                         <div class="name-input" style="width: 45%;">
                                             <label for="salaForFuncion" class="form-text modal-title">Sala</label>
@@ -203,14 +202,12 @@
                                     <div class="mb-3">
                                         <label for="salaFuncion" class="form-text modal-title">Sala</label>
 
-                                        <select id="salaFuncion" required class="form-select input" [(ngModel)]="_funcion.sala" name="salaFuncion" >
+                                        <select id="salaFuncion" required class="form-select input" [(ngModel)]="selectedFuncion.sala" name="salaFuncion" >
                                             <option disabled selected hidden>{{selectedFuncion.sala}}</option>
                                             @for (item of salas; track $index) {
                                               <option  [value]="item">{{item}}</option>
                                             }
                                           </select>
-
-                                        <input class="input" type="text" id="salaFuncion" name="sala" [(ngModel)]="selectedFuncion.sala" required>
                                     </div>
                                     <div class="mb-3">
                                         <label for="fechaFuncion" class="form-text modal-title">Fecha</label>
