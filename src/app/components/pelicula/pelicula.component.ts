@@ -17,14 +17,19 @@ import { error } from 'jquery';
   styleUrl: './pelicula.component.css'
 })
 export class PeliculaComponent {
-
+  
+selectedDate: string = 'Seleccione fecha';
 urlAPI: string | undefined;
+idP: any;
 public pelicula:Pelicula;
 public status: number | undefined;
 public funciones: Funcion[] = [];
+public funcionesFiltradas: Funcion[] = []; // Filtradas por película
 public funcionesAux: Funcion[] = [];
 public imagenHorizontal: any[] = [];
 public imagenVertical: any[] = [];
+
+
 constructor(
   private _peliculaService:PeliculaService,
   private _imagenService: ImagenService,
@@ -40,14 +45,15 @@ ngOnInit():void{
   console.log('ID obtenido de la ruta:', id);
   if(id!=null){
     this.getPelicula(id);
+    this.getFuncionesPelicula(id);
   }
 }
 
 getPelicula(id:string){
+  this.idP = id;
   this._peliculaService.show(id).subscribe(
      data => {
      this.pelicula = data['pelicula']
-     this.getFuncionesPelicula(id)
       if (this.pelicula && this.pelicula.imagenes) {
         const imagenH = this.pelicula.imagenes.find((imagen: { descripcion: string; }) => imagen.descripcion === 'horizontal');
         if (imagenH) {
@@ -66,19 +72,27 @@ getPelicula(id:string){
   )
   }
 
-    getFuncionesPelicula(idPeli:string){
-     this._funcionService.index().subscribe({
-        next: (response:any) =>{
-        this.funciones = response['data']
-        this.funcionesAux = this.funciones.filter((funcion: Funcion) => 
-        funcion.idPelicula.toString().includes(idPeli.toString()))
-             console.log(this.funcionesAux);
-        },
-        error:(error:any)=>{}
-      }) 
-
+  getFuncionesPelicula(idPeli: string) {
+    this._funcionService.index().subscribe({
+      next: (response: any) => {
+        this.funciones = response['data'];
+        this.funcionesFiltradas = this.funciones.filter((funcion: Funcion) =>
+          funcion.idPelicula.toString().includes(idPeli.toString()));
+        console.log(this.funcionesFiltradas);
+      },
+      error: (error: any) => {
+        console.error('Error al obtener las funciones:', error);
       }
-       
-  
+    });
+  }
+
+  onDateChange(event: any) {
+    const selectedDate = event.target.value;
+    this.selectedDate = selectedDate;
+    this.funcionesAux = this.funcionesFiltradas.filter(funcion => {
+      const funcionDate = new Date(funcion.fecha).toISOString().split('T')[0];
+      return funcionDate === selectedDate;
+    });
+  }
 }
 

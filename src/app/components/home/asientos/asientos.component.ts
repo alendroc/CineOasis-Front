@@ -117,32 +117,35 @@ export class AsientosComponent {
   loadIdentuty(){this.identity = this._userService.getIdentityFromStorage(); console.log(this.identity)}
 
 
-    enviarServiceCompartido(){
-      if(this.identity == null){
-        console.log('hola mundo')
-      }else{
-        this. enviarFuncionAsientos()
-        if(this.funcionesAsientosAux.length == 0){
-          console.log("no hay asientos seleccionados")
-        }else{
-          this.funcionesAsientosAux =[]
+  enviarServiceCompartido() {
+    if (this.identity == null) {
+    } else {
+      if (this.selectedAsientos.length === 0) {
+        Swal.fire({
+          icon: 'warning',
+          title: 'Debe seleccionar al menos un asiento',
+          text: 'Por favor, seleccione un asiento antes de continuar.',
+        });
+      } else {
+        this.enviarFuncionAsientos();
+        if (this.funcionesAsientosAux.length == 0) {
+          console.log("no hay asientos seleccionados");
+        } else {
+          this.funcionesAsientosAux = [];
           this.selectedAsientos.forEach(element => {
-            // Creamos una nueva instancia de FuncionAsiento para cada elemento seleccionado
-            let nuevoFuncionAsiento = new FuncionAsiento(0,0,0,false);
+            let nuevoFuncionAsiento = new FuncionAsiento(0, 0, 0, false);
             nuevoFuncionAsiento.idFuncion = this.funcion.id;
             nuevoFuncionAsiento.idAsiento = element.id;
             nuevoFuncionAsiento.estado = true;
-        
-            // Agregamos el nuevo objeto FuncionAsiento al array funcionesAsientosAux
             this.funcionesAsientosAux.push(nuevoFuncionAsiento);
           });
-         this._funcionCompartida.setSelectedAsientos(this.funcionesAsientosAux)
-         console.log("asientos GET:",this._funcionCompartida.getSelectedAsientos())
-         this._router.navigate(['/ofertaCombo']);
+          this._funcionCompartida.setSelectedAsientos(this.funcionesAsientosAux);
+          console.log("asientos GET:", this._funcionCompartida.getSelectedAsientos());
+          this._router.navigate(['/ofertaCombo']);
         }
-        
       }
     }
+  }
   
   recibirFuncionAsientos(){
     this._funcionAsientoService.index().subscribe({

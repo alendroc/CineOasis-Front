@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { AfterViewInit, Component, HostListener, OnInit } from '@angular/core';
+import { AfterViewInit, Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AsientoCompartidoService } from '../../../services/asientoCompartido.service';
 import { FuncionAsientoService } from '../../../services/funcionAsiento.service';
@@ -83,14 +83,14 @@ export class PagoComponent implements OnInit {
       this.years.push(currentYear + i);
   }
 }
-
+ngOnInit(): void {
+  this.loadIdentityAux();
+  this.ObtenerIdFuncion();
+  this.ObtenerDatosCombos();
+  this.ObtenerPrecioTotal();
   
-  ngOnInit(){
-    this.loadIdentityAux();
-    this.ObtenerIdFuncion();
-    this.ObtenerDatosCombos();
-    this.ObtenerPrecioTotal()
-  }
+}
+
 
   /*-------------------------------Usuario del sesion storage-------------------------*/
   loadIdentityAux(){this.identity=this._userService.getIdentityFromStorage();
@@ -123,8 +123,6 @@ export class PagoComponent implements OnInit {
       console.log('Éxito: Formulario válido. Realizando compra...');
           this.agregarAsiento();
           this.crearTicket();
-          
-      // Aquí podrías enviar los datos del formulario a un servicio o hacer alguna acción adicional
     } else {
   
     }
@@ -139,9 +137,9 @@ export class PagoComponent implements OnInit {
     this.obtenerComida()
   }
    ObtenerIdFuncion(){
-    this.idFuncion = this._serviceCompartido.getSelectedFuncionId();
-    this.obtenerFuncion(this.idFuncion)
+    this.idFuncion = this._serviceCompartido.getSelectedFuncionId();  
     this.obtenerAsientos()
+ 
   }
   obtenerPelicual(idPelicula:number){
     this._pelicula.show(idPelicula).subscribe({
@@ -169,6 +167,7 @@ export class PagoComponent implements OnInit {
     })
   }
   obtenerAsientos(){
+    this.obtenerFuncion(this.idFuncion)
     this.obtenerDatosPelicula()
     this.funcionAsientos.forEach(element => {
       console.log(element.idAsiento)
