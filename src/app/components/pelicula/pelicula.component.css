@@ -33,7 +33,7 @@
 .movie-details {
     flex: 1;
     margin-top: 30px;
-    margin-bottom: 33px;
+    margin-bottom: 35px;
     display: flex;
     flex-direction: row;
     justify-content: space-around;
@@ -77,11 +77,13 @@
     transition: background 0.3s, box-shadow 0.3s;
 }
 .today{
+    margin-top: 10px;
     margin-bottom: 10px;
     color: black;
     border-radius: 6px;
     padding: 6px 12px;
-    width: fit-content;
+    width: 230px;
+    text-align: center;
     background: linear-gradient(90deg, rgba(239, 195, 101, 1) 0%, rgba(179, 128, 18, 1) 100%);
 }
 
@@ -94,6 +96,7 @@
     font-family: "Racing Sans One", sans-serif;
     font-weight: 400;
     font-style: normal;
+    
 }
 .font-roboto{
     font-family: "Roboto Condensed", sans-serif;

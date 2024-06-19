@@ -96,13 +96,13 @@
                 <div class="info-fact"><p><strong>Hora:</strong></p><p>{{funcion.horaInicio}}</p></div>
                 <div class="info-fact"><p><strong>Sala:</strong></p><p>{{funcion.sala}}</p></div>
                 <div class="info-fact"><p><strong>Asientos:</strong></p>
-                  <div>
+                  <div style="display: flex;">
                     <div *ngFor="let asiento2 of asientos"><p>{{ asiento2.fila}}-{{ asiento2.numero}},</p></div>
                 </div>
               </div>
                 @if(comidas.length!=0){
                   <div class="info-fact"><p><strong>Comida:</strong></p>
-                    <div>
+                    <div style="display: flex;">
                         <div *ngFor="let camida2 of comidas"><p>{{ camida2.nombre}},</p></div>
                     </div>
                   </div>

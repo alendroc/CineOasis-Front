@@ -153,10 +153,8 @@
 }
 .image-combo {
     border-radius: 20px;
-    width: 25%;
-    height: 15vh;
     width: 100%;
-    height: auto;
+    height: 100%;
     object-fit: cover; 
   }
 .comida-info{
@@ -178,9 +176,6 @@
         border-radius: 10px;
         width: 80%;
         height: 15vh;
-    }
-    .card-cartelera{
-        
     }
 
 }

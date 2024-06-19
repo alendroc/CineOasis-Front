@@ -36,7 +36,8 @@
                     </li>
                 </ul>
                 <div class="showtimes ">
-                    <p class="font-racing today">HOY</p>
+                    <p style="color: #f3af3d;">Seleccione una fecha de funcion</p>
+                    <input type="date" class="font-racing today" (change)="onDateChange($event)">
                     <div class="boton-contenedor">
                     <button *ngFor="let hora of funcionesAux" [routerLink]="['/asientos', hora.id]" >{{hora.horaInicio.substring(0, 5)}} ({{pelicula.animacion}})</button> 
                     </div>
