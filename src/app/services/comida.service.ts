@@ -31,7 +31,7 @@ export class ComidaService{
         let options = {
             headers
         };
-        return this._http.get(this.urlAPI+`user/${id}`, options);
+        return this._http.get(this.urlAPI+`comida/${id}`, options);
     }
 
     create(comida:Comida):Observable<any>{

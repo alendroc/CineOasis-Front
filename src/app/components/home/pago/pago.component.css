@@ -50,8 +50,9 @@ body{
     margin-top: 30px;
     text-align: left;
  }
- .input-goup{
+ .input-group{
     margin-bottom: 30px;
+    
  }
  .input-field {
    
@@ -178,6 +179,26 @@ button {
    button:focus:not(:focus-visible) {
     outline: none;
    }
+   .tituloModal{
+    color: black;
+  }
+  .info-fact{
+    color: black;
+    display: flex;
+    justify-content: space-between;
+  }
+  .modal-header{
+    background-color: #69936E;
+  }
+  
+  .modal-footer{
+    background-color: #69936E;
+  }
+  .btn-secondary{
+    background: #113f17;
+    border-radius: 10px;
+    padding: 7px 10px;
+  }
 /*******/
 @media (max-width:568px) {
     .expiracion{

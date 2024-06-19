@@ -4,7 +4,7 @@
         <h1>METODO DE <span style="color: #EDBB4F;">PAGO</span></h1>
         <div style="display: flex; justify-content: space-between;margin-top: 30px;">
           <p class="monto-text">MONTO POR PAGAR</p>
-          <p class="sumid-text"><span style="color: #EDBB4F;">3000</span> colones</p>
+          <p class="sumid-text"><span style="color: #EDBB4F;">{{ total}}</span> colones</p>
         </div>
         <div class="input-pagos">
           <form #paymentForm="ngForm" (ngSubmit)="onSubmit(paymentForm)">
@@ -75,7 +75,7 @@
               </div>
             </div>
             <div style="display: flex; align-items: center; justify-content: center; margin: 40px 0;">
-              <button [disabled]="!paymentForm.form.valid">
+              <button [disabled]="!paymentForm.form.valid" data-bs-dismiss="modal" data-bs-target="#staticBackdrop" data-bs-toggle="modal">
                 <span class="shadow"></span>
                 <span class="edge"></span>
                 <span class="front text"> Realizar compra </span>
@@ -83,6 +83,38 @@
             </div>
           </form>
         </div>
+
+        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1  id="staticBackdropLabel">Factura</h1>
+            </div>
+            <div class="modal-body">
+            <div class="info-fact"><p><strong>Usuario:</strong></p><p> {{identity.name}}</p></div>
+                <div class="info-fact"><p><strong>Película:</strong></p><p>{{pelicula.nombre}}</p></div>
+                <div class="info-fact"><p><strong>Hora:</strong></p><p>{{funcion.horaInicio}}</p></div>
+                <div class="info-fact"><p><strong>Sala:</strong></p><p>{{funcion.sala}}</p></div>
+                <div class="info-fact"><p><strong>Asientos:</strong></p>
+                  <div>
+                    <div *ngFor="let asiento2 of asientos"><p>{{ asiento2.fila}}-{{ asiento2.numero}},</p></div>
+                </div>
+              </div>
+                @if(comidas.length!=0){
+                  <div class="info-fact"><p><strong>Comida:</strong></p>
+                    <div>
+                        <div *ngFor="let camida2 of comidas"><p>{{ camida2.nombre}},</p></div>
+                    </div>
+                  </div>
+                }
+                <div class="info-fact"><strong>Total:</strong> {{total}}</div>
+              </div>
+              <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" [routerLink]="['']"  data-bs-dismiss="modal">Close</button>
+              </div>
+            </div>
+        
+          </div>
+        </div>
       </div>
     </div>
-  </div>
