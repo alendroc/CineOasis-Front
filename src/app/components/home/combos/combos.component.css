@@ -3,8 +3,8 @@
     display: flex;
     justify-content: center;
     width: 100%;
+    height: 100%;
     color:#ffffff;
-    height: 100vh; 
     overflow: hidden;
 }
 .combo-container{
@@ -19,8 +19,7 @@ h3{
     font-family: "League Gothic", sans-serif;
     font-optical-sizing: auto;
     font-style: oblique;
-    font-variation-settings:
-    "wdth" 200;
+    font-variation-settings:"wdth" 200;
     font-size: 3em;
 }
 .div-scroll {
@@ -55,40 +54,50 @@ h3{
     width: 90%;
     height: 90%;
     border-radius: 20px;
+    object-fit: cover;
 }
 .info-combo {
     display: flex;
-    padding: 20px 40px;
+    gap: 10px;
     align-content: center;
     align-items: flex-start;
-    justify-content: center;
+    text-align: start;
     flex-direction: column;
+    width: 75%;
     padding: 20px;
-    text-align: center;
+
 }
 .title-combo {
-    color:antiquewhite;
-    font-size: 1.6em;
+    font-family: 'Roboto Condensed';
+    color: #E9AD2B;
+    font-weight: 700; 
+    text-transform: uppercase;
+    font-size: 2em;
 }
 .text-combo {
+    font-family: 'Timmana', sans-serif;
+    color: #69936E;
     font-size: 1.2em;
 }
 /* Responsivo */
 @media (max-width: 768px) {
+    .combo-body {
+        height: 100dvh;
+    }
     .combo-container{
         width: 100%;
         padding: 10px;
     }
     .card-container {
-        flex-direction: row;
+        flex-direction: column;
     }
 
     .image-div, .info-combo {
-        width: 50%;
+        width: 100%;
     }
 
     .info-combo {
         text-align: left;
-        padding: 20px 40px;
+        padding: 20px 0px;
     }
 }

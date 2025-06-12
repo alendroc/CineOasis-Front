@@ -1,5 +1,5 @@
 <div class="index-body">
-  
+
   <div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel">
       <div class="carousel-inner">
         <div class="carousel-item active c-item">
@@ -67,9 +67,12 @@
               </div>
               <div class="comida-info">
                 <h3>{{ comidas[0].nombre }}</h3>
-                <div style="display: flex; gap: 10px;">
-                  <span class="text-combo">Precio:</span>
-                  <span class="text-combo"><strong>{{ comidas[0].precio }}</strong></span>
+                <div class="comida-descripcion" >
+                  <p>Disfruta una experiencia única con nuestras deliciosas opciones mientras ves las mejores películas en Cine Oasis.</p>
+                  <div>
+                    <span class="text-combo">Precio: </span>
+                    <span class="text-combo">₡{{ comidas[0].precio }}</span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -77,9 +80,12 @@
             <div class="cardComida2" *ngIf="comidas.length > 1">
               <div class="comida-info" style="margin-top: 40px;">
                 <h3>{{ comidas[1].nombre }}</h3>
-                <div style="display: flex; gap: 10px;">
-                  <span class="text-combo">Precio:</span>
-                  <span class="text-combo"><strong>{{ comidas[1].precio }}</strong></span>
+                <div class="comida-descripcion">
+                  <p>Disfruta una experiencia única con nuestras deliciosas opciones mientras ves las mejores películas en Cine Oasis.</p>
+                  <div>
+                    <span class="text-combo">Precio: </span>
+                    <span class="text-combo">₡{{ comidas[0].precio }}</span>
+                  </div>
                 </div>
               </div>
               <div class="comida-foto" style="margin-left: 20px; margin-right: 0;">
@@ -93,7 +99,7 @@
 
 
     <div class="footer">
-      <div style="display: flex; padding-top: 20px;justify-content: space-around; color: aliceblue;">
+      <div class="footer-content">
         <div>
           <p>CINE OASIS <strong>© 2024</strong> </p>
         </div>

@@ -9,6 +9,8 @@ import { FuncionService } from '../../services/funcion.service';
 import { Funcion } from '../../models/Funcion';
 import { error } from 'jquery';
 
+declare var bootstrap: any;
+
 @Component({
   selector: 'app-pelicula',
   standalone: true,
@@ -28,8 +30,9 @@ public funcionesFiltradas: Funcion[] = []; // Filtradas por película
 public funcionesAux: Funcion[] = [];
 public imagenHorizontal: any[] = [];
 public imagenVertical: any[] = [];
-
-
+public fechasDisponibles: string[] = [];
+public minDate: string = '';
+public maxDate: string = '';
 constructor(
   private _peliculaService:PeliculaService,
   private _imagenService: ImagenService,
@@ -88,19 +91,44 @@ getPelicula(id:string){
   )
   }
 
-  getFuncionesPelicula(idPeli: string) {
-    this._funcionService.index().subscribe({
-      next: (response: any) => {
-        this.funciones = response['data'];
-        this.funcionesFiltradas = this.funciones.filter((funcion: Funcion) =>
-          funcion.idPelicula.toString().includes(idPeli.toString()));
-        console.log(this.funcionesFiltradas);
-      },
-      error: (error: any) => {
-        console.error('Error al obtener las funciones:', error);
-      }
-    });
+ getFuncionesPelicula(idPeli: string) {
+  this._funcionService.index().subscribe({
+    next: (response: any) => {
+      this.funciones = response['data'];
+      this.funcionesFiltradas = this.funciones.filter((funcion: Funcion) =>
+        funcion.idPelicula.toString().includes(idPeli.toString()));
+
+      const fechas = this.funcionesFiltradas.map(funcion =>
+        new Date(funcion.fecha).toISOString().split('T')[0]);
+
+      this.minDate = fechas.length ? fechas.reduce((a, b) => a < b ? a : b) : '';
+      this.maxDate = fechas.length ? fechas.reduce((a, b) => a > b ? a : b) : '';
+    },
+    error: (error: any) => {
+      console.error('Error al obtener las funciones:', error);
+    }
+  });
+}
+
+verificarAcceso(idFuncion: number) {
+  const token = sessionStorage.getItem('identity');
+  if (token) {
+    this._router.navigate(['/asientos', idFuncion]);
+  } else {
+    // Activar el modal de login
+    const modal = new bootstrap.Modal(document.getElementById('exampleModal')!);
+    modal.show();
   }
+}
+  validateFecha(event: any) {
+  const fechaSeleccionada = event.target.value;
+  if (!this.fechasDisponibles.includes(fechaSeleccionada)) {
+    alert("No hay funciones disponibles en esa fecha");
+    event.target.value = ''; // Limpia el valor
+    this.funcionesAux = [];
+  }
+}
+
 
   onDateChange(event: any) {
     const selectedDate = event.target.value;

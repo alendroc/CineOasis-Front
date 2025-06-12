@@ -31,9 +31,9 @@ table {
   }
   
 
-  td, th {
+  /*td, th {
     width: 25%;
-  }
+  }*/
 
 .header-table{
     display: flex;

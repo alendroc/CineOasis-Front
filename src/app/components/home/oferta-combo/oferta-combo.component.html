@@ -1,4 +1,4 @@
-<div class="combo-body" style="height: 100%;">
+<div class="combo-body" >
   <div class="combo-container">
     <h3>Alimentos</h3>
     <div class="div-scroll">
@@ -9,17 +9,23 @@
         <div class="image-div">
           <img class="image-combo" src="{{imageURL}}{{item.imagen}}" alt="Imagen comida">
         </div>
-        <div class="info-combo">
-            <h5 class="title-combo">{{item.nombre}}</h5>
-            <div style="display: flex; gap: 10px;">
-              <span class="text-combo">Precio:</span>
-              <span class="text-combo"><strong> {{item.precio}}</strong></span>
-            </div>
-            <div class="spinner-div" style="display: flex; align-items: center;">
-              <label class="text-combo" for="cantidad" style="margin-right: 10px;">Cantidad</label>
-              <button class="decrement" (click)="decrement(item)">-</button>
-              <input type="number" class="quantity-spinner" [value]="getQuantity(item)" min="0" max="20">
-              <button class="increment" (click)="increment(item)">+</button>
+         <div class="info-combo">
+              <h5 class="title-combo">{{item.nombre}}</h5>
+              <p class="description-combo">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. In vulputate interdum augue non ultricies. Integer scelerisque, ligula at varius pharetra, ligula tellus bibendum turpis, a ornare libero dui in sapien. Nunc sed ante magna. Ut nulla dui, ultrices ac arcu non, accumsan efficitur sapien. Quisque non eleifend lacus. Sed elementum et nisi a consequat. Nulla porta metus sit amet turpis.
+              </p>
+              <div class="spinner-div" style="display: flex; gap: 10px; align-items: center;">
+                <div style="display: flex; align-items: center;">
+                  <label class="text-combo" for="cantidad" style="height: 16px; margin-right: 10px; color: white;">Cantidad</label>
+                  <button class="decrement" (click)="decrement(item)">-</button>
+                  <input type="number" class="quantity-spinner" [value]="getQuantity(item)" min="0" max="20">
+                  <button class="increment" (click)="increment(item)">+</button>
+                </div>          
+              
+              <div style="display: flex; gap: 10px;height: 17px;">
+                <span class="text-combo">Precio:</span>
+                <span class="text-combo"> ₡{{item.precio}}</span>
+              </div>
             </div>
         </div>
       </div>

@@ -5,46 +5,46 @@
         </div>
         <div class="movie-details">
             <div class="movie-info">
-                <h1 class="font-roboto">{{pelicula.nombre}}</h1>
+                <h1>{{pelicula.nombre}}</h1>
                 <p style="margin-bottom: 10px;">{{pelicula.descripcion}}</p>
-                <li style="display: flex; gap: 10px;margin-bottom: 5px;">   
+                <li class="elenco">   
                     <p class="font-racing">ELENCO:</p>
                     <p>{{pelicula.elenco}}</p>
                 </li>
-                <li style="display: flex; gap: 10px;"> 
+                <li class="pelicula-caracteristicas">
                     <p class="font-racing">DIRECTOR:</p>
                     <p>{{pelicula.director}}</p>
                 </li>
             </div>
             <div class="another-info">
                 <ul class="movie-options">
-                    <li style="display: flex; gap: 10px;">
+                    <li class="pelicula-caracteristicas">
                         <p class="font-racing" >RESTRICCIÓN:</p>
                         <p>{{pelicula.calificacionEdad}}</p>
                     </li>
-                    <li style="display: flex; gap: 10px;">
+                    <li class="pelicula-caracteristicas">
                         <p class="font-racing">DURACIÓN:</p>
                         <p>{{pelicula.duracion}}</p>
                     </li>
-                    <li style="display: flex; gap: 10px;">
+                    <li class="pelicula-caracteristicas">
                         <p class="font-racing">Lenguaje:</p>
                         <p>{{pelicula.idioma}}</p>
                     </li>
-                    <li style="display: flex; gap: 10px;">
+                    <li class="pelicula-caracteristicas" >
                         <p class="font-racing">Subtítulos:</p>
                         <p>{{pelicula.subtitulo}}</p>
                     </li>
                 </ul>
                 <div class="showtimes ">
                     <p style="color: #f3af3d;">Seleccione una fecha de funcion</p>
-                    <input type="date" class="font-racing today" (change)="onDateChange($event)">
+                    <input type="date" class="font-racing today" [min]="minDate" [max]="maxDate" (change)="onDateChange($event)">
                     <div class="boton-contenedor">
-                    <button *ngFor="let hora of funcionesAux" [routerLink]="['/asientos', hora.id]" >{{hora.horaInicio.substring(0, 5)}} ({{pelicula.animacion}})</button> 
+                    <button *ngFor="let hora of funcionesAux" (click)="verificarAcceso(hora.id)">{{hora.horaInicio.substring(0, 5)}} ({{pelicula.animacion}})</button>
                     </div>
                     
                 </div>
             </div>
         </div>
     </div>
-    <div>a</div>
+  
 </div>

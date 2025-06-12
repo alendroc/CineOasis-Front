@@ -4,7 +4,7 @@
     justify-content: center;
     width: 100%;
     color:#ffffff;
-    height: 100vh; 
+    height: 100%; 
     overflow: hidden;
 }
 .combo-container{
@@ -56,31 +56,39 @@ h3{
     width: 90%;
     height: 90%;
     border-radius: 20px;
+        object-fit: cover;
 }
 .info-combo {
-    display: flex;
-  
+  display: flex;
+    gap: 10px;
     align-content: center;
     align-items: flex-start;
-    justify-content: space-evenly;
+    text-align: start;
     flex-direction: column;
-
-    text-align: center;
+    width: 75%;
+    padding: 20px;
 }
 .title-combo {
-    color:antiquewhite;
-    font-size: 1.6em;
+     font-family: 'Roboto Condensed';
+    color: #E9AD2B;
+    font-weight: 700; 
+    text-transform: uppercase;
+    font-size: 2em;
 }
 .text-combo {
+    font-family: 'Timmana', sans-serif;
+    color: #69936E;
     font-size: 1.2em;
 }
 .quantity-spinner {
-    height: 40px;
+    height: 30px;
+    width: 24px;
+    font-family: "Timmana", sans-serif;
+    color: #E9AD2B;
     text-align: center;
-    padding: 0;
-    font-size: 1em;
+    padding: 11px 0 0 0;
+    font-size: 1.5em;
     background-color: transparent;
-    color: antiquewhite;
     border: none;
 }
 .quantity-spinner:focus{
@@ -94,13 +102,10 @@ h3{
 }
 .increment, .decrement {
     all: unset; 
-    width: 40px;
-    height: 40px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    text-align: center;
+    width: 28px;   
     background-color: transparent;
-    color: antiquewhite;
+    color: rgb(255, 255, 255);
     font-size: 1.5em;
     cursor: pointer;
     
@@ -123,20 +128,29 @@ h3{
 }
 /* Responsivo */
 @media (max-width: 768px) {
+    .combo-body{
+        height: 100dvh;
+    }
     .combo-container{
         width: 100%;
         padding: 10px;
     }
+   
     .card-container {
-        flex-direction: row;
+        flex-direction: column;
     }
 
     .div-scroll{
         padding: 0;
     }
-
+     .image-div, .info-combo {
+        width: 100%;
+    }
     .info-combo {
         text-align: left;
-      
+    }
+    .spinner-div{
+        flex-direction: column;
+        align-items: start !important;
     }
 }

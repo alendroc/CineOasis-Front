@@ -3,14 +3,15 @@
     background: linear-gradient(0deg, rgba(233, 173, 43, 1) 0%, rgba(136, 183, 108, 1) 61%, rgba(39, 83, 44, 1) 100%);
 }
 
-.image-container {   
-    background-attachment: fixed;
+.image-container {
+    
     position: relative;
     width: 100%;
     height: 50vh; 
     box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.7); 
     background-position: center;
     background-size: cover;
+    background-repeat: no-repeat;
 }
 .image-container::before {
     content: '';
@@ -154,13 +155,36 @@
 .image-combo {
     border-radius: 20px;
     width: 100%;
-    height: 100%;
-    object-fit: cover; 
+    height: 20vh;
+    object-fit: cover;
+    box-shadow: 1px 3px 6px #000000;
   }
 .comida-info{
-    font-size: clamp(0.4rem, 3vw, 2rem);
+    
+    font-family: 'Roboto Condensed';
+}
+.comida-info h3 {
+    font-family: 'Roboto Condensed';
+    font-weight: 700;
+    font-size: 26px;
+        border-bottom: 2px solid;
+    margin-bottom: 10px;
+    color: #29642e;
+    text-shadow: 0px 1px 5px #ffffffab;
+    text-transform: uppercase;
 }
 
+.comida-descripcion{
+    font-family: 'Roboto Condensed';
+    font-weight: 400;
+    font-size: 20px;
+}
+.text-combo{
+    font-family: 'Roboto Condensed';
+    font-weight: 700;
+    color: #1d4721aa;
+
+}
 @media (max-width:771px){
  
     .card-cartelera{
@@ -172,10 +196,16 @@
     .comida-info{
         width: 100%;
     }
+    .comida-info h3{
+        font-size: 20px;
+    }
     .comida-foto{
         border-radius: 10px;
         width: 80%;
         height: 15vh;
+    }
+    .footer-dev{
+        
     }
 
 }
@@ -184,12 +214,17 @@
     height: 10vh;
     background-image: linear-gradient(45deg, rgb(22, 22, 22),rgb(121, 121, 121)),linear-gradient(45deg, rgb(86, 33, 11) 0%, rgb(86, 33, 11) 19%,rgb(105, 58, 15) 19%, rgb(105, 58, 15) 64%,rgb(125, 83, 19) 64%, rgb(125, 83, 19) 68%,rgb(144, 109, 22) 68%, rgb(144, 109, 22) 81%,rgb(164, 134, 26) 81%, rgb(164, 134, 26) 87%,rgb(183, 159, 30) 87%, rgb(183, 159, 30) 100%),linear-gradient(135deg, rgb(86, 33, 11) 0%, rgb(86, 33, 11) 19%,rgb(105, 58, 15) 19%, rgb(105, 58, 15) 64%,rgb(125, 83, 19) 64%, rgb(125, 83, 19) 68%,rgb(144, 109, 22) 68%, rgb(144, 109, 22) 81%,rgb(164, 134, 26) 81%, rgb(164, 134, 26) 87%,rgb(183, 159, 30) 87%, rgb(183, 159, 30) 100%); background-blend-mode:overlay,overlay,normal;
 }
-
+.footer-content{
+   display: flex; 
+   padding: 20px 20px 0 20px;
+   justify-content: space-around;
+    color: aliceblue;
+}
 .footer-dev{
-    line-height: 2px; 
+  
     display: flex;
-    flex-direction: row; 
-    align-items: center;
-    font-size: clamp(0.2rem, 2vw, 1rem);
+    flex-direction: column;
+    align-items: start;
+    font-size: clamp(0.2rem, 3vw, 1rem);
 }
 /* Media queries para responsividad */
